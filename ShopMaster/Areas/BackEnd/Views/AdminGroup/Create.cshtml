@@ -1,0 +1,72 @@
+﻿@model ShopMaster.Areas.BackEnd.ViewModels.AdminGroupPermissionViewModel
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Create" method="post">
+    <input type="hidden" asp-for="GroupId" />
+    <div class="form-group">
+        <label for="GroupName">群組名稱：</label>
+        <input type="text" asp-for="GroupName" class="form-control" required />
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>分類</th>
+                <th>名稱</th>
+                <th>新增權限</th>
+                <th>查看權限</th>
+                <th>編輯權限</th>
+                <th>刪除權限</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var groupedPermissions = Model.MenuPermissions
+                .Select((permission, index) => new { permission, index })
+                .GroupBy(x => x.permission.MenuGroupName);
+                int itemIndex = 0; // 追蹤項目索引
+            }
+
+            @foreach (var group in groupedPermissions)
+            {
+                <tr style="background-color: #d9f7ff;">
+                    <td colspan="6"><strong>@group.Key</strong></td>
+                </tr>
+                @foreach (var item in group)
+                {
+                    var menu = item.permission;
+                    var index = item.index;
+                    <tr>
+                        <td></td>
+                        <td>
+                            @menu.MenuName
+                            <input type="hidden" name="MenuPermissions[@index].MenuName" value="@menu.MenuName" />
+                            <input type="hidden" name="MenuPermissions[@index].MenuId" value="@menu.MenuId" />
+                            <input type="hidden" name="MenuPermissions[@index].MenuGroupName" value="@menu.MenuGroupName" />
+                        </td>
+                        <td>
+                            <input type="checkbox" name="MenuPermissions[@index].CanCreate" value="true" @(menu.CanCreate ? "checked" : "") />
+                            <input type="hidden" name="MenuPermissions[@index].CanCreate" value="false" />
+                        </td>
+                        <td>
+                            <input type="checkbox" name="MenuPermissions[@index].CanRead" value="true" @(menu.CanRead ? "checked" : "") />
+                            <input type="hidden" name="MenuPermissions[@index].CanRead" value="false" />
+                        </td>
+                        <td>
+                            <input type="checkbox" name="MenuPermissions[@index].CanUpdate" value="true" @(menu.CanUpdate ? "checked" : "") />
+                            <input type="hidden" name="MenuPermissions[@index].CanUpdate" value="false" />
+                        </td>
+                        <td>
+                            <input type="checkbox" name="MenuPermissions[@index].CanDelete" value="true" @(menu.CanDelete ? "checked" : "") />
+                            <input type="hidden" name="MenuPermissions[@index].CanDelete" value="false" />
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-primary">儲存</button>
+    <a asp-action="Index" class="btn btn-secondary">取消</a>
+</form>

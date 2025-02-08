@@ -1,0 +1,44 @@
+﻿@model List<ShopMaster.Areas.BackEnd.Models.Admin>
+
+@{
+    ViewData["Title"] = "管理員列表";
+    Layout = "~/Areas/BackEnd/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>管理員列表</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>帳號</th>
+            <th>Email</th>
+            <th>建立時間</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var admin in Model)
+        {
+            <tr>
+                <td>@admin.Id</td>
+                <td>@admin.Username</td>
+                <td>@admin.Email</td>
+                <td>@admin.CreatedAt</td>
+                <td>
+                    <a href="/BackEnd/Admin/Edit/@admin.Id" class="btn btn-warning btn-sm">編輯</a>
+                    <form action="/BackEnd/Admin/Delete/@admin.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('確定刪除嗎？')">刪除</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="/BackEnd/Admin/Create" class="btn btn-primary">新增管理員</a>

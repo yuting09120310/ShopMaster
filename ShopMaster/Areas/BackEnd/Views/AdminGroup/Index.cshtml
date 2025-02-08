@@ -1,0 +1,37 @@
+﻿@model List<ShopMaster.Areas.BackEnd.Models.AdminGroup>
+
+<h2>管理員群組</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>群組名稱</th>
+            <th>建立時間</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var group in Model)
+        {
+            <tr>
+                <td>@group.Id</td>
+                <td>@group.Name</td>
+                <td>@group.CreatedAt</td>
+                <td>
+                    <a href="/BackEnd/AdminGroup/Edit/@group.Id" class="btn btn-warning">編輯</a>
+                    <form action="/BackEnd/AdminGroup/Delete/@group.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('確定刪除嗎？')">刪除</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="/BackEnd/AdminGroup/Create" class="btn btn-primary">新增群組</a>
