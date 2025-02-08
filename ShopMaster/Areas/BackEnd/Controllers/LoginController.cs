@@ -23,7 +23,7 @@ namespace ShopMaster.Areas.BackEnd.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> IndexAsync(string Username, string Password)
+        public async Task<IActionResult> Index(string Username, string Password)
         {
             if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
             {
@@ -46,7 +46,7 @@ namespace ShopMaster.Areas.BackEnd.Controllers
 
             // 設定登入 Session
             HttpContext.Session.SetString("AdminUser", admin.Username);
-            return RedirectToAction("Index", "Dashboard");
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult Logout()
