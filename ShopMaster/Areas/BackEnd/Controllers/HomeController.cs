@@ -4,6 +4,7 @@ using ShopMaster.Areas.BackEnd.Models;
 
 namespace ShopMaster.Areas.BackEnd.Controllers
 {
+    [Area("BackEnd")]
     public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
