@@ -1,0 +1,58 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "後台登入";
+}
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewData["Title"] - ShopMaster</title>
+    <link href="~/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="~/admin/css/sb-admin-2.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-primary">
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-6 col-lg-6 col-md-9">
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-5">
+                        <div class="text-center">
+                            <h1 class="h4 text-gray-900 mb-4">歡迎回來！</h1>
+                        </div>
+
+                        <!-- 錯誤訊息區塊 -->
+                        @if (!string.IsNullOrEmpty(ViewBag.Error))
+                        {
+                            <div class="alert alert-danger text-center">
+                                @ViewBag.Error
+                            </div>
+                        }
+
+                        <form method="post" action="/BackEnd/Login">
+                            <div class="form-group">
+                                <input type="text" class="form-control form-control-user" name="Username" placeholder="輸入帳號" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control form-control-user" name="Password" placeholder="輸入密碼" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-user btn-block">登入</button>
+                        </form>
+
+                        <hr>
+                        <div class="text-center">
+                            <a class="small" href="#">忘記密碼？</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/admin/vendor/jquery/jquery.min.js"></script>
+    <script src="~/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/admin/js/sb-admin-2.min.js"></script>
+</body>
+</html>
