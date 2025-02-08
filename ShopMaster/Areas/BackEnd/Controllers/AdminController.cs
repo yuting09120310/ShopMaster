@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using ShopMaster.Areas.BackEnd.Models;
 using System.Security.Cryptography;
 using System.Text;
-using ShopMaster.Areas.BackEnd.Models;
 using ShopMaster.Areas.BackEnd.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
