@@ -45,8 +45,8 @@ namespace ShopMaster.Areas.BackEnd.Controllers
             }
 
             // 設定登入 Session
-            HttpContext.Session.SetString("AdminUser", admin.Username);
-            return RedirectToAction("Index", "Home");
+            HttpContext.Session.SetString("AdminId", admin.Id.ToString());
+             return RedirectToAction("Index", "Home");
         }
 
         public IActionResult Logout()

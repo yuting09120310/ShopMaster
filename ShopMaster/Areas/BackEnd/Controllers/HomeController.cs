@@ -7,15 +7,16 @@ namespace ShopMaster.Areas.BackEnd.Controllers
     [Area("BackEnd")]
     public class HomeController : BaseController
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ShopmasterdbContext _db;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ShopmasterdbContext db) : base(db)
         {
-            _logger = logger;
+            _db = db;
         }
 
         public IActionResult Index()
         {
+            GetMenu();
             return View();
         }
 

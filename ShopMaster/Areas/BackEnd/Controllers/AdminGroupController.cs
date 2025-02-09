@@ -9,7 +9,7 @@ namespace ShopMaster.Areas.BackEnd.Controllers
     {
         private readonly ShopmasterdbContext _db;
 
-        public AdminGroupController(ShopmasterdbContext db)
+        public AdminGroupController(ShopmasterdbContext db) : base(db)
         {
             _db = db;
         }
