@@ -23,26 +23,33 @@ namespace ShopMaster.Areas.BackEnd.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var menuSubs = await _db.MenuSubs
-            .Include(m => m.Group)
-            .ToListAsync();
+            // 先取得 MenuGroup
+            var menuGroups = await _db.MenuGroups.ToListAsync();
 
-                var viewModel = new AdminGroupPermissionViewModel
+            // 取得 MenuSub 並手動關聯到 MenuGroup
+            var menuSubs = await _db.MenuSubs.ToListAsync();
+
+            var viewModel = new AdminGroupPermissionViewModel
+            {
+                MenuPermissions = menuSubs.Select(menu =>
                 {
-                    MenuPermissions = menuSubs.Select(menu => new MenuPermission
+                    var menuGroup = menuGroups.FirstOrDefault(g => g.Id == menu.GroupId);
+                    return new MenuPermission
                     {
                         MenuId = menu.Id,
                         MenuName = menu.Name,
-                        MenuGroupName = menu.Group.Name,
+                        MenuGroupName = menuGroup?.Name ?? "未知分類", // 🔹 手動關聯 Group
                         CanCreate = false,
                         CanRead = true,
                         CanUpdate = false,
                         CanDelete = false
-                    }).ToList()
-                };
+                    };
+                }).ToList()
+            };
 
-                return View(viewModel);
+            return View(viewModel);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Create(AdminGroupPermissionViewModel model)
@@ -85,53 +92,100 @@ namespace ShopMaster.Areas.BackEnd.Controllers
             var group = await _db.AdminGroups.FindAsync(id);
             if (group == null) return NotFound();
 
-            var menuSubs = await _db.MenuSubs
-                .Include(m => m.Group)
-                .ToListAsync();
+            // 先查詢所有 MenuGroup
+            var menuGroups = await _db.MenuGroups.ToListAsync();
+
+            // 查詢所有 MenuSub
+            var menuSubs = await _db.MenuSubs.ToListAsync();
+
+            // 查詢該群組的權限
             var rules = await _db.Rules.Where(r => r.GroupId == id).ToListAsync();
 
             var viewModel = new AdminGroupPermissionViewModel
             {
                 GroupId = group.Id,
                 GroupName = group.Name,
-                MenuPermissions = menuSubs.Select(menu => new MenuPermission
+                MenuPermissions = menuSubs.Select(menu =>
                 {
-                    MenuId = menu.Id,
-                    MenuName = menu.Name,
-                    MenuGroupName = menu.Group.Name,
-                    CanCreate = rules.Any(r => r.MenuId == menu.Id && r.CanCreate == true),
-                    CanRead = rules.Any(r => r.MenuId == menu.Id && r.CanRead == true),
-                    CanUpdate = rules.Any(r => r.MenuId == menu.Id && r.CanUpdate == true),
-                    CanDelete = rules.Any(r => r.MenuId == menu.Id && r.CanDelete == true)
+                    // 手動找到對應的 MenuGroup
+                    var menuGroup = menuGroups.FirstOrDefault(g => g.Id == menu.GroupId);
+
+                    return new MenuPermission
+                    {
+                        MenuId = menu.Id,
+                        MenuName = menu.Name,
+                        MenuGroupName = menuGroup != null ? menuGroup.Name : "未知分類", // 如果找不到就顯示 "未知分類"
+                        CanCreate = rules.Any(r => r.MenuId == menu.Id && r.CanCreate == true),
+                        CanRead = rules.Any(r => r.MenuId == menu.Id && r.CanRead == true),
+                        CanUpdate = rules.Any(r => r.MenuId == menu.Id && r.CanUpdate == true),
+                        CanDelete = rules.Any(r => r.MenuId == menu.Id && r.CanDelete == true)
+                    };
                 }).ToList()
             };
 
             return View(viewModel);
         }
 
+
+
         [HttpPost]
         public async Task<IActionResult> Edit(AdminGroupPermissionViewModel model)
         {
-            var existingRules = await _db.Rules.Where(r => r.GroupId == model.GroupId).ToListAsync();
-            _db.Rules.RemoveRange(existingRules);
+            var existingRules = await _db.Rules
+                .Where(r => r.GroupId == model.GroupId)
+                .ToListAsync();
+
+            var menuIdsFromForm = model.MenuPermissions.Select(m => m.MenuId).ToHashSet();
 
             foreach (var menu in model.MenuPermissions)
             {
-                var newRule = new Rule
+                var rule = existingRules.FirstOrDefault(r => r.MenuId == menu.MenuId);
+
+                if (rule != null)
                 {
-                    GroupId = model.GroupId,
-                    MenuId = menu.MenuId,
-                    CanCreate = menu.CanCreate ? true : false,
-                    CanRead = menu.CanRead ? true : false,
-                    CanUpdate = menu.CanUpdate ? true : false,
-                    CanDelete = menu.CanDelete ? true : false,
-                };
-                _db.Rules.Add(newRule);
+                    // 更新現有權限
+                    rule.CanCreate = menu.CanCreate;
+                    rule.CanRead = menu.CanRead;
+                    rule.CanUpdate = menu.CanUpdate;
+                    rule.CanDelete = menu.CanDelete;
+
+                    _db.Entry(rule).State = EntityState.Modified;
+                }
+                else
+                {
+                    // 新增新的權限
+                    var newRule = new Rule
+                    {
+                        GroupId = model.GroupId,
+                        MenuId = menu.MenuId,
+                        CanCreate = menu.CanCreate,
+                        CanRead = menu.CanRead,
+                        CanUpdate = menu.CanUpdate,
+                        CanDelete = menu.CanDelete
+                    };
+                    _db.Rules.Add(newRule);
+                }
+            }
+
+            // 🛑 避免 "會員列表" 這類選單被刪掉
+            var missingRules = existingRules
+                .Where(r => !menuIdsFromForm.Contains(r.MenuId))
+                .ToList();
+
+            foreach (var rule in missingRules)
+            {
+                rule.CanCreate = false;
+                rule.CanRead = false;
+                rule.CanUpdate = false;
+                rule.CanDelete = false;
+                _db.Entry(rule).State = EntityState.Modified;
             }
 
             await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+
+
 
         [HttpPost]
         public async Task<IActionResult> Delete(int id)

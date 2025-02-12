@@ -118,10 +118,6 @@ public partial class ShopmasterdbContext : DbContext
             entity.Property(e => e.SortOrder)
                 .HasDefaultValueSql("'0'")
                 .HasColumnType("int(11)");
-
-            entity.HasOne(d => d.Group).WithMany(p => p.MenuSubs)
-                .HasForeignKey(d => d.GroupId)
-                .HasConstraintName("MenuSub_ibfk_1");
         });
 
         modelBuilder.Entity<Product>(entity =>
@@ -180,14 +176,6 @@ public partial class ShopmasterdbContext : DbContext
             entity.Property(e => e.CanDelete).HasDefaultValueSql("'0'");
             entity.Property(e => e.CanRead).HasDefaultValueSql("'1'");
             entity.Property(e => e.CanUpdate).HasDefaultValueSql("'0'");
-
-            entity.HasOne(d => d.Group).WithMany(p => p.Rules)
-                .HasForeignKey(d => d.GroupId)
-                .HasConstraintName("Rule_ibfk_1");
-
-            entity.HasOne(d => d.Menu).WithMany(p => p.Rules)
-                .HasForeignKey(d => d.MenuId)
-                .HasConstraintName("Rule_ibfk_2");
         });
 
         OnModelCreatingPartial(modelBuilder);

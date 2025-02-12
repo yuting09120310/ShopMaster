@@ -18,8 +18,4 @@ public partial class MenuSub
     public int? SortOrder { get; set; }
 
     public DateTime? CreatedAt { get; set; }
-
-    public virtual MenuGroup Group { get; set; } = null!;
-
-    public virtual ICollection<Rule> Rules { get; set; } = new List<Rule>();
 }

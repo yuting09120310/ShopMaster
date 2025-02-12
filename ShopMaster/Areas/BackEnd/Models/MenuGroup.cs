@@ -12,6 +12,4 @@ public partial class MenuGroup
     public int? SortOrder { get; set; }
 
     public DateTime? CreatedAt { get; set; }
-
-    public virtual ICollection<MenuSub> MenuSubs { get; set; } = new List<MenuSub>();
 }

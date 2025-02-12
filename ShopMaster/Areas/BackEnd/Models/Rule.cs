@@ -16,8 +16,4 @@ public partial class Rule
     public bool? CanUpdate { get; set; }
 
     public bool? CanDelete { get; set; }
-
-    public virtual AdminGroup Group { get; set; } = null!;
-
-    public virtual MenuSub Menu { get; set; } = null!;
 }
