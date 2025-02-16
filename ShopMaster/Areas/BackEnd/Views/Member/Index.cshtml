@@ -1,0 +1,57 @@
+﻿@model List<ShopMaster.Areas.BackEnd.Models.Member>
+
+@{
+    ViewData["Title"] = "會員管理";
+    Layout = "~/Areas/BackEnd/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>會員管理</h2>
+
+<a href="@Url.Action("Create", "Member")" class="btn btn-success mb-3">新增會員</a>
+
+<table class="table table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>頭像</th>
+            <th>姓名</th>
+            <th>Email</th>
+            <th>電話</th>
+            <th>會員等級</th>
+            <th>狀態</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var member in Model)
+        {
+            <tr>
+                <td>@member.Id</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(member.Avatar))
+                    {
+                        <img src="@member.Avatar" alt="Avatar" width="50">
+                    }
+                </td>
+                <td>@member.Name</td>
+                <td>@member.Email</td>
+                <td>@member.Phone</td>
+                <td>@(member.MemberType != null ? member.MemberType.Name : "無等級")</td>
+                <td>
+                    @if (member.Active == true)
+                    {
+                        <span class="badge bg-success">啟用</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">停用</span>
+                    }
+                </td>
+                <td>
+                    <a href="@Url.Action("Edit", "Member", new { id = member.Id })" class="btn btn-warning btn-sm">編輯</a>
+                    <a href="@Url.Action("Delete", "Member", new { id = member.Id })" class="btn btn-danger btn-sm" onclick="return confirm('確定刪除?');">刪除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

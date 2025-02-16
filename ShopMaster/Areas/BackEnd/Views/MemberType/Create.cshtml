@@ -1,0 +1,26 @@
+﻿@model ShopMaster.Areas.BackEnd.Models.MemberType
+
+@{
+    ViewData["Title"] = "新增會員等級";
+    Layout = "~/Areas/BackEnd/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>新增會員等級</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <label>等級名稱</label>
+        <input type="text" class="form-control" asp-for="Name" required>
+    </div>
+    <div class="mb-3">
+        <label>折扣 (%)</label>
+        <input type="number" class="form-control" asp-for="Discount" required min="0" max="100" step="0.01">
+    </div>
+    <div class="mb-3">
+        <label>升級門檻 ($)</label>
+        <input type="number" class="form-control" asp-for="UpgradeThreshold" required min="0" step="0.01">
+    </div>
+    <button type="submit" class="btn btn-success">新增</button>
+</form>
+
+<a href="@Url.Action("Index", "MemberType")" class="btn btn-secondary mt-3">返回列表</a>

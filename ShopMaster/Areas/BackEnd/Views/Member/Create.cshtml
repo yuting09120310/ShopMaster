@@ -1,0 +1,67 @@
+﻿@model ShopMaster.Areas.BackEnd.Models.Member
+
+@{
+    ViewData["Title"] = "新增會員";
+    Layout = "~/Areas/BackEnd/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>新增會員</h2>
+
+<form method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label class="form-label">姓名</label>
+        <input type="text" class="form-control" asp-for="Name" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control" asp-for="Email" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">密碼</label>
+        <input type="password" class="form-control" asp-for="PasswordHash" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">電話</label>
+        <input type="text" class="form-control" asp-for="Phone">
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">地址</label>
+        <input type="text" class="form-control" asp-for="Address">
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">生日</label>
+        <input type="date" class="form-control" asp-for="Birthday">
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">會員等級</label>
+        <select class="form-control" asp-for="MemberTypeId">
+            @foreach (var type in ViewBag.MemberTypes)
+            {
+                <option value="@type.Id">@type.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">頭像</label>
+        <input type="file" class="form-control" name="avatarFile" accept="image/*">
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">啟用狀態</label>
+        <select class="form-control" asp-for="Active">
+            <option value="1">啟用</option>
+            <option value="0">停用</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-success">新增</button>
+</form>
+
+<a href="@Url.Action("Index", "Member")" class="btn btn-secondary mt-3">返回列表</a>

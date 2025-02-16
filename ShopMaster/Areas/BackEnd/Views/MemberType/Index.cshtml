@@ -1,0 +1,44 @@
+﻿@model List<ShopMaster.Areas.BackEnd.Models.MemberType>
+
+@{
+    ViewData["Title"] = "會員等級管理";
+    Layout = "~/Areas/BackEnd/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>會員等級管理</h2>
+
+<a href="@Url.Action("Create", "MemberType")" class="btn btn-success mb-3">新增等級</a>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<table class="table table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>等級名稱</th>
+            <th>折扣 (%)</th>
+            <th>升級門檻 ($)</th>
+            <th>建立時間</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var type in Model)
+        {
+            <tr>
+                <td>@type.Id</td>
+                <td>@type.Name</td>
+                <td>@type.Discount %</td>
+                <td>$@type.UpgradeThreshold</td>
+                <td>@type.CreatedAt?.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>
+                    <a href="@Url.Action("Edit", "MemberType", new { id = type.Id })" class="btn btn-warning btn-sm">編輯</a>
+                    <a href="@Url.Action("Delete", "MemberType", new { id = type.Id })" class="btn btn-danger btn-sm" onclick="return confirm('確定刪除?');">刪除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
