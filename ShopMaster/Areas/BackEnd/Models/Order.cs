@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace ShopMaster.Areas.BackEnd.Models;
+
+public partial class Order
+{
+    public long Id { get; set; }
+
+    public long MemberId { get; set; }
+
+    public decimal TotalAmount { get; set; }
+
+    public int Status { get; set; }
+
+    public int PaymentType { get; set; }
+
+    public DateTime? CreatedAt { get; set; }
+
+    public virtual Member Member { get; set; } = null!;
+
+    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+}

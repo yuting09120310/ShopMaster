@@ -20,9 +20,17 @@ public partial class shopmasterdbContext : DbContext
 
     public virtual DbSet<AdminGroup> AdminGroups { get; set; }
 
+    public virtual DbSet<Member> Members { get; set; }
+
+    public virtual DbSet<MemberType> MemberTypes { get; set; }
+
     public virtual DbSet<MenuGroup> MenuGroups { get; set; }
 
     public virtual DbSet<MenuSub> MenuSubs { get; set; }
+
+    public virtual DbSet<Order> Orders { get; set; }
+
+    public virtual DbSet<OrderDetail> OrderDetails { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
 
@@ -83,6 +91,56 @@ public partial class shopmasterdbContext : DbContext
             entity.Property(e => e.Name).HasMaxLength(50);
         });
 
+        modelBuilder.Entity<Member>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("Member");
+
+            entity.HasIndex(e => e.Email, "Email").IsUnique();
+
+            entity.HasIndex(e => e.MemberTypeId, "MemberTypeId");
+
+            entity.Property(e => e.Id).HasColumnType("bigint(20)");
+            entity.Property(e => e.Active).HasDefaultValueSql("'1'");
+            entity.Property(e => e.Address).HasMaxLength(255);
+            entity.Property(e => e.Avatar).HasMaxLength(255);
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp");
+            entity.Property(e => e.Email).HasMaxLength(100);
+            entity.Property(e => e.MemberTypeId)
+                .HasDefaultValueSql("'4'")
+                .HasColumnType("int(11)");
+            entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.PasswordHash).HasMaxLength(255);
+            entity.Property(e => e.Phone).HasMaxLength(20);
+
+            entity.HasOne(d => d.MemberType).WithMany(p => p.Members)
+                .HasForeignKey(d => d.MemberTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("Member_ibfk_1");
+        });
+
+        modelBuilder.Entity<MemberType>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("MemberType");
+
+            entity.HasIndex(e => e.Name, "Name").IsUnique();
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp");
+            entity.Property(e => e.Discount)
+                .HasPrecision(3, 2)
+                .HasDefaultValueSql("'1.00'");
+            entity.Property(e => e.Name).HasMaxLength(50);
+            entity.Property(e => e.UpgradeThreshold).HasPrecision(10, 2);
+        });
+
         modelBuilder.Entity<MenuGroup>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -120,6 +178,59 @@ public partial class shopmasterdbContext : DbContext
             entity.Property(e => e.SortOrder)
                 .HasDefaultValueSql("'0'")
                 .HasColumnType("int(11)");
+        });
+
+        modelBuilder.Entity<Order>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("Order");
+
+            entity.HasIndex(e => e.MemberId, "MemberId");
+
+            entity.Property(e => e.Id).HasColumnType("bigint(20)");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp");
+            entity.Property(e => e.MemberId).HasColumnType("bigint(20)");
+            entity.Property(e => e.PaymentType).HasColumnType("int(11)");
+            entity.Property(e => e.Status).HasColumnType("int(11)");
+            entity.Property(e => e.TotalAmount).HasPrecision(10, 2);
+
+            entity.HasOne(d => d.Member).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.MemberId)
+                .HasConstraintName("Order_ibfk_1");
+        });
+
+        modelBuilder.Entity<OrderDetail>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("OrderDetail");
+
+            entity.HasIndex(e => e.OrderId, "OrderId");
+
+            entity.HasIndex(e => e.ProductId, "ProductId");
+
+            entity.Property(e => e.Id).HasColumnType("bigint(20)");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp");
+            entity.Property(e => e.OrderId).HasColumnType("bigint(20)");
+            entity.Property(e => e.ProductId).HasColumnType("bigint(20)");
+            entity.Property(e => e.Quantity)
+                .HasDefaultValueSql("'1'")
+                .HasColumnType("int(11)");
+            entity.Property(e => e.SubTotal).HasPrecision(10, 2);
+            entity.Property(e => e.UnitPrice).HasPrecision(10, 2);
+
+            entity.HasOne(d => d.Order).WithMany(p => p.OrderDetails)
+                .HasForeignKey(d => d.OrderId)
+                .HasConstraintName("OrderDetail_ibfk_1");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.OrderDetails)
+                .HasForeignKey(d => d.ProductId)
+                .HasConstraintName("OrderDetail_ibfk_2");
         });
 
         modelBuilder.Entity<Product>(entity =>

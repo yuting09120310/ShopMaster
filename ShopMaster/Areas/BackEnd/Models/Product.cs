@@ -27,6 +27,8 @@ public partial class Product
 
     public DateTime? CreatedAt { get; set; }
 
+    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+
     public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
 
     public virtual ProductType? Type { get; set; }
