@@ -44,14 +44,14 @@ namespace ShopMaster.Areas.BackEnd.Controllers
                 _db.Products.Add(product);
                 await _db.SaveChangesAsync(); // 先儲存，取得商品 ID
 
-                // 📌 1. 設定商品圖片儲存路徑 (upload/product/{商品編號}/)
+                //  1. 設定商品圖片儲存路徑 (upload/product/{商品編號}/)
                 string productFolder = Path.Combine(_env.WebRootPath, "upload", "product", product.Id.ToString());
                 if (!Directory.Exists(productFolder))
                 {
                     Directory.CreateDirectory(productFolder);
                 }
 
-                // 📌 2. 儲存主要圖片
+                //  2. 儲存主要圖片
                 if (mainImageFile != null)
                 {
                     string mainFileName = $"main{Path.GetExtension(mainImageFile.FileName)}"; // 檔名: main.jpg
@@ -67,7 +67,7 @@ namespace ShopMaster.Areas.BackEnd.Controllers
                     await _db.SaveChangesAsync();
                 }
 
-                // 📌 3. 儲存多張商品圖片
+                //  3. 儲存多張商品圖片
                 if (imageFiles != null)
                 {
                     foreach (var image in imageFiles)
@@ -125,14 +125,14 @@ namespace ShopMaster.Areas.BackEnd.Controllers
                 existingProduct.TypeId = product.TypeId;
                 existingProduct.Publish = product.Publish;
 
-                // 📌 1. 設定商品圖片資料夾 (upload/product/{商品編號}/)
+                //  1. 設定商品圖片資料夾 (upload/product/{商品編號}/)
                 string productFolder = Path.Combine(_env.WebRootPath, "upload", "product", existingProduct.Id.ToString());
                 if (!Directory.Exists(productFolder))
                 {
                     Directory.CreateDirectory(productFolder);
                 }
 
-                // 📌 2. 更新主要圖片
+                //  2. 更新主要圖片
                 if (mainImageFile != null)
                 {
                     // 刪除舊圖片
@@ -153,7 +153,7 @@ namespace ShopMaster.Areas.BackEnd.Controllers
                     existingProduct.MainImage = $"/upload/product/{existingProduct.Id}/{mainFileName}";
                 }
 
-                // 📌 3. 刪除選擇的多圖片
+                //  3. 刪除選擇的多圖片
                 if (deleteImageIds != null)
                 {
                     var imagesToDelete = _db.ProductImages.Where(img => deleteImageIds.Contains(img.Id)).ToList();
@@ -166,7 +166,7 @@ namespace ShopMaster.Areas.BackEnd.Controllers
                     }
                 }
 
-                // 📌 4. 新增多圖片
+                //  4. 新增多圖片
                 if (imageFiles != null)
                 {
                     foreach (var image in imageFiles)
@@ -207,21 +207,21 @@ namespace ShopMaster.Areas.BackEnd.Controllers
 
             if (product == null) return NotFound();
 
-            // 📌 1. 刪除所有商品圖片檔案
+            // 1. 刪除所有商品圖片檔案
             string productFolder = Path.Combine(_env.WebRootPath, "upload", "product", product.Id.ToString());
 
             if (Directory.Exists(productFolder))
             {
-                Directory.Delete(productFolder, true); // 📌 刪除資料夾 & 內部所有圖片
+                Directory.Delete(productFolder, true); // 刪除資料夾 & 內部所有圖片
             }
 
-            // 📌 2. 刪除資料庫中的圖片紀錄
+            //  2. 刪除資料庫中的圖片紀錄
             _db.ProductImages.RemoveRange(product.ProductImages);
 
-            // 📌 3. 刪除商品
+            //  3. 刪除商品
             _db.Products.Remove(product);
 
-            // 📌 4. 儲存變更
+            //  4. 儲存變更
             await _db.SaveChangesAsync();
 
             return RedirectToAction("Index");
