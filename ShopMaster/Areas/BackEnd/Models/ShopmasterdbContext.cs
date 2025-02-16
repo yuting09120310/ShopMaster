@@ -5,13 +5,13 @@ using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
 
 namespace ShopMaster.Areas.BackEnd.Models;
 
-public partial class ShopmasterdbContext : DbContext
+public partial class shopmasterdbContext : DbContext
 {
-    public ShopmasterdbContext()
+    public shopmasterdbContext()
     {
     }
 
-    public ShopmasterdbContext(DbContextOptions<ShopmasterdbContext> options)
+    public shopmasterdbContext(DbContextOptions<shopmasterdbContext> options)
         : base(options)
     {
     }
@@ -25,6 +25,8 @@ public partial class ShopmasterdbContext : DbContext
     public virtual DbSet<MenuSub> MenuSubs { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
+
+    public virtual DbSet<ProductImage> ProductImages { get; set; }
 
     public virtual DbSet<ProductType> ProductTypes { get; set; }
 
@@ -129,20 +131,50 @@ public partial class ShopmasterdbContext : DbContext
             entity.HasIndex(e => e.TypeId, "TypeId");
 
             entity.Property(e => e.Id).HasColumnType("bigint(20)");
+            entity.Property(e => e.Content).HasColumnType("text");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp");
             entity.Property(e => e.Description).HasColumnType("text");
+            entity.Property(e => e.MainImage).HasMaxLength(255);
             entity.Property(e => e.Name).HasMaxLength(255);
             entity.Property(e => e.Price).HasPrecision(10, 2);
-            entity.Property(e => e.Publish).HasDefaultValueSql("'1'");
+            entity.Property(e => e.Publish)
+                .HasDefaultValueSql("'1'")
+                .HasColumnType("int(1)");
             entity.Property(e => e.Stock).HasColumnType("int(11)");
             entity.Property(e => e.TypeId).HasColumnType("int(11)");
+            entity.Property(e => e.Views)
+                .HasDefaultValueSql("'0'")
+                .HasColumnType("int(11)");
 
             entity.HasOne(d => d.Type).WithMany(p => p.Products)
                 .HasForeignKey(d => d.TypeId)
                 .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("Product_ibfk_1");
+        });
+
+        modelBuilder.Entity<ProductImage>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("ProductImage");
+
+            entity.HasIndex(e => e.ProductId, "ProductId");
+
+            entity.Property(e => e.Id).HasColumnType("bigint(20)");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp");
+            entity.Property(e => e.ImageUrl).HasMaxLength(255);
+            entity.Property(e => e.ProductId).HasColumnType("bigint(20)");
+            entity.Property(e => e.SortOrder)
+                .HasDefaultValueSql("'0'")
+                .HasColumnType("int(11)");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.ProductImages)
+                .HasForeignKey(d => d.ProductId)
+                .HasConstraintName("ProductImage_ibfk_1");
         });
 
         modelBuilder.Entity<ProductType>(entity =>

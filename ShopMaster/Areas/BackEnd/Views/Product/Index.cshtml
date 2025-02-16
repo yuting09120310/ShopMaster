@@ -1,0 +1,62 @@
+﻿@model List<ShopMaster.Areas.BackEnd.Models.Product>
+
+@{
+    ViewData["Title"] = "商品管理";
+    Layout = "~/Areas/BackEnd/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>商品管理</h2>
+
+<a href="@Url.Action("Create", "Product")" class="btn btn-success mb-3">新增商品</a>
+
+<table class="table table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>圖片</th>
+            <th>名稱</th>
+            <th>類別</th>
+            <th>價格</th>
+            <th>庫存</th>
+            <th>狀態</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.Id</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(product.MainImage))
+                    {
+                        <img src="@product.MainImage" alt="Product Image" width="50" />
+                    }
+                </td>
+                <td>@product.Name</td>
+                <td>@(product.Type != null ? product.Type.Name : "無類別")</td>
+                <td>@product.Price</td>
+                <td>@product.Stock</td>
+                <td>
+                    @if (product.Publish == 0)
+                    {
+                        <span class="badge bg-success">啟用</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">停用</span>
+                    }
+                </td>
+                <td>
+                    <a href="@Url.Action("Edit", "Product", new { id = product.Id })" class="btn btn-warning btn-sm">編輯</a>
+
+                    <form method="post" action="@Url.Action("Delete", "Product", new { id = product.Id })" style="display:inline;" onsubmit="return confirm('確定要刪除這個商品嗎？');">
+                        @Html.AntiForgeryToken() <!-- ✅ 獨立使用 -->
+                        <button type="submit" class="btn btn-danger btn-sm">刪除</button>
+                    </form>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,40 @@
+﻿@model List<ShopMaster.Areas.BackEnd.Models.ProductType>
+
+@{
+    ViewData["Title"] = "商品類別管理";
+    Layout = "~/Areas/BackEnd/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>商品類別管理</h2>
+
+<a href="@Url.Action("Create", "ProductType")" class="btn btn-success mb-3">新增類別</a>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<table class="table table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>名稱</th>
+            <th>建立時間</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var type in Model)
+        {
+            <tr>
+                <td>@type.Id</td>
+                <td>@type.Name</td>
+                <td>@type.CreatedAt?.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>
+                    <a href="@Url.Action("Edit", "ProductType", new { id = type.Id })" class="btn btn-warning btn-sm">編輯</a>
+                    <a href="@Url.Action("Delete", "ProductType", new { id = type.Id })" class="btn btn-danger btn-sm" onclick="return confirm('確定刪除?');">刪除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -7,9 +7,9 @@ namespace ShopMaster.Areas.BackEnd.Controllers
 {
     public class AdminGroupController : BaseController
     {
-        private readonly ShopmasterdbContext _db;
+        private readonly shopmasterdbContext _db;
 
-        public AdminGroupController(ShopmasterdbContext db) : base(db)
+        public AdminGroupController(shopmasterdbContext db) : base(db)
         {
             _db = db;
         }

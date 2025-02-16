@@ -7,9 +7,9 @@ namespace ShopMaster.Areas.BackEnd.Controllers
     [Area("BackEnd")]
     public class HomeController : BaseController
     {
-        private readonly ShopmasterdbContext _db;
+        private readonly shopmasterdbContext _db;
 
-        public HomeController(ShopmasterdbContext db) : base(db)
+        public HomeController(shopmasterdbContext db) : base(db)
         {
             _db = db;
         }

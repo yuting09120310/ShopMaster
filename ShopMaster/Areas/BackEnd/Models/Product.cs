@@ -9,7 +9,11 @@ public partial class Product
 
     public string Name { get; set; } = null!;
 
+    public string? MainImage { get; set; }
+
     public string? Description { get; set; }
+
+    public string? Content { get; set; }
 
     public decimal Price { get; set; }
 
@@ -17,9 +21,13 @@ public partial class Product
 
     public int? TypeId { get; set; }
 
-    public bool? Publish { get; set; }
+    public int? Publish { get; set; }
+
+    public int? Views { get; set; }
 
     public DateTime? CreatedAt { get; set; }
+
+    public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
 
     public virtual ProductType? Type { get; set; }
 }

@@ -9,9 +9,9 @@ namespace ShopMaster.Areas.BackEnd.Controllers
     [Area("BackEnd")]
     public class BaseController : Controller
     {
-        protected readonly ShopmasterdbContext _db;
+        protected readonly shopmasterdbContext _db;
 
-        public BaseController(ShopmasterdbContext db)
+        public BaseController(shopmasterdbContext db)
         {
             _db = db;
         }

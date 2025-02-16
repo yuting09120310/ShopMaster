@@ -1,0 +1,19 @@
+﻿@model ShopMaster.Areas.BackEnd.Models.ProductType
+
+@{
+    ViewData["Title"] = "編輯商品類別";
+    Layout = "~/Areas/BackEnd/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>編輯商品類別</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="mb-3">
+        <label>類別名稱</label>
+        <input type="text" class="form-control" asp-for="Name" required>
+    </div>
+    <button type="submit" class="btn btn-primary">更新</button>
+</form>
+
+<a href="@Url.Action("Index", "ProductType")" class="btn btn-secondary mt-3">返回列表</a>

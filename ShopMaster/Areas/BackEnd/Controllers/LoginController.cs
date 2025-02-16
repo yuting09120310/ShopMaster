@@ -9,9 +9,9 @@ namespace ShopMaster.Areas.BackEnd.Controllers
     [Area("BackEnd")]
     public class LoginController : Controller
     {
-        private readonly ShopmasterdbContext _db;
+        private readonly shopmasterdbContext _db;
 
-        public LoginController(ShopmasterdbContext db)
+        public LoginController(shopmasterdbContext db)
         {
             _db = db;
         }

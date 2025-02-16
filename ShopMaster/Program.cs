@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 // 設定 MySQL 連線
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddDbContext<ShopMaster.Areas.BackEnd.Models.ShopmasterdbContext>(options =>
+builder.Services.AddDbContext<ShopMaster.Areas.BackEnd.Models.shopmasterdbContext>(options =>
     options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 30))));
 
 builder.Services.AddSession(); // 啟用 Session
