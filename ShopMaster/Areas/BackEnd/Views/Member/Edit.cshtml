@@ -57,8 +57,8 @@
     <div class="mb-3">
         <label class="form-label">啟用狀態</label>
         <select class="form-control" asp-for="Active">
-            <option value="1" selected="@(Model.Active == true ? "selected" : null)">啟用</option>
-            <option value="0" selected="@(Model.Active == false ? "selected" : null)">停用</option>
+            <option value="1" selected="@(Model.Active == 1 ? "selected" : null)">啟用</option>
+            <option value="0" selected="@(Model.Active == 0 ? "selected" : null)">停用</option>
         </select>
     </div>
 

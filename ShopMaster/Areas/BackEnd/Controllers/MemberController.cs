@@ -36,16 +36,17 @@ namespace ShopMaster.Areas.BackEnd.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Member member, IFormFile? avatarFile)
         {
+            ModelState.Remove(nameof(member.MemberType));
+
             if (ModelState.IsValid)
             {
                 member.CreatedAt = DateTime.UtcNow;
-                member.Active = member.Active ?? false;
 
                 // 儲存會員
                 _db.Members.Add(member);
                 await _db.SaveChangesAsync(); // 取得會員 ID
 
-                // 📌 儲存頭像
+                //  儲存頭像
                 if (avatarFile != null)
                 {
                     string memberFolder = Path.Combine(_env.WebRootPath, "upload", "member", member.Id.ToString());
@@ -89,6 +90,8 @@ namespace ShopMaster.Areas.BackEnd.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Member member, IFormFile? avatarFile)
         {
+            ModelState.Remove(nameof(member.MemberType));
+
             if (ModelState.IsValid)
             {
                 var existingMember = await _db.Members.FindAsync(member.Id);

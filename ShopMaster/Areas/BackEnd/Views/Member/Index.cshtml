@@ -38,7 +38,7 @@
                 <td>@member.Phone</td>
                 <td>@(member.MemberType != null ? member.MemberType.Name : "無等級")</td>
                 <td>
-                    @if (member.Active == true)
+                    @if (member.Active == 1)
                     {
                         <span class="badge bg-success">啟用</span>
                     }

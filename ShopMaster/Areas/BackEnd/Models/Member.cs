@@ -23,7 +23,7 @@ public partial class Member
 
     public int MemberTypeId { get; set; }
 
-    public bool? Active { get; set; }
+    public int Active { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
