@@ -1,0 +1,57 @@
+﻿@model ShopMaster.Areas.BackEnd.Models.EcouponEvent
+
+@{
+    ViewData["Title"] = "新增優惠活動";
+    Layout = "~/Areas/BackEnd/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>新增優惠活動</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <label>活動名稱</label>
+        <input type="text" class="form-control" asp-for="Name" required>
+    </div>
+
+    <div class="mb-3">
+        <label>代碼前綴</label>
+        <input type="text" class="form-control" asp-for="CodePrefix" required>
+    </div>
+
+    <div class="mb-3">
+        <label>折扣類型</label>
+        <select class="form-control" asp-for="CouponType">
+            <option value="cash">現金折扣</option>
+            <option value="percent">滿額折扣</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>折扣金額</label>
+        <input type="number" class="form-control" asp-for="Discount" required>
+    </div>
+
+    <div class="mb-3">
+        <label>最低消費金額</label>
+        <input type="number" class="form-control" asp-for="MinOrderAmount" required>
+    </div>
+
+    <div class="mb-3">
+        <label>優惠券有效天數</label>
+        <input type="number" class="form-control" asp-for="ExpiryDays" required>
+    </div>
+
+    <div class="mb-3">
+        <label>開始日期</label>
+        <input type="date" class="form-control" asp-for="StartDate" required>
+    </div>
+
+    <div class="mb-3">
+        <label>結束日期</label>
+        <input type="date" class="form-control" asp-for="EndDate">
+    </div>
+
+    <button type="submit" class="btn btn-success">新增</button>
+</form>
+
+<a href="@Url.Action("Index", "EcouponEvent")" class="btn btn-secondary mt-3">返回列表</a>

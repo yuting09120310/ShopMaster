@@ -20,6 +20,10 @@ public partial class shopmasterdbContext : DbContext
 
     public virtual DbSet<AdminGroup> AdminGroups { get; set; }
 
+    public virtual DbSet<Ecoupon> Ecoupons { get; set; }
+
+    public virtual DbSet<EcouponEvent> EcouponEvents { get; set; }
+
     public virtual DbSet<Member> Members { get; set; }
 
     public virtual DbSet<MemberType> MemberTypes { get; set; }
@@ -31,6 +35,8 @@ public partial class shopmasterdbContext : DbContext
     public virtual DbSet<Order> Orders { get; set; }
 
     public virtual DbSet<OrderDetail> OrderDetails { get; set; }
+
+    public virtual DbSet<PayInfo> PayInfos { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
 
@@ -91,6 +97,70 @@ public partial class shopmasterdbContext : DbContext
             entity.Property(e => e.Name).HasMaxLength(50);
         });
 
+        modelBuilder.Entity<Ecoupon>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("ECoupon");
+
+            entity.HasIndex(e => e.Code, "Code").IsUnique();
+
+            entity.HasIndex(e => e.EcouponEventId, "ECouponEventId");
+
+            entity.HasIndex(e => e.MemberId, "MemberId");
+
+            entity.HasIndex(e => e.OrderId, "OrderId");
+
+            entity.Property(e => e.Id).HasColumnType("bigint(20)");
+            entity.Property(e => e.Code).HasMaxLength(50);
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp");
+            entity.Property(e => e.EcouponEventId)
+                .HasColumnType("bigint(20)")
+                .HasColumnName("ECouponEventId");
+            entity.Property(e => e.MemberId).HasColumnType("bigint(20)");
+            entity.Property(e => e.OrderId).HasColumnType("bigint(20)");
+            entity.Property(e => e.Status)
+                .HasDefaultValueSql("'0'")
+                .HasColumnType("int(1)");
+
+            entity.HasOne(d => d.EcouponEvent).WithMany(p => p.Ecoupons)
+                .HasForeignKey(d => d.EcouponEventId)
+                .HasConstraintName("ECoupon_ibfk_1");
+
+            entity.HasOne(d => d.Member).WithMany(p => p.Ecoupons)
+                .HasForeignKey(d => d.MemberId)
+                .HasConstraintName("ECoupon_ibfk_2");
+
+            entity.HasOne(d => d.Order).WithMany(p => p.Ecoupons)
+                .HasForeignKey(d => d.OrderId)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("ECoupon_ibfk_3");
+        });
+
+        modelBuilder.Entity<EcouponEvent>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("ECouponEvent");
+
+            entity.HasIndex(e => e.CodePrefix, "CodePrefix").IsUnique();
+
+            entity.Property(e => e.Id).HasColumnType("bigint(20)");
+            entity.Property(e => e.CodePrefix).HasMaxLength(50);
+            entity.Property(e => e.CouponType)
+                .HasDefaultValueSql("'Discount'")
+                .HasColumnType("enum('Discount','FreeShipping')");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp");
+            entity.Property(e => e.Discount).HasPrecision(10, 2);
+            entity.Property(e => e.ExpiryDays).HasColumnType("int(11)");
+            entity.Property(e => e.MinOrderAmount).HasPrecision(10, 2);
+            entity.Property(e => e.Name).HasMaxLength(100);
+        });
+
         modelBuilder.Entity<Member>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -102,7 +172,9 @@ public partial class shopmasterdbContext : DbContext
             entity.HasIndex(e => e.MemberTypeId, "MemberTypeId");
 
             entity.Property(e => e.Id).HasColumnType("bigint(20)");
-            entity.Property(e => e.Active).HasDefaultValueSql("'1'");
+            entity.Property(e => e.Active)
+                .HasDefaultValueSql("'1'")
+                .HasColumnType("int(1)");
             entity.Property(e => e.Address).HasMaxLength(255);
             entity.Property(e => e.Avatar).HasMaxLength(255);
             entity.Property(e => e.CreatedAt)
@@ -186,6 +258,8 @@ public partial class shopmasterdbContext : DbContext
 
             entity.ToTable("Order");
 
+            entity.HasIndex(e => e.PaymentType, "FK_Order_PaymentType");
+
             entity.HasIndex(e => e.MemberId, "MemberId");
 
             entity.Property(e => e.Id).HasColumnType("bigint(20)");
@@ -200,6 +274,11 @@ public partial class shopmasterdbContext : DbContext
             entity.HasOne(d => d.Member).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.MemberId)
                 .HasConstraintName("Order_ibfk_1");
+
+            entity.HasOne(d => d.PaymentTypeNavigation).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.PaymentType)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Order_PaymentType");
         });
 
         modelBuilder.Entity<OrderDetail>(entity =>
@@ -231,6 +310,22 @@ public partial class shopmasterdbContext : DbContext
             entity.HasOne(d => d.Product).WithMany(p => p.OrderDetails)
                 .HasForeignKey(d => d.ProductId)
                 .HasConstraintName("OrderDetail_ibfk_2");
+        });
+
+        modelBuilder.Entity<PayInfo>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("PayInfo");
+
+            entity.HasIndex(e => e.Name, "Name").IsUnique();
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp");
+            entity.Property(e => e.Description).HasColumnType("text");
+            entity.Property(e => e.Name).HasMaxLength(50);
         });
 
         modelBuilder.Entity<Product>(entity =>

@@ -1,0 +1,116 @@
+﻿@model List<ShopMaster.Areas.BackEnd.Models.Ecoupon>
+
+@{
+    ViewData["Title"] = "已發放的優惠券";
+    Layout = "~/Areas/BackEnd/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-4"><i class="fas fa-ticket-alt"></i> 已發放的優惠券</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<!-- 篩選表單 -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <i class="fas fa-filter"></i> 篩選優惠券
+    </div>
+    <div class="card-body">
+        <form method="get">
+            <div class="row">
+                <div class="col-md-3">
+                    <label><strong>活動名稱</strong></label>
+                    <input type="text" class="form-control" name="eventName" value="@ViewBag.EventName" placeholder="輸入活動名稱">
+                </div>
+                <div class="col-md-3">
+                    <label><strong>使用狀態</strong></label>
+                    <select class="form-control" name="status">
+                        <option value="">全部</option>
+                        <option value="0" selected="@(ViewBag.Status == 0 ? "selected" : null)">未使用</option>
+                        <option value="1" selected="@(ViewBag.Status == 1 ? "selected" : null)">已使用</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label><strong>有效狀態</strong></label>
+                    <select class="form-control" name="expired">
+                        <option value="">全部</option>
+                        <option value="1" selected="@(ViewBag.Expired == 1 ? "selected" : null)">已過期</option>
+                        <option value="0" selected="@(ViewBag.Expired == 0 ? "selected" : null)">未過期</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> 搜尋</button>
+                    <a href="@Url.Action("Index", "Ecoupon")" class="btn btn-secondary ms-2"><i class="fas fa-redo"></i> 重置</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 優惠券列表 (移除標題) -->
+<div class="card">
+    <div class="card-body p-0">
+        <!-- 取消內邊距，讓表格頂上去 -->
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>優惠券代碼</th>
+                    <th>會員</th>
+                    <th>活動名稱</th>
+                    <th>狀態</th>
+                    <th>過期日</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var coupon in Model)
+                {
+                    <tr>
+                        <td>@coupon.Id</td>
+                        <td>
+                            <span class="badge bg-info text-white">@coupon.Code</span>
+                        </td>
+                        <td>@coupon.Member.Name <br><small class="text-muted">@coupon.Member.Email</small></td>
+                        <td>@coupon.EcouponEvent.Name</td>
+                        <td>
+                            @if (coupon.Status == 0)
+                            {
+                                <span class="badge bg-warning text-dark">未使用</span>
+                            }
+                            else if (coupon.Status == 1)
+                            {
+                                <span class="badge bg-success">已使用</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">已過期</span>
+                            }
+                        </td>
+                        <td>@coupon.ExpiryDate</td>
+                        <td>
+                            @if (coupon.Status == 0)
+                            {
+                                <a href="@Url.Action("Delete", "Ecoupon", new { id = coupon.Id })" class="btn btn-danger btn-sm" onclick="return confirm('確定刪除?');">
+                                    <i class="fas fa-trash-alt"></i> 刪除
+                                </a>
+                            }
+                            else
+                            {
+                                <button class="btn btn-secondary btn-sm" disabled>
+                                    <i class="fas fa-ban"></i> 不可刪除
+                                </button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

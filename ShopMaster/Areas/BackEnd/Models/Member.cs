@@ -23,9 +23,11 @@ public partial class Member
 
     public int MemberTypeId { get; set; }
 
-    public int Active { get; set; }
+    public int? Active { get; set; }
 
     public DateTime? CreatedAt { get; set; }
+
+    public virtual ICollection<Ecoupon> Ecoupons { get; set; } = new List<Ecoupon>();
 
     public virtual MemberType MemberType { get; set; } = null!;
 

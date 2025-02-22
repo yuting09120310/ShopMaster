@@ -1,0 +1,58 @@
+﻿@model ShopMaster.Areas.BackEnd.Models.Order
+
+@{
+    ViewData["Title"] = "訂單詳情";
+    Layout = "~/Areas/BackEnd/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>訂單詳情</h2>
+
+<div class="card">
+    <div class="card-body">
+        <h4>訂單編號：@Model.Id</h4>
+        <p><strong>會員：</strong> @Model.Member.Name</p>
+        <p><strong>總金額：</strong> $@Model.TotalAmount</p>
+        <p><strong>付款方式：</strong> @(Model.PaymentType == 1 ? "信用卡" : "銀行轉帳")</p>
+        <p>
+            <strong>狀態：</strong>
+            @if (Model.Status == 1)
+            {
+                <span class="badge bg-success">已完成</span>
+            }
+            else if (Model.Status == 2)
+            {
+                <span class="badge bg-warning">待出貨</span>
+            }
+            else
+            {
+                <span class="badge bg-danger">取消</span>
+            }
+        </p>
+        <p><strong>建立時間：</strong> @Model.CreatedAt?.ToString("yyyy-MM-dd HH:mm")</p>
+    </div>
+</div>
+
+<h4 class="mt-4">訂單商品</h4>
+<table class="table table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>商品名稱</th>
+            <th>數量</th>
+            <th>單價</th>
+            <th>小計</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var detail in Model.OrderDetails)
+        {
+            <tr>
+                <td>@detail.Product.Name</td>
+                <td>@detail.Quantity</td>
+                <td>$@detail.UnitPrice</td>
+                <td>$@detail.SubTotal</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("Index", "Order")" class="btn btn-secondary mt-3">返回列表</a>

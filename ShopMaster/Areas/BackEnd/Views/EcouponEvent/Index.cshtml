@@ -1,0 +1,51 @@
+﻿@model List<ShopMaster.Areas.BackEnd.Models.EcouponEvent>
+
+@{
+    ViewData["Title"] = "優惠活動管理";
+    Layout = "~/Areas/BackEnd/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>優惠活動管理</h2>
+
+<a href="@Url.Action("Create", "EcouponEvent")" class="btn btn-success mb-3">新增活動</a>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<table class="table table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>活動名稱</th>
+            <th>折扣類型</th>
+            <th>折扣</th>
+            <th>最低消費</th>
+            <th>有效天數</th>
+            <th>開始日期</th>
+            <th>結束日期</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ev in Model)
+        {
+            <tr>
+                <td>@ev.Id</td>
+                <td>@ev.Name</td>
+                <td>@(ev.CouponType == "cash" ? "現金折扣" : "滿額折扣")</td>
+                <td>@ev.Discount</td>
+                <td>@ev.MinOrderAmount</td>
+                <td>@ev.ExpiryDays 天</td>
+                <td>@ev.StartDate</td>
+                <td>@(ev.EndDate?.ToString("yyyy-MM-dd") ?? "無限期")</td>
+                <td>
+                    <a href="@Url.Action("Edit", "EcouponEvent", new { id = ev.Id })" class="btn btn-warning btn-sm">編輯</a>
+                    <a href="@Url.Action("Delete", "EcouponEvent", new { id = ev.Id })" class="btn btn-danger btn-sm" onclick="return confirm('確定刪除?');">刪除</a>
+                    <a href="@Url.Action("Distribute", "EcouponEvent", new { id = ev.Id })" class="btn btn-primary btn-sm">📩 發放優惠券</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -17,7 +17,11 @@ public partial class Order
 
     public DateTime? CreatedAt { get; set; }
 
+    public virtual ICollection<Ecoupon> Ecoupons { get; set; } = new List<Ecoupon>();
+
     public virtual Member Member { get; set; } = null!;
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+
+    public virtual PayInfo PaymentTypeNavigation { get; set; } = null!;
 }

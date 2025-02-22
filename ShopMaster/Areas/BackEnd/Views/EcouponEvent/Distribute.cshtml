@@ -1,0 +1,26 @@
+﻿@model ShopMaster.Areas.BackEnd.ViewModels.EcouponDistributeViewModel
+
+@{
+    ViewData["Title"] = "發放優惠券";
+    Layout = "~/Areas/BackEnd/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>發放優惠券 - @Model.EventName</h2>
+
+<form method="post">
+    <input type="hidden" name="EcouponEventId" value="@Model.EventId">
+
+    <div class="mb-3">
+        <label>選擇會員</label>
+        <select class="form-control" name="MemberId">
+            @foreach (var member in Model.Members)
+            {
+                <option value="@member.Id">@member.Name (@member.Email)</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-success">發放</button>
+</form>
+
+<a href="@Url.Action("Index", "EcouponEvent")" class="btn btn-secondary mt-3">返回</a>
