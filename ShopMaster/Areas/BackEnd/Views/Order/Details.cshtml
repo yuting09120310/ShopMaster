@@ -1,4 +1,4 @@
-﻿@model ShopMaster.Areas.BackEnd.Models.Order
+﻿@model ShopMaster.Areas.BackEnd.ViewModels.OrderDetailViewModel
 
 @{
     ViewData["Title"] = "訂單詳情";
@@ -9,24 +9,16 @@
 
 <div class="card">
     <div class="card-body">
-        <h4>訂單編號：@Model.Id</h4>
-        <p><strong>會員：</strong> @Model.Member.Name</p>
-        <p><strong>總金額：</strong> $@Model.TotalAmount</p>
-        <p><strong>付款方式：</strong> @(Model.PaymentType == 1 ? "信用卡" : "銀行轉帳")</p>
+        <h4>訂單編號：@Model.OrderId</h4>
+        <p><strong>會員：</strong> @Model.MemberName (<span class="text-muted">@Model.MemberEmail</span>)</p>
+        <p><strong>總金額：</strong> <del class="text-muted">$@Model.TotalAmount</del></p>
+        <p><strong>折扣後金額：</strong> <span class="text-success">$@Model.FinalAmount</span></p>
+        <p><strong>付款方式：</strong> @Model.PaymentType</p>
         <p>
             <strong>狀態：</strong>
-            @if (Model.Status == 1)
-            {
-                <span class="badge bg-success">已完成</span>
-            }
-            else if (Model.Status == 2)
-            {
-                <span class="badge bg-warning">待出貨</span>
-            }
-            else
-            {
-                <span class="badge bg-danger">取消</span>
-            }
+            <span class="badge @(Model.OrderStatus == "已完成" ? "bg-success" : (Model.OrderStatus == "待出貨" ? "bg-warning" : "bg-danger"))">
+                @Model.OrderStatus
+            </span>
         </p>
         <p><strong>建立時間：</strong> @Model.CreatedAt?.ToString("yyyy-MM-dd HH:mm")</p>
     </div>
@@ -43,14 +35,37 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var detail in Model.OrderDetails)
+        @foreach (var item in Model.OrderItems)
         {
             <tr>
-                <td>@detail.Product.Name</td>
-                <td>@detail.Quantity</td>
-                <td>$@detail.UnitPrice</td>
-                <td>$@detail.SubTotal</td>
+                <td>@item.ProductName</td>
+                <td>@item.Quantity</td>
+                <td>$@item.OriginalPrice</td>
+                <td>$@item.SubTotal</td>
             </tr>
+        }
+
+        <!-- 會員折扣 -->
+        <tr class="table-warning">
+            <td colspan="1" class="text-end"><strong>會員折扣 </strong></td>
+            <td colspan="1" class="text-end"></td>
+            <td colspan="1" class="text-end"></td>
+            <td colspan="1" class="text-danger">-$@Model.MemberTotalDiscount</td>
+        </tr>
+
+        <!-- 優惠券使用列表 -->
+        @if (Model.UsedCoupons.Any())
+        {
+            @foreach (var coupon in Model.UsedCoupons)
+            {
+                <tr class="table-info">
+                    <td colspan="1" class="text-end"><strong>優惠券折扣：@coupon.Code</strong></td>
+                    <td colspan="1" class="text-end"></td>
+                    <td colspan="1" class="text-end"></td>
+                    <td colspan="1" class="text-danger">-$$@coupon.Discount</td>
+                </tr>
+            }
+            
         }
     </tbody>
 </table>

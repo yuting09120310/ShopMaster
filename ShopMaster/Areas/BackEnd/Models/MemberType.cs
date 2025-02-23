@@ -16,4 +16,6 @@ public partial class MemberType
     public DateTime? CreatedAt { get; set; }
 
     public virtual ICollection<Member> Members { get; set; } = new List<Member>();
+
+    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 }

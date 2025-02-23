@@ -262,11 +262,16 @@ public partial class shopmasterdbContext : DbContext
 
             entity.HasIndex(e => e.MemberId, "MemberId");
 
+            entity.HasIndex(e => e.MemberTypeId, "MemberTypeId");
+
             entity.Property(e => e.Id).HasColumnType("bigint(20)");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp");
             entity.Property(e => e.MemberId).HasColumnType("bigint(20)");
+            entity.Property(e => e.MemberTypeId)
+                .HasDefaultValueSql("'4'")
+                .HasColumnType("int(11)");
             entity.Property(e => e.PaymentType).HasColumnType("int(11)");
             entity.Property(e => e.Status).HasColumnType("int(11)");
             entity.Property(e => e.TotalAmount).HasPrecision(10, 2);
@@ -274,6 +279,11 @@ public partial class shopmasterdbContext : DbContext
             entity.HasOne(d => d.Member).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.MemberId)
                 .HasConstraintName("Order_ibfk_1");
+
+            entity.HasOne(d => d.MemberType).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.MemberTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("Order_ibfk_2");
 
             entity.HasOne(d => d.PaymentTypeNavigation).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.PaymentType)
@@ -295,13 +305,14 @@ public partial class shopmasterdbContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp");
+            entity.Property(e => e.FinalPrice).HasPrecision(10, 2);
             entity.Property(e => e.OrderId).HasColumnType("bigint(20)");
+            entity.Property(e => e.OriginalPrice).HasPrecision(10, 2);
             entity.Property(e => e.ProductId).HasColumnType("bigint(20)");
             entity.Property(e => e.Quantity)
                 .HasDefaultValueSql("'1'")
                 .HasColumnType("int(11)");
             entity.Property(e => e.SubTotal).HasPrecision(10, 2);
-            entity.Property(e => e.UnitPrice).HasPrecision(10, 2);
 
             entity.HasOne(d => d.Order).WithMany(p => p.OrderDetails)
                 .HasForeignKey(d => d.OrderId)
