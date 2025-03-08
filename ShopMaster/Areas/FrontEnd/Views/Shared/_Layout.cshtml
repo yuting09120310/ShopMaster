@@ -1,53 +1,145 @@
-﻿<!DOCTYPE html>
+﻿
+@{}
+
+
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@ViewData["Title"] - ShopMaster</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  
+    <style>
+        @@media (min-width: 768px) {
+  .offcanvas-end {
+    display: block; /* Make sure offcanvas is visible on larger screens */
+  }
+}
+
+
+
+    </style>
+    
+
+
 </head>
 <body>
 
     <!-- 導航列 -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
-            <a class="navbar-brand" href="/">ShopMaster</a>
+    <div class="fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" >
+        <div class="container" >
+            <a class="navbar-brand fw-bold fs-3 ps-2" href="/">ShopMaster</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+            </button>      
+            
+        </div>
+        <div class="d-flex container" >
+            <div  class="col-9">
+                <form class="d-flex ps-5 mt-2 " role="search" >
+                    <input class="form-control   me-0" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn" style="border:none" type="submit"><i class="bi bi-search fs-5 me-4"></i></button>
+                </form>    
+            </div>
+            <div class="col-3">                                
+                <ul class="list-group list-group-horizontal mt-2 ">                                         
+                    <li class="list-group-item bg-light pe-2 " style="border:none">                       
+                        <a class="nav-link pl-4 " href="/Account/Login" ><i class="bi bi-person-circle fs-5" ></i></a>
+                    </li> 
+                    <li class="list-group-item bg-light " style="border:none">                        
+                        <a class="nav-link"  ><i class="bi bi-bucket fs-5 text-end "data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"></i></a>                        
+                    </li>   
+                    
+                </ul>     
+                
+            </div>
+        </div>
+                   
+    </nav>  
+    @* 購物車 *@
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel" data-bs-backdrop="false"">
+     <div class="offcanvas-header">
+       <h5 class="offcanvas-title" id="offcanvasRightLabel">您的購物車</h5>
+       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+     </div>
+    <div class="offcanvas-body">     </div>
+</div>
+
+
+    <nav class="navbar navbar-expand-lg bg-light ">
+        <div class="container">            
+            <div class="collapse navbar-collapse offset-md-1 mb-1 " id="navbarNav">
+                <ul class="navbar-nav fw-bold" style=" font-size: 16px;">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">首頁</a>
+                        <a class="nav-link" aria-current="page" href="/" >首頁</a>
+                    </li>                    
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="/Product" role="button" data-bs-toggle="dropdown" aria-expanded="false" >
+                            商品
+                        </a>                     
+                        <ul class="dropdown-menu " style=" font-size: 15px;">
+                            <li><a class="dropdown-item " href="/Product" >最新商品</a></li>
+                            <li><a class="dropdown-item " href="/Product" >熱銷商品</a></li>
+                            <li><a class="dropdown-item " href="/Product" >限定商品</a></li>
+                            <li><a class="dropdown-item " href="/Product" >特價商品</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/Product">商品</a>
+                        <a class="nav-link" href="/Admin" >關於我們</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/Cart">購物車</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Account/Login">登入</a>
-                    </li>
+                        <a class="nav-link" href="/Contact" >聯絡我們</a>
+                    </li>                    
                 </ul>
             </div>
         </div>
     </nav>
+  </div>
 
     <!-- 主要內容 -->
+    
+
     <main>
-        @RenderBody()
+       @RenderBody()        
     </main>
 
     <!-- 頁腳 -->
-    <footer class="bg-dark text-white text-center py-3 mt-5">
+    <footer class="text-dark text-center py-3 mt-5 border-top border-dark">
         <p>
-            © 2024 ShopMaster. All Rights Reserved. |
-            <a href="/BackEnd/" class="text-light text-decoration-none">後台管理</a>
+            © 2025 ShopMaster. All Rights Reserved. |
+            <a href="/BackEnd/" class="text-dark text-decoration-none">後台管理</a>
         </p>
     </footer>
 
+   
+    
+    
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+
+      // 啟用tooltip
+       var tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+       tooltipTriggerList.forEach(function (tooltipTriggerEl) { new bootstrap.Tooltip(tooltipTriggerEl);
+       });      
+
+       // 啟用Popovers
+       const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+       const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+
+
+       
+
+  </script>
+
+
+
+   
+    
 </body>
 </html>
+
+

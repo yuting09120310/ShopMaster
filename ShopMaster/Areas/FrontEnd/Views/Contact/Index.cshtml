@@ -1,0 +1,54 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+@{
+    <style>
+        #send {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+        }
+    </style>
+
+    <div class="container" style="padding-top: 110px">
+        <div class="row justify-content-center mt-5">
+            <div class="col-4">
+                <form>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="floatingInputValue" placeholder="姓名" value="">
+                        <label for="floatingInputValue">姓名</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="floatingInputValue" placeholder="電子郵件" value="">
+                        <label for="floatingInputValue">電子郵件</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="floatingInputValue" placeholder="電話" value="">
+                        <label for="floatingInputValue">電話</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                            <option selected>建議</option>
+                            <option value="1">換貨</option>
+                            <option value="2">退貨</option>
+                            <option value="3">其它</option>
+                        </select>
+                        <label for="floatingSelect">問題類型</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control" placeholder="問題內容" id="floatingTextarea2" style="height: 100px"></textarea>
+                        <label for="floatingTextarea2">問題內容</label>
+                    </div>
+                    <div>                       
+                        <input type="file" class="form-control bg-white" id="floatingInputValue" placeholder="" value="">
+                    </div>
+                    <div id="sendDiv" class="d-flex justify-content-center mt-4">
+                        <button type="button" class="btn btn-warning text-center mt-2 fw-bold" id="send">SEND !</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}

@@ -48,7 +48,7 @@ public partial class shopmasterdbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=192.168.0.90;database=shopmasterdb;user id=ShopMasterDB;password=Alex0310", Microsoft.EntityFrameworkCore.ServerVersion.Parse("5.7.43-mysql"));
+        => optionsBuilder.UseMySql("server=219.68.168.127;database=shopmasterdb;user id=ShopMasterDB;password=Alex0310", Microsoft.EntityFrameworkCore.ServerVersion.Parse("5.7.43-mysql"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
