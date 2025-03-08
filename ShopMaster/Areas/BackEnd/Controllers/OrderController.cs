@@ -59,8 +59,8 @@ namespace ShopMaster.Areas.BackEnd.Controllers
                 OrderId = order.Id,
                 MemberName = order.Member.Name,
                 MemberEmail = order.Member.Email,
-                TotalAmount = order.TotalAmount,
-                FinalAmount = finalAmount, //  計算最終付款金額
+                TotalAmount = totalAmount,
+                FinalAmount = customPay, //  計算最終付款金額
                 MemberTotalDiscount = memberDiscountTotal, //  會員折扣
                 CouponTotalDiscount = couponDiscountTotal, //  優惠券折扣
                 PaymentType = order.PaymentType == 1 ? "信用卡" : "銀行轉帳",
