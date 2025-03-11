@@ -2,6 +2,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using ShopMaster.Areas.BackEnd.Models;
+using X.PagedList;
+using X.PagedList.Mvc.Core;
+using X.PagedList.Extensions;
+
 
 namespace ShopMaster.Areas.BackEnd.Controllers
 {
@@ -18,11 +22,44 @@ namespace ShopMaster.Areas.BackEnd.Controllers
         }
 
         // 會員列表
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? Name, string? Id, string? Phone, string? MemberTypeId, string? Active, int? page)
         {
-            var members = await _db.Members.Include(m => m.MemberType).OrderBy(m => m.CreatedAt).ToListAsync();
-            return View(members);
+            ViewBag.MemberTypes = _db.MemberTypes.ToList();
+            var members = _db.Members.Include(m => m.MemberType).OrderBy(m => m.CreatedAt).AsQueryable();
+
+            if (!string.IsNullOrEmpty(Name))
+            {
+                members = members.Where(e => e.Name.Contains(Name));
+            }
+
+            if (!string.IsNullOrEmpty(Id) && long.TryParse(Id, out long memberId))
+            {
+                members = members.Where(e => e.Id == memberId);
+            }
+
+            if (!string.IsNullOrEmpty(Phone))
+            {
+                members = members.Where(e => e.Phone == Phone);
+            }
+
+            if (!string.IsNullOrEmpty(MemberTypeId) && int.TryParse(MemberTypeId, out int memberTypeId))
+            {
+                members = members.Where(e => e.MemberTypeId == memberTypeId);
+            }
+
+            if (!string.IsNullOrEmpty(Active) && int.TryParse(Active, out int activeStatus))
+            {
+                members = members.Where(e => e.Active == activeStatus);
+            }
+
+            int pageSize = 10;
+            int pageNumber = page ?? 1;
+
+            var pagedMembers = members.AsEnumerable().ToPagedList(pageNumber, pageSize);
+
+            return View(pagedMembers);
         }
+
 
         // 新增 - GET
         public async Task<IActionResult> Create()
@@ -91,6 +128,7 @@ namespace ShopMaster.Areas.BackEnd.Controllers
         public async Task<IActionResult> Edit(Member member, IFormFile? avatarFile)
         {
             ModelState.Remove(nameof(member.MemberType));
+            ModelState.Remove(nameof(member.PasswordHash));
 
             if (ModelState.IsValid)
             {

@@ -1,4 +1,6 @@
-﻿@model List<ShopMaster.Areas.BackEnd.Models.Member>
+﻿@model X.PagedList.IPagedList<ShopMaster.Areas.BackEnd.Models.Member>
+@using X.PagedList
+@using X.PagedList.Mvc.Core
 
 @{
     ViewData["Title"] = "會員管理";
@@ -7,8 +9,56 @@
 
 <h2>會員管理</h2>
 
+<!-- 篩選表單 -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <i class="fas fa-filter"></i> 篩選會員
+    </div>
+    <div class="card-body">
+        <form method="get">
+            <div class="row">
+                <div class="col-md-2">
+                    <label><strong>姓名</strong></label>
+                    <input type="text" name="Name" class="form-control" value="@Context.Request.Query["Name"]" />
+                </div>
+                <div class="col-md-2">
+                    <label><strong>會員編號</strong></label>
+                    <input type="text" name="Id" class="form-control" value="@Context.Request.Query["Id"]" />
+                </div>
+                <div class="col-md-2">
+                    <label><strong>手機號碼</strong></label>
+                    <input type="text" name="Phone" class="form-control" value="@Context.Request.Query["Phone"]" />
+                </div>
+                <div class="col-md-2">
+                    <label><strong>會員等級</strong></label>
+                    <select name="MemberTypeId" class="form-control">
+                        <option value="">所有等級</option>
+                        @foreach (var type in ViewBag.MemberTypes)
+                        {
+                            <option value="@type.Id" selected="@(type.Id.ToString() == Context.Request.Query["MemberTypeId"])">@type.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label><strong>會員狀態</strong></label>
+                    <select class="form-control" name="Active">
+                        <option value="">所有狀態</option>
+                        <option value="1" selected="@(Context.Request.Query["Active"] == "1")">啟用</option>
+                        <option value="0" selected="@(Context.Request.Query["Active"] == "0")">停用</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> 搜尋</button>
+                    <a href="@Url.Action("Index", "Member")" class="btn btn-secondary ms-2"><i class="fas fa-redo"></i> 重置</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 <a href="@Url.Action("Create", "Member")" class="btn btn-success mb-3">新增會員</a>
 
+<!-- 會員列表 -->
 <table class="table table-bordered">
     <thead class="table-dark">
         <tr>
@@ -55,3 +105,22 @@
         }
     </tbody>
 </table>
+
+<div class="d-flex justify-content-center">
+    @Html.PagedListPager(
+            (IPagedList)Model,
+            page => Url.Action("Index", new { page }),
+            new PagedListRenderOptions
+    {
+        DisplayItemSliceAndTotal = false, // 直接隱藏
+        DisplayLinkToFirstPage = PagedListDisplayMode.IfNeeded,
+        DisplayLinkToLastPage = PagedListDisplayMode.IfNeeded,
+        DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+        DisplayLinkToNextPage = PagedListDisplayMode.Always,
+        MaximumPageNumbersToDisplay = 5,
+        UlElementClasses = new[] { "pagination", "justify-content-center" },
+        LiElementClasses = new[] { "page-item" },
+        PageClasses = new[] { "page-link" }
+    }
+            )
+</div>
