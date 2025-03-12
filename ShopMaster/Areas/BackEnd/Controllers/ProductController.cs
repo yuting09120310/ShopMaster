@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using ShopMaster.Areas.BackEnd.Models;
+using X.PagedList.Extensions;
 
 namespace ShopMaster.Areas.BackEnd.Controllers
 {
@@ -18,10 +19,28 @@ namespace ShopMaster.Areas.BackEnd.Controllers
         }
 
         // 商品列表
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? Name, string? TypeId, int? page)
         {
+            ViewBag.ProductTypes = _db.ProductTypes.ToList();
+
             var products = await _db.Products.Include(p => p.Type).OrderByDescending(p => p.CreatedAt).ToListAsync();
-            return View(products);
+
+            if (!string.IsNullOrEmpty(Name))
+            {
+                products = products.Where(p => p.Name.Contains(Name)).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(TypeId) && int.TryParse(TypeId, out int typeId))
+            {
+                products = products.Where(p => p.TypeId == typeId).ToList();
+            }
+
+            int pageSize = 10;
+            int pageNumber = page ?? 1;
+
+            var pagedMembers = products.AsEnumerable().ToPagedList(pageNumber, pageSize);
+
+            return View(pagedMembers);
         }
 
         // 新增 - GET

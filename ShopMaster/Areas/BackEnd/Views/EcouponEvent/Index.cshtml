@@ -5,6 +5,21 @@
     Layout = "~/Areas/BackEnd/Views/Shared/_AdminLayout.cshtml";
 }
 
+@if (TempData["Error"] != null)
+{
+    <script>
+        alert('@Html.Raw(TempData["Error"])');
+    </script>
+}
+@if (TempData["Success"] != null)
+{
+    <script>
+        alert('@Html.Raw(TempData["Success"])');
+    </script>
+}
+
+
+
 <h2>優惠活動管理</h2>
 
 <a href="@Url.Action("Create", "EcouponEvent")" class="btn btn-success mb-3">新增活動</a>

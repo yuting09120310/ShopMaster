@@ -1,20 +1,28 @@
-﻿@model List<ShopMaster.Areas.BackEnd.Models.Ecoupon>
+﻿@model X.PagedList.IPagedList<ShopMaster.Areas.BackEnd.Models.Ecoupon>
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+
 
 @{
     ViewData["Title"] = "已發放的優惠券";
     Layout = "~/Areas/BackEnd/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2 class="mb-4"><i class="fas fa-ticket-alt"></i> 已發放的優惠券</h2>
-
 @if (TempData["Error"] != null)
 {
-    <div class="alert alert-danger">@TempData["Error"]</div>
+    <script>
+        alert('@Html.Raw(TempData["Error"])');
+    </script>
 }
 @if (TempData["Success"] != null)
 {
-    <div class="alert alert-success">@TempData["Success"]</div>
+    <script>
+        alert('@Html.Raw(TempData["Success"])');
+    </script>
 }
+
+
+<h2 class="mb-4"><i class="fas fa-ticket-alt"></i> 已發放的優惠券</h2>
 
 <!-- 篩選表單 -->
 <div class="card mb-4">
@@ -45,7 +53,7 @@
                     </select>
                 </div>
                 <div class="col-md-3 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> 搜尋</button>
+                    <button type="submit" class="btn btn-primary mr-2"><i class="fas fa-search"></i> 搜尋</button>
                     <a href="@Url.Action("Index", "Ecoupon")" class="btn btn-secondary ms-2"><i class="fas fa-redo"></i> 重置</a>
                 </div>
             </div>
@@ -113,4 +121,23 @@
             </tbody>
         </table>
     </div>
+</div>
+
+<div class="d-flex justify-content-center">
+    @Html.PagedListPager(
+            (IPagedList)Model,
+            page => Url.Action("Index", new { page }),
+            new PagedListRenderOptions
+    {
+        DisplayItemSliceAndTotal = false, // 直接隱藏
+        DisplayLinkToFirstPage = PagedListDisplayMode.IfNeeded,
+        DisplayLinkToLastPage = PagedListDisplayMode.IfNeeded,
+        DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+        DisplayLinkToNextPage = PagedListDisplayMode.Always,
+        MaximumPageNumbersToDisplay = 5,
+        UlElementClasses = new[] { "pagination", "justify-content-center" },
+        LiElementClasses = new[] { "page-item" },
+        PageClasses = new[] { "page-link" }
+    }
+            )
 </div>

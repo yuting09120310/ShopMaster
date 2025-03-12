@@ -1,11 +1,43 @@
-﻿@model List<ShopMaster.Areas.BackEnd.Models.Product>
+﻿@model X.PagedList.IPagedList<ShopMaster.Areas.BackEnd.Models.Product>
+@using X.PagedList
+@using X.PagedList.Mvc.Core
 
 @{
     ViewData["Title"] = "商品管理";
     Layout = "~/Areas/BackEnd/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2>商品管理</h2>
+<!-- 篩選表單 -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <i class="fas fa-filter"></i> 商品管理
+    </div>
+    <div class="card-body">
+        <form method="get">
+            <div class="row">
+                <div class="col-md-2">
+                    <label><strong>名稱</strong></label>
+                    <input type="text" name="Name" class="form-control" value="@Context.Request.Query["Name"]" placeholder="輸入商品名稱" />
+                </div>
+                <div class="col-md-2">
+                    <label><strong>商品類別</strong></label>
+                    <select name="TypeId" class="form-control">
+                        <option value="">全部</option>
+                        @foreach (var type in ViewBag.ProductTypes)
+                        {
+                            <option value="@type.Id" selected="@(type.Id.ToString() == Context.Request.Query["TypeId"])">@type.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary mr-2"><i class="fas fa-search"></i> 搜尋</button>
+                    <a href="@Url.Action("Index", "Product")" class="btn btn-secondary"><i class="fas fa-redo"></i> 重置</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 
 <a href="@Url.Action("Create", "Product")" class="btn btn-success mb-3">新增商品</a>
 
@@ -60,3 +92,22 @@
         }
     </tbody>
 </table>
+
+<div class="d-flex justify-content-center">
+    @Html.PagedListPager(
+            (IPagedList)Model,
+            page => Url.Action("Index", new { page }),
+            new PagedListRenderOptions
+    {
+        DisplayItemSliceAndTotal = false, // 直接隱藏
+        DisplayLinkToFirstPage = PagedListDisplayMode.IfNeeded,
+        DisplayLinkToLastPage = PagedListDisplayMode.IfNeeded,
+        DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+        DisplayLinkToNextPage = PagedListDisplayMode.Always,
+        MaximumPageNumbersToDisplay = 5,
+        UlElementClasses = new[] { "pagination", "justify-content-center" },
+        LiElementClasses = new[] { "page-item" },
+        PageClasses = new[] { "page-link" }
+    }
+            )
+</div>
