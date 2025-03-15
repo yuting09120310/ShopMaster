@@ -94,8 +94,16 @@
        /*  border-color: rgba(255, 0, 0, 0.5); */ /* 邊框顏色也變半透明 */
     }
 
-   
-
+    #purchase {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+    }
+    #describe{        
+        border-radius: 0.375rem;        
+        border: 1px solid lightgray; 
+        padding: 10px;
+    }
 
 </style>
 
@@ -148,11 +156,11 @@
         </div>
         @* 商品明細 *@
         <div class="col-12 col-md-6">
-            <h4  id="productName" style="color:gray">商品商品商品商品商品</h4>
-            <p class="text-start fw-bold " style="color:grey; font-size:17px; " >商品副標題比如 限量 幾色 新品 精選</p>
-            <p class="text-start  fw-bolder " style="color:lightslategrey; font-size:16px;">NT$5000</p>
+            <h2 id="productName" style="color:black" class="mt-3">SOUNDCORE R50i 真無線藍牙耳機</h2>
+            <p class="text-start mt-3  " style="color:black; font-size:17px; ">藍牙耳機</p>
+            <P class="text-start  " style="color:black; ">NT$5000</P>
             <div>
-                <div class="form-check radio-btn" id="colorCheckA">
+                @* <div class="form-check radio-btn" id="colorCheckA">
                     <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefaultA" >
                     <label class="form-check-label" for="flexRadioDefaultA" style="background-image: url('https://picsum.photos/300?=1')" ;>
                         紅
@@ -165,46 +173,43 @@
                         黑
                     </label>
 
-                </div>
-                <select class="form-select" aria-label="尺寸">
+                </div> *@
+
+                <div class="d-flex mt-5">
+                <select class="form-select" aria-label="尺寸" style="height:38px; width:100px">
                     <option selected>尺寸</option>
                     <option value="1">XS</option>
                     <option value="2">S</option>
                     <option value="3">M</option>
                 </select>
                 @* 數量 *@
-                <div class="input-group mb-3">
-                    <button class="btn btn-outline-secondary" type="button border-0" id="button-addon1">-</button>
-                    <input type="text" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                    <button class="btn btn-outline-secondary border-right-0" type="button" id="button-addon1">+</button>
-                </div>                                
-                <div class="d-grid gap-2">
-                    <button class="btn btn-warning fw-bold" type="button">加入購物車</button>                   
+                    
+                    <div class="input-group mb-3 ms-2 border-left-0" style="height:38px; width:100px; border-left: none;" id="count">
+                        <button class="btn" type="button" id="button-minus" style="border-color: #dee2e6; border-right: none;">-</button>
+                        <input type="text" class="form-control border-left-0" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" style="border-right: none; border-left: none;" aria-valuenow="1" value="1">
+                        <button class="btn" type="button" id="button-plus" style="border-color: #dee2e6; border-left: none;">+</button>
+                    </div>
+                        
+                </div>
+                <div class="d-grid gap-2 justify-content-center">
+                    <button class="btn btn-warning fw-bold" type="button" id="purchase">加入購物車</button>
                 </div>
             </div>
-            <p class="text-start">商品描述區塊商品描述區塊商品描述區塊商品描述區塊商品描述區塊商品描述區塊
+            <div class="mt-4" id="describe">
+            <p class="text-start my-0 ">商品描述區塊商品描述區塊商品描述區塊商品描述區塊商品描述區塊商品描述區塊
                 商品描述區塊商品描述區塊商品描述區塊商品商品描述區塊描述區塊商品描述區塊商品描述區塊
                 商品描述區塊商品描述區塊商品描述區塊
                 商品描述區塊商品描述區塊商品描述區塊商品描述區塊商品描述區塊商品描述區塊商品描述區塊商品描述區塊商品描述區塊
                 商品描述區塊商品描述區塊商品描述區塊商品商品描述區塊描述區塊商品描述區塊商品描述區塊
-                商品描述區塊商品描述區塊商品描述區塊
-                商品描述區塊商品描述區塊商品描述區塊
-                商品描述區塊商品描述區塊商品描述區塊商品描述區塊商品描述區塊商品描述區塊
-                商品描述區塊商品描述區塊商品描述區塊商品商品描述區塊描述區塊商品描述區塊商品描述區塊
-                商品描述區塊商品描述區塊商品描述區塊
-                商品描述區塊商品描述區塊商品描述區塊
-
-
-
+                商品描述區塊商品描述區塊商品描述區塊            商品描述區塊商品描述區塊商品描述區塊
+               
             </p>
-
-
-
+            </div>
            
         </div>
 
     </div>
-
+    
     <section>
         <h4 class="mt-5">你可能也喜歡</h4>        
         <div class="row mt-2">
@@ -281,9 +286,27 @@
     // 初始化，當頁面加載時設置第一個按鈕為半透明
     buttons[0].classList.add('inactive');
 
-    
-    
 
+    // 以下數字加總
+    const buttonMinus = document.getElementById('button-minus');
+    const buttonPlus = document.getElementById('button-plus');
+    const input = document.querySelector('#count input');
+    // 監聽減號按鈕事件
+    buttonMinus.addEventListener('click', function() {
+        let currentValue = parseInt(input.value);
+        // 保證數字不小於 1
+        if (!isNaN(currentValue) && currentValue > 1) {
+            input.value = currentValue - 1;
+        }
+    });
+
+    // 監聽加號按鈕事件
+    buttonPlus.addEventListener('click', function() {
+        let currentValue = parseInt(input.value);
+        if (!isNaN(currentValue)) {
+            input.value = currentValue + 1;
+        }
+    });
 
 </script>
 
