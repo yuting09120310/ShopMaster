@@ -105,6 +105,17 @@
         padding: 10px;
     }
 
+    /* 隱藏數字輸入框的增減箭頭 */
+    /* input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    } */
+
 </style>
 
 <div class="container" style="padding-top: 115px">
@@ -154,6 +165,7 @@
                 </button>
             </div>
         </div>
+       
         @* 商品明細 *@
         <div class="col-12 col-md-6">
             <h2 id="productName" style="color:black" class="mt-3">SOUNDCORE R50i 真無線藍牙耳機</h2>
@@ -184,12 +196,12 @@
                 </select>
                 @* 數量 *@
                     
-                    <div class="input-group mb-3 ms-2 border-left-0" style="height:38px; width:100px; border-left: none;" id="count">
+                    <div class="input-group mb-3 ms-2 border-left-0" style="height:38px; width:110px; border-left: none;" id="count">
                         <button class="btn" type="button" id="button-minus" style="border-color: #dee2e6; border-right: none;">-</button>
-                        <input type="text" class="form-control border-left-0" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" style="border-right: none; border-left: none;" aria-valuenow="1" value="1">
+                        <input type="text" class="form-control border-left-0" value="1" id="count-input" aria-label="Example text with button addon" aria-describedby="button-addon1" style="border-right: none; border-left: none; text-align: center">
                         <button class="btn" type="button" id="button-plus" style="border-color: #dee2e6; border-left: none;">+</button>
                     </div>
-                        
+                   
                 </div>
                 <div class="d-grid gap-2 justify-content-center">
                     <button class="btn btn-warning fw-bold" type="button" id="purchase">加入購物車</button>
@@ -291,22 +303,26 @@
     const buttonMinus = document.getElementById('button-minus');
     const buttonPlus = document.getElementById('button-plus');
     const input = document.querySelector('#count input');
-    // 監聽減號按鈕事件
+
+     
+
+         // 監聽減號按鈕事件
     buttonMinus.addEventListener('click', function() {
-        let currentValue = parseInt(input.value);
-        // 保證數字不小於 1
-        if (!isNaN(currentValue) && currentValue > 1) {
+        let currentValue = parseInt(input.value);       
+        if (!isNaN(currentValue) && currentValue > 1) {  // 保證數字不小於 1
             input.value = currentValue - 1;
         }
     });
 
     // 監聽加號按鈕事件
     buttonPlus.addEventListener('click', function() {
-        let currentValue = parseInt(input.value);
+        let currentValue = parseInt(input.value);       
         if (!isNaN(currentValue)) {
-            input.value = currentValue + 1;
+            input.value = currentValue + 1;  // 可以無限加
         }
     });
+
+
 
 </script>
 

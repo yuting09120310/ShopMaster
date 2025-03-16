@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ShopMaster.Areas.BackEnd.Controllers
 {
+    [Area("BackEnd")]
     public class AdminController : BaseController
     {
         private readonly shopmasterdbContext _db;

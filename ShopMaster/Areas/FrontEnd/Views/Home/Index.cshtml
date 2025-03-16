@@ -12,6 +12,14 @@
 </header> *@
 
 <style>
+
+    /* 保持圖片比例 */
+    /* .carousel-inner img {
+        width: 100%;
+        height: auto; 
+    } */
+   
+
     /* 初始样式 */
     .hover {
         position: relative;
@@ -31,8 +39,8 @@
         }
 </style>
 
-<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner">
+<div id="carouselExampleControls" class="carousel slide " data-bs-ride="carousel" >
+    <div class="carousel-inner" style="padding-top: 110px">
         <div class="carousel-item active">
             <img src="https://picsum.photos/700/300" class="d-block w-100" alt="...">
         </div>
@@ -43,11 +51,11 @@
             <img src="https://picsum.photos/700/300" class="d-block w-100" alt="...">
         </div>
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev" style="padding-top: 110px">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
     </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next" style="padding-top: 110px">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
     </button>

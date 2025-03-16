@@ -5,6 +5,7 @@ using ShopMaster.Areas.BackEnd.ViewModels;
 
 namespace ShopMaster.Areas.BackEnd.Controllers
 {
+    [Area("BackEnd")]
     public class AdminGroupController : BaseController
     {
         private readonly shopmasterdbContext _db;
