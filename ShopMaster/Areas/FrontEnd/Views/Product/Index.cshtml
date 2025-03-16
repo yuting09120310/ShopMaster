@@ -1,22 +1,22 @@
-﻿@*
-   
-*@
-@{}
+﻿@model List<ShopMaster.Areas.FrontEnd.ViewModelsF.Product>
+
+
+@{
+}
 
 
 
-    <style>
-        /* 初始样式 */
-        .hover
-        {
-            position: relative;
-            padding-bottom:10px;            
-            color:black ;
-            border-radius: 10px;
-            line-height: 200px;   
-            transition: transform 0.3s ease, opacity 0.3s ease; /* 添加过渡效果 */
-            opacity: 1; /* 默认不透明 */
-        }
+<style>
+    /* 初始样式 */
+    .hover {
+        position: relative;
+        padding-bottom: 10px;
+        color: black;
+        border-radius: 10px;
+        line-height: 200px;
+        transition: transform 0.3s ease, opacity 0.3s ease; /* 添加过渡效果 */
+        opacity: 1; /* 默认不透明 */
+    }
 
         /* 悬停时的浮动和半透明效果 */
         .hover:hover {
@@ -25,52 +25,57 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* 阴影 */
         }
 
+</style>
 
-    </style>
+
 <div class="container my-5 " style="padding-top: 110px">
-        <h2 class="fw-lighter">熱銷商品</h2>
-        <div class="row mt-2">
+    <h2 class="fw-lighter">熱銷商品</h2>
+    <div class="row mt-2">
+
+    @foreach (var p in Model)
+    {   
         <div class="col-md-3 col-sm-4 col-6 mt-3 mb-2">
-                <a href="/Product/Details" class="text-decoration-none">
-                    <div class="card hover">
-                        <img src="https://picsum.photos/300?=1" class="card-img-top" alt="商品1">
-                        <div class="card-body">
-                            <h5 class="card-title">商品名稱 1</h5>
-                        </div>
+            <a href="Product/Details" class="text-decoration-none">
+                <div class="card hover">
+                    <img src="https://picsum.photos/300?=1" class="card-img-top" alt="商品1">
+                    <div class="card-body">
+                        <h5 class="card-title">@p.Name</h5>
                     </div>
-                </a>
-            </div>
-            <div class="col-md-3 col-sm-4 col-6  mt-3 mb-2">
-                <a href="/Product/Details" class="text-decoration-none">
-                    <div class="card hover">
-                        <img src="https://picsum.photos/300?=2" class="card-img-top" alt="商品1">
-                        <div class="card-body">
-                            <h5 class="card-title">商品名稱2</h5>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        <div class="col-md-3 col-sm-4 col-6   mt-3 mb-2">
-                <a href="/Product/Details" class="text-decoration-none">
-                    <div class="card hover">
-                        <img src="https://picsum.photos/300?=3" class="card-img-top" alt="商品1">
-                        <div class="card-body">
-                            <h5 class="card-title">商品名稱 3</h5>
-                        </div>
-                    </div>
-                </a>
-            </div>
+                </div>
+            </a>
         </div>
+    }
+        @* <div class="col-md-3 col-sm-4 col-6  mt-3 mb-2">
+            <a href="/Product/Details" class="text-decoration-none">
+                <div class="card hover">
+                    <img src="https://picsum.photos/300?=2" class="card-img-top" alt="商品1">
+                    <div class="card-body">
+                        <h5 class="card-title">商品名稱2</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 col-sm-4 col-6   mt-3 mb-2">
+            <a href="/Product/Details" class="text-decoration-none">
+                <div class="card hover">
+                    <img src="https://picsum.photos/300?=3" class="card-img-top" alt="商品1">
+                    <div class="card-body">
+                        <h5 class="card-title">商品名稱 3</h5>
+                    </div>
+                </div>
+            </a>
+        </div> *@
     </div>
+</div>
 
 
 
 
 
-   
-    
 
-    
+
+
+
 
 
 
