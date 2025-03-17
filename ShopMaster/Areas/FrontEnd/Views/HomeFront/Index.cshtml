@@ -1,8 +1,6 @@
 ﻿@model IEnumerable<IGrouping<int?, ShopMaster.Areas.FrontEnd.ViewModelsF.Product>>
 
 
-
-
 @{
     ViewData["Title"] = "首頁";
 }
@@ -67,18 +65,21 @@
     </button>
 </div>
 
-<!-- 最新商品 -->
+
 <section class="container my-5">
     @foreach (var group in Model){
+        //商品分類
         <h2 class="fw-lighter">@group.Key</h2>
 
         <div class="row mt-2">
             @foreach (var product in group)
-            {
+            {              
+                           
+
                 <div class="col-md-3 col-sm-4 col-6 mt-3 mb-2">
                     <a href="/Products/Details" class="text-decoration-none">
                 <div class="card hover">
-                    <img src="https://picsum.photos/300?=1" class="card-img-top" alt="商品1">
+                    <img src=@product.MainImage class="card-img-top" alt="商品1">
                     <div class="card-body">
                         <h5 class="card-title">@product.Name</h5>
                     </div>

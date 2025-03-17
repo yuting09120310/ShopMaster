@@ -54,9 +54,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                                         {
                                             TypeId = pt.Id,
                                             Name = p.Name,
-
-
-
+                                            Price = p.Price,
+                                            MainImage = p.MainImage
 
                                         }).ToList();
 
@@ -68,9 +67,35 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
 
         // GET: ProductsController/Details/5
-        public ActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            return View();
+            var product = await _db.Products.ToListAsync();
+            var productType = await _db.ProductTypes.ToListAsync();
+            var productImg = await _db.ProductImages.ToListAsync();
+            var result = product.Join(productType,
+                                        p => p.TypeId,
+                                        t => t.Id,
+                                        (p, t) => new { p, t })
+                                        .Join(productImg,
+                                        pt => pt.p.Id,
+                                        i => i.ProductId,
+                                        (pt, i) => new ViewModelsF.Product
+                                        {
+                                            TypeId = pt.p.TypeId,
+                                            Id = pt.p.Id,
+                                            Name = pt.p.Name,
+                                            Price = pt.p.Price,
+                                            ProductImages = new List<ProductImage>
+                                             {
+                                                new ProductImage { ImageUrl = i.ImageUrl, ProductId = pt.p.Id }
+                                             }
+
+
+                                        }).GroupBy(p => p.TypeId)
+                                        .ToList();
+
+
+            return View(result);
         }
 
         // GET: ProductsController/Create

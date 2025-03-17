@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShopMaster.Areas.BackEnd.Controllers;
@@ -29,19 +30,23 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         public async Task<IActionResult> Index()
         {
             var product = await _db.Products.ToListAsync();
-            var productTyoe = await _db.ProductTypes.ToListAsync();
+            var productType = await _db.ProductTypes.ToListAsync();            
 
-            var result = product.Join(productTyoe,
+            var result = product.Join(productType,
                                         p => p.TypeId,
                                         pt => pt.Id,
                                         (p, pt) => new ViewModelsF.Product
                                         {
                                             TypeId = pt.Id,
                                             Name = p.Name,
-                                            Price = p.Price
+                                            Price = p.Price,
+                                            MainImage = p.MainImage
+                                            
 
                                         }).GroupBy(p => p.TypeId)
                                           .ToList();
+
+
 
             return View(result);
         }
