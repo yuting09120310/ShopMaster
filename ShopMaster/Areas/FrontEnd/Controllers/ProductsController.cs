@@ -10,34 +10,62 @@ using ShopMaster.Areas.FrontEnd.ViewModelsF;
 namespace ShopMaster.Areas.FrontEnd.Controllers
 {
     [Area("FrontEnd")]
-    public class ProductController : BaseController
+    public class ProductsController : BaseController
     {
         private readonly shopmasterdbContext _db;
-        private readonly IWebHostEnvironment _env;
 
-        public ProductController(shopmasterdbContext db, IWebHostEnvironment env) : base(db)
+
+        public ProductsController(shopmasterdbContext db) : base(db)
         {
             _db = db;
-            _env = env;
+
         }
 
         // GET: ProductsController
-        public async Task<IActionResult>  Index()
+        // 取產品資料
+        //public async Task<IActionResult>  Index()
+        //{
+        //    var productList = await _db.Products.ToListAsync();
+
+
+        //    var productF = productList.Select(p => new ViewModelsF.Product
+        //    {
+        //        Name = p.Name,
+        //        Id = p.Id,
+        //        Description = p.Description,
+        //        Price = p.Price
+
+        //    }).ToList(); 
+
+
+        //    return View(productF);
+        //}
+
+
+        public async Task<IActionResult> index()
         {
-            var productList = await _db.Products.ToListAsync();
+            var product = await _db.Products.ToListAsync();
+            var productTyoe = await _db.ProductTypes.ToListAsync();
+
+            var result = product.Join(productTyoe,
+                                        p => p.TypeId,
+                                        pt => pt.Id,
+                                        (p, pt) => new ViewModelsF.Product
+                                        {
+                                            TypeId = pt.Id,
+                                            Name = p.Name,
 
 
-            var productF = productList.Select(p => new ViewModelsF.Product
-            {
-                Name = p.Name,
-                Id = p.Id,
-                Description = p.Description,
-                Price = p.Price
-            }).ToList(); 
 
 
-            return View(productF);
+                                        }).ToList();
+
+
+
+
+            return View(result);
         }
+
 
         // GET: ProductsController/Details/5
         public ActionResult Details(int id)
@@ -109,3 +137,4 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         }
     }
 }
+

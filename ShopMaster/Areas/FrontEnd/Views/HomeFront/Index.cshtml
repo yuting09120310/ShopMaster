@@ -1,0 +1,92 @@
+﻿@model IEnumerable<IGrouping<int?, ShopMaster.Areas.FrontEnd.ViewModelsF.Product>>
+
+
+
+
+@{
+    ViewData["Title"] = "首頁";
+}
+
+<!-- Hero Section -->
+@* <header class="bg-primary text-white text-center py-5">
+    <div class="container">
+        <h1 class="display-4">歡迎來到 ShopMaster</h1>
+        <p class="lead">我們提供最好的商品，讓您購物更輕鬆！</p>
+        <a href="/Product" class="btn btn-light btn-lg">查看商品</a>
+    </div>
+</header> *@
+
+<style>
+
+    /* 保持圖片比例 */
+    /* .carousel-inner img {
+    width: 100%;
+    height: auto; 
+    } */
+
+
+    /* 初始样式 */
+    .hover {
+    position: relative;
+    padding-bottom: 10px;
+    color: black;
+    border-radius: 10px;
+    line-height: 200px;
+    transition: transform 0.3s ease, opacity 0.3s ease; /* 添加过渡效果 */
+    opacity: 1; /* 默认不透明 */
+    }
+
+    /* 悬停时的浮动和半透明效果 */
+    .hover:hover {
+    transform: translateY(-8px); /* 向上浮动 */
+    opacity: 0.7; /* 半透明 */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* 阴影 */
+    }
+</style>
+
+
+<div id="carouselExampleControls" class="carousel slide " data-bs-ride="carousel" >
+    <div class="carousel-inner" style="padding-top: 110px">
+        <div class="carousel-item active">
+            <img src="https://picsum.photos/700/300" class="d-block w-100" alt="...">
+        </div>
+        <div class="carousel-item">
+            <img src="https://picsum.photos/700/300" class="d-block w-100" alt="...">
+        </div>
+        <div class="carousel-item">
+            <img src="https://picsum.photos/700/300" class="d-block w-100" alt="...">
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev" style="padding-top: 110px">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next" style="padding-top: 110px">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<!-- 最新商品 -->
+<section class="container my-5">
+    @foreach (var group in Model){
+        <h2 class="fw-lighter">@group.Key</h2>
+
+        <div class="row mt-2">
+            @foreach (var product in group)
+            {
+                <div class="col-md-3 col-sm-4 col-6 mt-3 mb-2">
+                    <a href="/Products/Details" class="text-decoration-none">
+                <div class="card hover">
+                    <img src="https://picsum.photos/300?=1" class="card-img-top" alt="商品1">
+                    <div class="card-body">
+                        <h5 class="card-title">@product.Name</h5>
+                    </div>
+                </div>
+            </a>
+        </div>   }   
+       
+        
+    </div>}
+</section>
+

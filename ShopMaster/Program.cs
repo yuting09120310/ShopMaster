@@ -22,6 +22,9 @@ app.UseRouting();
 app.UseSession();
 app.UseAuthorization();
 
+
+
+
 app.MapControllerRoute(
     name: "backend",
     pattern: "BackEnd/{controller=Home}/{action=Index}/{id?}",
@@ -29,7 +32,7 @@ app.MapControllerRoute(
 
 app.MapControllerRoute(
     name: "frontend",
-    pattern: "{controller=Home}/{action=Index}/{id?}",
+    pattern: "{controller=HomeFront}/{action=Index}/{id?}",
     defaults: new { area = "FrontEnd" });
 
 app.Run();
