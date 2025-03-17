@@ -5,11 +5,11 @@ using ShopMaster.Areas.BackEnd.Models;
 namespace ShopMaster.Areas.BackEnd.Controllers
 {
     [Area("BackEnd")]
-    public class HomeController : BaseController
+    public class DashboardController : BaseController
     {
         private readonly shopmasterdbContext _db;
 
-        public HomeController(shopmasterdbContext db) : base(db)
+        public DashboardController(shopmasterdbContext db) : base(db)
         {
             _db = db;
         }

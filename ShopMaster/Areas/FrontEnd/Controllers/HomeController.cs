@@ -12,14 +12,14 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
     [Area("FrontEnd")]
 
 
-    public class HomeFrontController : BaseController
+    public class HomeController : Controller
     {
         private readonly shopmasterdbContext _db;
 
 
-        private readonly ILogger<HomeFrontController> _logger;
+        private readonly ILogger<HomeController> _logger;
 
-        public HomeFrontController(shopmasterdbContext db, ILogger<HomeFrontController> logger) : base(db)
+        public HomeController(shopmasterdbContext db, ILogger<HomeController> logger) 
         {
             _logger = logger;
             _db = db;
