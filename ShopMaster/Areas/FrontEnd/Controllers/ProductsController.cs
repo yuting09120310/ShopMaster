@@ -10,15 +10,14 @@ using ShopMaster.Areas.FrontEnd.ViewModelsF;
 namespace ShopMaster.Areas.FrontEnd.Controllers
 {
     [Area("FrontEnd")]
-    public class ProductsController : BaseController
+    public class ProductsController : Controller
     {
         private readonly shopmasterdbContext _db;
 
 
-        public ProductsController(shopmasterdbContext db) : base(db)
+        public ProductsController(shopmasterdbContext db)
         {
             _db = db;
-
         }
 
         // GET: ProductsController
