@@ -2,16 +2,41 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using ShopMaster.Areas.FrontEnd.Models;
+using ShopMaster.Areas.BackEnd.Models;
+using ShopMaster.Areas.BackEnd.Controllers;
+using Microsoft.EntityFrameworkCore;
+using ShopMaster.Areas.FrontEnd.ViewModelsF;
 
 namespace ShopMaster.Areas.FrontEnd.Controllers
 {
     [Area("FrontEnd")]
-    public class ProductController : Controller
+    public class ProductController : BaseController
     {
-        // GET: ProductsController
-        public ActionResult Index()
+        private readonly shopmasterdbContext _db;
+        private readonly IWebHostEnvironment _env;
+
+        public ProductController(shopmasterdbContext db, IWebHostEnvironment env) : base(db)
         {
-            return View();
+            _db = db;
+            _env = env;
+        }
+
+        // GET: ProductsController
+        public async Task<IActionResult>  Index()
+        {
+            var productList = await _db.Products.ToListAsync();
+
+
+            var productF = productList.Select(p => new ViewModelsF.Product
+            {
+                Name = p.Name,
+                Id = p.Id,
+                Description = p.Description,
+                Price = p.Price
+            }).ToList(); 
+
+
+            return View(productF);
         }
 
         // GET: ProductsController/Details/5
