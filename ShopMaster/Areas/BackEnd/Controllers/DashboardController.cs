@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using ShopMaster.Areas.BackEnd.Models;
+using ShopMaster.Areas.BackEnd.ViewModels;
 
 namespace ShopMaster.Areas.BackEnd.Controllers
 {
@@ -17,13 +18,30 @@ namespace ShopMaster.Areas.BackEnd.Controllers
         public IActionResult Index()
         {
             GetMenu();
-            var orders = _db.Orders
-                .Where(x => x.CreatedAt.HasValue && x.CreatedAt.Value.Year == DateTime.Now.Year && x.CreatedAt.Value.Month == 2)
-                .ToList();
-            var orderCount = orders.Count;
-            var totalAmt = orders.Sum(x => x.TotalAmount);
+            var currentMonth = DateTime.Now.Month;
+            var currentYear = DateTime.Now.Year;
 
-            return View();
+            var monthOrders = _db.Orders
+                .Where(x => x.CreatedAt.HasValue && x.CreatedAt.Value.Year == currentYear && x.CreatedAt.Value.Month == 2)
+                .ToList();
+            var monthOrderCount = monthOrders.Count;
+            var monthTotalAmount = monthOrders.Sum(x => x.TotalAmount);
+
+            var yearOrders = _db.Orders
+                .Where(x => x.CreatedAt.HasValue && x.CreatedAt.Value.Year == currentYear)
+                .ToList();
+            var yearOrderCount = yearOrders.Count;
+            var yearTotalAmount = yearOrders.Sum(x => x.TotalAmount);
+
+            var dashboard = new DashBoard
+            {
+                MonthOrderCount = monthOrderCount,
+                MonthTotalAmount = monthTotalAmount,
+                YearOrderCount = yearOrderCount,
+                YearTotalAmount = yearTotalAmount
+            };
+
+            return View(dashboard);
         }
 
         public IActionResult Privacy()
