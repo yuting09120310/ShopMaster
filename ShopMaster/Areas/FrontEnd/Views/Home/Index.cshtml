@@ -40,7 +40,34 @@
     opacity: 0.7; /* 半透明 */
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* 阴影 */
     }
+
+    card {
+        display: flex;
+        flex-direction: column;
+        height: 100%; /* 讓卡片的高度填滿其容器 */
+    }
+
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* 讓內容分佈並將按鈕推到底部 */
+        flex-grow: 1; /* 讓card-body佔據剩餘空間 */
+    }
+
+    .card-button {
+        width: 100%; /* 按鈕寬度100%，填滿整個卡片底部 */
+        height: 50px; /* 按鈕的高度，這裡可以調整 */
+        border: none;
+    }
+
+    .mt-auto {
+        margin-top: auto; /* 這個類將推動按鈕到卡片底部 */
+    }
 </style>
+關鍵解釋：
+    
+</style>
+
 
 
 <div id="carouselExampleControls" class="carousel slide " data-bs-ride="carousel" >
@@ -77,7 +104,7 @@
                            
 
                 <div class="col-md-3 col-sm-4 col-6 mt-3 mb-2">
-                    <a href="/Products/Details" class="text-decoration-none">
+                    <a href="/Products/Details/@product.Id" class="text-decoration-none">
                 <div class="card hover">
                     <img src=@product.MainImage class="card-img-top" alt="商品1">
                     <div class="card-body">
@@ -90,4 +117,15 @@
         
     </div>}
 </section>
+
+
+
+@*  <form id="myForm" method="post" asp-action="Details" asp-controller="Products" asp-area="FrontEnd" class="d-flex flex-column flex-grow-1">
+    <!-- 隱藏欄位來儲存卡片標題 -->
+    <input type="hidden" name="productId" id="productId" value="@product.Id">
+
+    <!-- 提交按鈕 -->
+    <button type="submit" class="btn btn-danger card-button">Submit</button>
+</form> *@
+                           
 

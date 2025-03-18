@@ -84,13 +84,17 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                                             Id = pt.p.Id,
                                             Name = pt.p.Name,
                                             Price = pt.p.Price,
+                                            Content = pt.p.Content,
+                                            Description = pt.p.Description,
+                                            MainImage = pt.p.MainImage,
+                                            Stock = pt.p.Stock,
+                                            ProductImage = i.ImageUrl,
                                             ProductImages = new List<ProductImage>
                                              {
-                                                new ProductImage { ImageUrl = i.ImageUrl, ProductId = pt.p.Id }
+                                                new ProductImage { ImageUrl = i.ImageUrl, ProductId = pt.p.Id , Id = i.Id }
                                              }
-
-
-                                        }).GroupBy(p => p.TypeId)
+                                        }).GroupBy(p => p.TypeId).SelectMany(group => group)
+                                        .Where(p => p.Id == id)
                                         .ToList();
 
 

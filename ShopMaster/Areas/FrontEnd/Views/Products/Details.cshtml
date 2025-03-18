@@ -1,229 +1,232 @@
-﻿@*
+﻿@model List<ShopMaster.Areas.FrontEnd.ViewModelsF.Product>
+
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    int i = 0;
 }
 <style>
     /* 顯示大張圖片 */
     .modal-content {
-        background-color: transparent;
+    background-color: transparent;
     }
 
     #picBtn {
-        position: relative; /* 確保按鈕內的圖片可以定位 */
-        border: none;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    position: relative; /* 確保按鈕內的圖片可以定位 */
+    border: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     }
 
     img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover; /* 保持圖片的比例並填滿按鈕區域 */
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 保持圖片的比例並填滿按鈕區域 */
     }
 
     /* 點選商品小圖片預設狀態下，按鈕完全不透明 */
     .list-group-item {
-        transition: opacity 0.3s ease;
-        opacity: 1;
+    transition: opacity 0.3s ease;
+    opacity: 1;
     }
 
-        /* 當按鈕被點擊（active）時，讓其變為半透明 */
-        .list-group-item:active {
-            opacity: 0.5;
-        }
+    /* 當按鈕被點擊（active）時，讓其變為半透明 */
+    .list-group-item:active {
+    opacity: 0.5;
+    }
 
-        /* 當按鈕獲得焦點時，也保持半透明效果 */
-        .list-group-item:focus {
-            opacity: 0.5;
-        }
+    /* 當按鈕獲得焦點時，也保持半透明效果 */
+    .list-group-item:focus {
+    opacity: 0.5;
+    }
 
     .inactive {
-        opacity: 0.5; /* 透明度設定為 0.5 */
+    opacity: 0.5; /* 透明度設定為 0.5 */
     }
 
-   
+
     /* 點選商品初始样式 */
     .hover {
-        position: relative;
-        padding-bottom: 10px;
-        color: black;
-        border-radius: 10px;
-        line-height: 200px;
-        transition: transform 0.3s ease, opacity 0.3s ease; /* 添加過渡效果 */
-        opacity: 1; 
+    position: relative;
+    padding-bottom: 10px;
+    color: black;
+    border-radius: 10px;
+    line-height: 200px;
+    transition: transform 0.3s ease, opacity 0.3s ease; /* 添加過渡效果 */
+    opacity: 1; 
     }
 
     /* 懸停時的浮動和半透明效果 */
     .hover:hover {
-        transform: translateY(-8px); /* 向上浮動 */
-        opacity: 0.7; /* 半透明 */
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); 
+    transform: translateY(-8px); /* 向上浮動 */
+    opacity: 0.7; /* 半透明 */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); 
     }
     /* 以下商品明細 */
 
     #productName{
-       
-        font-weight:bolder;
-        
+
+    font-weight:bolder;
+
     }
-    
+
     /* 隱藏預設的 radio 按鈕 */
     .form-check-input {
-        display: none;
+    display: none;
     }
     /* 自定義圓形按鈕，使用圖片作為背景 */
     .radio-btn .form-check-label {
-        position: relative;
-        padding-left: 50px; /* 留下空間給圖片 */
-        cursor: pointer;
-        font-size: 18px;
-        line-height: 25px;
-        color: red;
-        border: 2px solid #ccc;
+    position: relative;
+    padding-left: 50px; /* 留下空間給圖片 */
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 25px;
+    color: red;
+    border: 2px solid #ccc;
     }
 
-        .radio-btn .form-check-label.blue:before {
-            background-color: blue; /* 若指定了 blue 顏色 */
-        }
+    .radio-btn .form-check-label.blue:before {
+    background-color: blue; /* 若指定了 blue 顏色 */
+    }
     /* 當選中後，圓形變為半透明 */
     .form-check-input:checked  {
-        background-color: rgba(240, 250, 186, 0.5); /* 選中後變成半透明紅色 */
-       /*  border-color: rgba(255, 0, 0, 0.5); */ /* 邊框顏色也變半透明 */
+    background-color: rgba(240, 250, 186, 0.5); /* 選中後變成半透明紅色 */
+    /*  border-color: rgba(255, 0, 0, 0.5); */ /* 邊框顏色也變半透明 */
     }
 
     #purchase {
-        width: 110px;
-        height: 110px;
-        border-radius: 50%;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
     }
     #describe{        
-        border-radius: 0.375rem;        
-        border: 1px solid lightgray; 
-        padding: 10px;
+    border-radius: 0.375rem;        
+    border: 1px solid lightgray; 
+    padding: 10px;
     }
 
     /* 隱藏數字輸入框的增減箭頭 */
     /* input[type="number"]::-webkit-outer-spin-button,
     input[type="number"]::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
     }
 
     input[type="number"] {
-        -moz-appearance: textfield;
+    -moz-appearance: textfield;
     } */
 
 </style>
+@foreach (var d in Model)
+{if (Model.IndexOf(d) == 0)
+    {
 
+    }
+}
+
+
+@{
+    HashSet<string> displayedImages = new HashSet<string>();
+}
 <div class="container" style="padding-top: 115px">
     <div class="row mt-5">
+
+
         @* 商品照片 *@
         <div class="col-md-1 col-2">
-            <div class="list-group">
-                <button type="button" class="list-group-item list-group-item-action btn btn-lg" id="picBtn" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0">
-                    <img src="https://picsum.photos/300?=0" class="d-block w-100" alt="..." id="pic0">
-                </button>
-                <button type="button" class="list-group-item list-group-item-actiontn btn btn-lg mt-2" id="picBtn" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"><img src="https://picsum.photos/300?=1" class="d-block w-100" alt="..." id="pic1"></button>
-                <button type="button" class="list-group-item list-group-item-action btn btn-lg mt-2" id="picBtn" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"><img src="https://picsum.photos/300?=2" class="d-block w-100" alt="..." id="pic2"></button>
-            </div>
+
+            <div class="list-group ">
+
+                @foreach (var p in Model)
+                {
+                    <button type="button" class="list-group-item list-group-item-action btn btn-lg mt-2" id="picBtn" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="@Model.IndexOf(p)">
+                        <img src="@p.ProductImage" class="d-block w-100" alt="..." id="pic0">
+                    </button>
+                   
+            }</div>
+
         </div>
+
+
         <div class="col-md-5 col-10" style="padding-left: 0px;padding-right: 0px">
+
             <div id="carouselExampleCaptions" class="carousel slide ">
                 <div class="carousel-inner">
-                    <div class=" btn carousel-item active py-0 px-0" style="border:none" data-bs-toggle="modal" data-bs-target="#exampleModal" id="picBigBtn">
-                        <img src="https://picsum.photos/300?=0" class="d-block w-100" alt="..." id="pic">
-                        <div class="carousel-caption d-none d-md-block">
-                            <h5>First slide label</h5>
-                            <p>Some representative placeholder content for the first slide.</p>
-                        </div>
-                    </div>
-                    <div class="btn carousel-item py-0 px-0" style="border:none">
-                        <img src="https://picsum.photos/300?=1" class="d-block w-100" alt="...">
-                        <div class="carousel-caption d-none d-md-block">
-                            <h5>Second slide label</h5>
-                            <p>Some representative placeholder content for the second slide.</p>
-                        </div>
-                    </div>
-                    <div class="btn carousel-item py-0 px-0" style="border:none">
-                        <img src="https://picsum.photos/300?=2" class="d-block w-100" alt="...">
-                        <div class="carousel-caption d-none d-md-block">
-                            <h5>Third slide label</h5>
-                            <p>Some representative placeholder content for the third slide.</p>
-                        </div>
-                    </div>
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-                    <span class="" aria-hidden="true"><i class="bi bi-circle-fill"></i></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-                    <span class="" aria-hidden="true"><i class="bi bi-circle-fill"></i></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-            </div>
-        </div>
-       
-        @* 商品明細 *@
-        <div class="col-12 col-md-6">
-            <h2 id="productName" style="color:black" class="mt-3">SOUNDCORE R50i 真無線藍牙耳機</h2>
-            <p class="text-start mt-3  " style="color:black; font-size:17px; ">藍牙耳機</p>
-            <P class="text-start  " style="color:black; ">NT$5000</P>
-            <div>
-                @* <div class="form-check radio-btn" id="colorCheckA">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefaultA" >
-                    <label class="form-check-label" for="flexRadioDefaultA" style="background-image: url('https://picsum.photos/300?=1')" ;>
-                        紅
-                    </label>                  
-                   
-                </div>
-                <div class="form-check radio-btn" id="colorCheckB">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefaultB">
-                    <label class="form-check-label" for="flexRadioDefaultB" style="background-image: url('https://picsum.photos/300?=2?')" ;>
-                        黑
-                    </label>
-
-                </div> *@
-
-                <div class="d-flex mt-5">
-                <select class="form-select" aria-label="尺寸" style="height:38px; width:100px">
-                    <option selected>尺寸</option>
-                    <option value="1">XS</option>
-                    <option value="2">S</option>
-                    <option value="3">M</option>
-                </select>
-                @* 數量 *@
                     
-                    <div class="input-group mb-3 ms-2 border-left-0" style="height:38px; width:110px; border-left: none;" id="count">
-                        <button class="btn" type="button" id="button-minus" style="border-color: #dee2e6; border-right: none;">-</button>
-                        <input type="text" class="form-control border-left-0" value="1" id="count-input" aria-label="Example text with button addon" aria-describedby="button-addon1" style="border-right: none; border-left: none; text-align: center">
-                        <button class="btn" type="button" id="button-plus" style="border-color: #dee2e6; border-left: none;">+</button>
+                    @foreach (var p in Model)
+                    {
+                        <div class=" btn carousel-item @(Model.IndexOf(p) == 0 ? "active" : "") py-0 px-0" style="border:none" data-bs-toggle="modal" data-bs-target="#exampleModal" id="picBigBtn">
+                                <img src="@p.ProductImage" class="d-block w-100" alt="..." id="pic">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5></h5>
+                                    <p></p>
+                                </div>
+                            </div>                                                  
+                    }
+                          
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                            <span class="" aria-hidden="true"><i class="bi bi-circle-fill " style="color:black"></i></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                    <span class="" aria-hidden="true"><i class="bi bi-circle-fill" style="color:black"></i></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
                     </div>
-                   
                 </div>
-                <div class="d-grid gap-2 justify-content-center">
-                    <button class="btn btn-warning fw-bold" type="button" id="purchase">加入購物車</button>
+
+        @foreach (var d in Model)
+        {
+
+            if (Model.IndexOf(d) == 0)
+            {
+                @* 商品明細 *@
+                <div class="col-12 col-md-6">
+
+                    <h2 id="productName" style="color:black" class="mt-3">@d.Name</h2>
+                    <p class="text-start mt-3  " style="color:black; font-size:17px; ">@d.Description</p>
+                    <P class="text-start  " style="color:black; ">@d.Price</P>
+                    <div>
+
+                        <div class="d-flex mt-5">
+                            <select class="form-select" aria-label="尺寸" style="height:38px; width:100px">
+                                <option selected>尺寸</option>
+                                <option value="1">XS</option>
+                                <option value="2">S</option>
+                                <option value="3">M</option>
+                            </select>
+                            @* 數量 *@
+
+                            <div class="input-group mb-3 ms-2 border-left-0" style="height:38px; width:110px; border-left: none;" id="count">
+                                <button class="btn" type="button" id="button-minus" style="border-color: #dee2e6; border-right: none;">-</button>
+                                <input type="text" class="form-control border-left-0" value="1" id="count-input" aria-label="Example text with button addon" aria-describedby="button-addon1" style="border-right: none; border-left: none; text-align: center">
+                                <button class="btn" type="button" id="button-plus" style="border-color: #dee2e6; border-left: none;">+</button>
+                            </div>
+
+                        </div>
+                        <div class="d-grid gap-2 justify-content-center">
+                            <button class="btn btn-warning fw-bold" type="button" id="purchase">加入購物車</button>
+                        </div>
+                    </div>
+                    <div class="mt-4" id="describe">
+                        <p class="text-start my-0 ">
+                            @d.Content
+                        </p>
+                    </div>
+
+
                 </div>
-            </div>
-            <div class="mt-4" id="describe">
-            <p class="text-start my-0 ">商品描述區塊商品描述區塊商品描述區塊商品描述區塊商品描述區塊商品描述區塊
-                商品描述區塊商品描述區塊商品描述區塊商品商品描述區塊描述區塊商品描述區塊商品描述區塊
-                商品描述區塊商品描述區塊商品描述區塊
-                商品描述區塊商品描述區塊商品描述區塊商品描述區塊商品描述區塊商品描述區塊商品描述區塊商品描述區塊商品描述區塊
-                商品描述區塊商品描述區塊商品描述區塊商品商品描述區塊描述區塊商品描述區塊商品描述區塊
-                商品描述區塊商品描述區塊商品描述區塊            商品描述區塊商品描述區塊商品描述區塊
-               
-            </p>
-            </div>
-           
-        </div>
+                i++;
+            }}
 
     </div>
-    
+
     <section>
-        <h4 class="mt-5">你可能也喜歡</h4>        
+        <h4 class="mt-5">你可能也喜歡</h4>
         <div class="row mt-2">
             <div class="col-md-3 col-sm-4 col-6 mt-3 mb-2">
                 <a href="/Products/Details" class="text-decoration-none">
@@ -261,6 +264,8 @@
 
 
 <!-- Modal -->
+@foreach (var p in Model)
+                {
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content" style="border:none">
@@ -274,7 +279,7 @@
 
         </div>
     </div>
-</div>
+</div>}
 
 
 
@@ -326,3 +331,18 @@
 
 </script>
 
+    @* 參考 *@
+@* <div class="form-check radio-btn" id="colorCheckA">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefaultA" >
+                    <label class="form-check-label" for="flexRadioDefaultA" style="background-image: url('https://picsum.photos/300?=1')" ;>
+                        紅
+                    </label>                  
+
+                </div>
+                <div class="form-check radio-btn" id="colorCheckB">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefaultB">
+                    <label class="form-check-label" for="flexRadioDefaultB" style="background-image: url('https://picsum.photos/300?=2?')" ;>
+                        黑
+                    </label>
+
+                </div> *@

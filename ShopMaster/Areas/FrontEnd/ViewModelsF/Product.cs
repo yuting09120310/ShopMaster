@@ -10,6 +10,8 @@ namespace ShopMaster.Areas.FrontEnd.ViewModelsF
 
         public string? MainImage { get; set; }
 
+        public string? ProductImage { get; set; }
+
         //副標題
         public string? Description { get; set; }
 

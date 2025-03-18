@@ -33,7 +33,7 @@
     @foreach (var p in Model)
     {   
         <div class="col-md-3 col-sm-4 col-6 mt-3 mb-2">
-                <a href="/Products/Details" class="text-decoration-none" >
+                <a href="/Products/Details/@p.Id" class="text-decoration-none" >
                 <div class="card hover">
                     <img src=@p.MainImage class="card-img-top" alt="商品1">
                     <div class="card-body">

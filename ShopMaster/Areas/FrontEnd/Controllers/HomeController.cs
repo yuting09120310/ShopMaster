@@ -38,9 +38,11 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                                         (p, pt) => new ViewModelsF.Product
                                         {
                                             TypeId = pt.Id,
+                                            Id = p.Id,
                                             Name = p.Name,
                                             Price = p.Price,
                                             MainImage = p.MainImage
+                                            
                                             
 
                                         }).GroupBy(p => p.TypeId)
