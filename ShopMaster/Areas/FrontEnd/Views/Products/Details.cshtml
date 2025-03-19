@@ -155,7 +155,7 @@
                         {
 
                             <div class=" btn carousel-item @(Model.ProductDetails.IndexOf(p) == 0 ? "active" : "") py-0 px-0" style="border:none" data-bs-toggle="modal" data-bs-target="#modal-@img.Id" id="picBigBtn">
-                                <img src="@img.ImageUrl" class="d-block w-100" alt="..." id="pic">
+                                <img src="@img.ImageUrl" class="d-block w-100" alt="..." id="pic" style="padding:10px">
                                 <div class="carousel-caption d-none d-md-block">
                                     <h5></h5>
                                     <p></p>
@@ -239,10 +239,9 @@
     <section>
         <h4 class="mt-5">你可能也喜歡</h4>
         <div class="row mt-2">
-            @foreach (var group in Model.ProductList)
+            @foreach (var p in Model.ProductListLove)
             {
-                @foreach (var p in group)
-                {
+               
                     <div class="col-md-3 col-sm-4 col-6 mt-3 mb-2">
                         <a href="/Products/Details/@p.Id" class="text-decoration-none">
                     <div class="card hover">
@@ -252,7 +251,7 @@
                         </div>
                     </div>
                 </a>
-            </div>}}          
+            </div>}          
             
         </div>
     </section>

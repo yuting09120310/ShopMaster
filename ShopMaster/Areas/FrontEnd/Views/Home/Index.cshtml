@@ -63,9 +63,7 @@
     .mt-auto {
         margin-top: auto; /* 這個類將推動按鈕到卡片底部 */
     }
-</style>
-
-    
+</style>  
 
 
 
@@ -96,13 +94,11 @@
 <section class="container my-5">
     @foreach (var group in Model.ProductList){
         //商品分類
-        <h2 class="fw-lighter">@group.Key</h2>
+        <h2 class="fw-lighter" style="margin-top:17px">@group.Select(x => x.TypeName).Distinct().FirstOrDefault()</h2>
 
         <div class="row mt-2">
             @foreach (var product in group)
             {
-
-
                 <div class="col-md-3 col-sm-4 col-6 mt-3 mb-2">
                     <a href="/Products/Details/@product.Id" class="text-decoration-none">
                         <div class="card hover">

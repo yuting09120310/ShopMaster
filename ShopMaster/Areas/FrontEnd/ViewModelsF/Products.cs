@@ -6,7 +6,10 @@ namespace ShopMaster.Areas.FrontEnd.ViewModelsF
     {
         public long Id { get; set; }
 
+        //商品名稱
         public string Name { get; set; } = null!;
+
+        public string TypeName{ get; set; } = null!;
 
         public string? MainImage { get; set; }
 

@@ -41,8 +41,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                                             Id = p.Id,
                                             Name = p.Name,
                                             Price = p.Price,
-                                            MainImage = p.MainImage
-
+                                            MainImage = p.MainImage,
+                                            TypeName = pt.Name
 
 
                                         }).GroupBy(p => p.TypeId ?? 0)

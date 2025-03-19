@@ -6,6 +6,7 @@ using ShopMaster.Areas.BackEnd.Models;
 using ShopMaster.Areas.BackEnd.Controllers;
 using Microsoft.EntityFrameworkCore;
 using ShopMaster.Areas.FrontEnd.ViewModelsF;
+using System.Linq;
 
 namespace ShopMaster.Areas.FrontEnd.Controllers
 {
@@ -58,9 +59,6 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
                                         }).ToList();
 
-
-
-
             return View(result);
         }
 
@@ -71,9 +69,10 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             var product = await _db.Products.ToListAsync();
             var productType = await _db.ProductTypes.ToListAsync();
             var productImg = await _db.ProductImages.ToListAsync();
-            
+
             //產品列表
-            var productList = product.Join(productType,
+            //所有商品
+            var productListLoveA = product.Join(productType,
                                         p => p.TypeId,
                                         pt => pt.Id,
                                         (p, pt) => new ViewModelsF.Products
@@ -83,12 +82,20 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                                             Name = p.Name,
                                             Price = p.Price,
                                             MainImage = p.MainImage
+                                        }).ToList();
+            //點到的商品
+            var productListLoveB = productListLoveA.Where(x => x.Id == id).ToList();
 
 
-
-                                        }).GroupBy(p => p.TypeId ?? 0)
-                                          .ToList();
-
+            //找同樣規格商品
+            List<Products> productListLoveC = new List<Products>();
+            if (productListLoveB != null)
+            {
+                 productListLoveC = productListLoveA
+                                                  .Where(x => productListLoveB
+                                                  .Select(y => y.TypeId)
+                                                  .Contains(x.TypeId)).ToList();  
+            }
 
 
             //產品明細
@@ -102,6 +109,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                                         (pt, i) => new ViewModelsF.Products
                                         {
                                             TypeId = pt.p.TypeId,
+                                            TypeName = pt.t.Name,
                                             Id = pt.p.Id,
                                             Name = pt.p.Name,
                                             Price = pt.p.Price,
@@ -120,7 +128,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             var productsAll = new ProductsAll
             {
                 ProductDetails = productDetails,
-                 ProductList = productList
+                ProductListLove = productListLoveC
             };
 
 
