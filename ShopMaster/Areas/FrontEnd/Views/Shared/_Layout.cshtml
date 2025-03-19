@@ -1,5 +1,6 @@
 ﻿@using ShopMaster.Areas.BackEnd.Models
-@model ShopMaster.Areas.FrontEnd.ViewModelsF.ProductsAll
+@inject shopmasterdbContext _dbContext
+
 
 @{
     
@@ -95,7 +96,7 @@
                             </a>
                             <ul class="dropdown-menu " style=" font-size: 15px;">
 
-                          @foreach (var item in Model.ProductTypeList)
+                    @foreach (var item in _dbContext.ProductTypes)
                             {
                               <li><a class="dropdown-item" href="/Home/Index/@item.Id">@item.Name</a></li>
                             }

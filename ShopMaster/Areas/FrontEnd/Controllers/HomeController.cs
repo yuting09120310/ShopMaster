@@ -78,7 +78,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             {
                 ProductList = productList,
                 ProductListLove = productListLove,
-                ProductTypeList = productType
+               
             };
 
 
