@@ -120,16 +120,9 @@
     } */
 
 </style>
-@foreach (var d in Model)
-{if (Model.IndexOf(d) == 0)
-    {
-
-    }
-}
 
 
-@{
-    HashSet<string> displayedImages = new HashSet<string>();
+
 }
 <div class="container" style="padding-top: 115px">
     <div class="row mt-5">
@@ -145,8 +138,8 @@
                     <button type="button" class="list-group-item list-group-item-action btn btn-lg mt-2" id="picBtn" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="@Model.IndexOf(p)">
                         <img src="@p.ProductImage" class="d-block w-100" alt="..." id="pic0">
                     </button>
-                   
-            }</div>
+
+                }</div>
 
         </div>
 
@@ -155,18 +148,36 @@
 
             <div id="carouselExampleCaptions" class="carousel slide ">
                 <div class="carousel-inner">
-                    
+
                     @foreach (var p in Model)
                     {
-                        <div class=" btn carousel-item @(Model.IndexOf(p) == 0 ? "active" : "") py-0 px-0" style="border:none" data-bs-toggle="modal" data-bs-target="#exampleModal" id="picBigBtn">
-                                <img src="@p.ProductImage" class="d-block w-100" alt="..." id="pic">
+                        @foreach (var img in p.ProductImages)
+                        {
+
+                            <div class=" btn carousel-item @(Model.IndexOf(p) == 0 ? "active" : "") py-0 px-0" style="border:none" data-bs-toggle="modal" data-bs-target="#modal-@img.Id" id="picBigBtn">
+                                <img src="@img.ImageUrl" class="d-block w-100" alt="..." id="pic">
                                 <div class="carousel-caption d-none d-md-block">
                                     <h5></h5>
                                     <p></p>
                                 </div>
-                            </div>                                                  
-                    }
-                          
+                            </div>
+
+                            <div class="modal fade" id="modal-@img.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content" style="border:none">
+                                        <div class="modal-header" style="border:none">
+
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <img src="@img.ImageUrl" class="d-block w-100" alt="...">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }                          
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
                             <span class="" aria-hidden="true"><i class="bi bi-circle-fill " style="color:black"></i></span>
@@ -264,8 +275,7 @@
 
 
 <!-- Modal -->
-@foreach (var p in Model)
-                {
+
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content" style="border:none">
@@ -279,7 +289,7 @@
 
         </div>
     </div>
-</div>}
+</div>
 
 
 
