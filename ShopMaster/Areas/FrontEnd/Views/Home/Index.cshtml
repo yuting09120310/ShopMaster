@@ -1,4 +1,4 @@
-﻿@model IEnumerable<IGrouping<int?, ShopMaster.Areas.FrontEnd.ViewModelsF.Product>>
+﻿@model  ShopMaster.Areas.FrontEnd.ViewModelsF.ProductsAll
 
 
 @{
@@ -64,9 +64,9 @@
         margin-top: auto; /* 這個類將推動按鈕到卡片底部 */
     }
 </style>
-關鍵解釋：
+
     
-</style>
+
 
 
 
@@ -94,27 +94,28 @@
 
 
 <section class="container my-5">
-    @foreach (var group in Model){
+    @foreach (var group in Model.ProductList){
         //商品分類
         <h2 class="fw-lighter">@group.Key</h2>
 
         <div class="row mt-2">
             @foreach (var product in group)
-            {              
-                           
+            {
+
 
                 <div class="col-md-3 col-sm-4 col-6 mt-3 mb-2">
                     <a href="/Products/Details/@product.Id" class="text-decoration-none">
-                <div class="card hover">
-                    <img src=@product.MainImage class="card-img-top" alt="商品1">
-                    <div class="card-body">
-                        <h5 class="card-title">@product.Name</h5>
-                    </div>
+                        <div class="card hover">
+                            <img src=@product.MainImage class="card-img-top" alt="商品1">
+                            <div class="card-body">
+                                <h5 class="card-title">@product.Name</h5>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </a>
-        </div>   }   
-       
-        
+            }
+
+
     </div>}
 </section>
 

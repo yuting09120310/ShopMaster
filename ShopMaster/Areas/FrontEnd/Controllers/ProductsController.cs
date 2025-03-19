@@ -49,7 +49,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             var result = product.Join(productTyoe,
                                         p => p.TypeId,
                                         pt => pt.Id,
-                                        (p, pt) => new ViewModelsF.Product
+                                        (p, pt) => new ViewModelsF.Products
                                         {
                                             TypeId = pt.Id,
                                             Name = p.Name,
@@ -71,14 +71,35 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             var product = await _db.Products.ToListAsync();
             var productType = await _db.ProductTypes.ToListAsync();
             var productImg = await _db.ProductImages.ToListAsync();
-            var result = product.Join(productType,
+            
+            //產品列表
+            var productList = product.Join(productType,
+                                        p => p.TypeId,
+                                        pt => pt.Id,
+                                        (p, pt) => new ViewModelsF.Products
+                                        {
+                                            TypeId = pt.Id,
+                                            Id = p.Id,
+                                            Name = p.Name,
+                                            Price = p.Price,
+                                            MainImage = p.MainImage
+
+
+
+                                        }).GroupBy(p => p.TypeId ?? 0)
+                                          .ToList();
+
+
+
+            //產品明細
+            var productDetails = product.Join(productType,
                                         p => p.TypeId,
                                         t => t.Id,
                                         (p, t) => new { p, t })
                                         .Join(productImg,
                                         pt => pt.p.Id,
                                         i => i.ProductId,
-                                        (pt, i) => new ViewModelsF.Product
+                                        (pt, i) => new ViewModelsF.Products
                                         {
                                             TypeId = pt.p.TypeId,
                                             Id = pt.p.Id,
@@ -96,9 +117,14 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                                         }).GroupBy(p => p.TypeId).SelectMany(group => group)
                                         .Where(p => p.Id == id)
                                         .ToList();
+            var productsAll = new ProductsAll
+            {
+                ProductDetails = productDetails,
+                 ProductList = productList
+            };
 
 
-            return View(result);
+            return View(productsAll);
         }
 
         // GET: ProductsController/Create

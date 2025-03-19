@@ -32,25 +32,28 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             var product = await _db.Products.ToListAsync();
             var productType = await _db.ProductTypes.ToListAsync();            
 
-            var result = product.Join(productType,
+            var productList = product.Join(productType,
                                         p => p.TypeId,
                                         pt => pt.Id,
-                                        (p, pt) => new ViewModelsF.Product
+                                        (p, pt) => new ViewModelsF.Products
                                         {
                                             TypeId = pt.Id,
                                             Id = p.Id,
                                             Name = p.Name,
                                             Price = p.Price,
                                             MainImage = p.MainImage
-                                            
-                                            
 
-                                        }).GroupBy(p => p.TypeId)
+
+
+                                        }).GroupBy(p => p.TypeId ?? 0)
                                           .ToList();
 
+            var productsAll = new ProductsAll
+            {
+                ProductList = productList
+            };
 
-
-            return View(result);
+            return View(productsAll);
         }
 
 

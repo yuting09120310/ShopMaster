@@ -1,4 +1,4 @@
-﻿@model List<ShopMaster.Areas.FrontEnd.ViewModelsF.Product>
+﻿@model ShopMaster.Areas.FrontEnd.ViewModelsF.ProductsAll
 
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -133,9 +133,9 @@
 
             <div class="list-group ">
 
-                @foreach (var p in Model)
+                @foreach (var p in Model.ProductDetails)
                 {
-                    <button type="button" class="list-group-item list-group-item-action btn btn-lg mt-2" id="picBtn" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="@Model.IndexOf(p)">
+                    <button type="button" class="list-group-item list-group-item-action btn btn-lg mb-2" id="picBtn" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="@Model.ProductDetails.IndexOf(p)">
                         <img src="@p.ProductImage" class="d-block w-100" alt="..." id="pic0">
                     </button>
 
@@ -149,12 +149,12 @@
             <div id="carouselExampleCaptions" class="carousel slide ">
                 <div class="carousel-inner">
 
-                    @foreach (var p in Model)
+                    @foreach (var p in Model.ProductDetails)
                     {
                         @foreach (var img in p.ProductImages)
                         {
 
-                            <div class=" btn carousel-item @(Model.IndexOf(p) == 0 ? "active" : "") py-0 px-0" style="border:none" data-bs-toggle="modal" data-bs-target="#modal-@img.Id" id="picBigBtn">
+                            <div class=" btn carousel-item @(Model.ProductDetails.IndexOf(p) == 0 ? "active" : "") py-0 px-0" style="border:none" data-bs-toggle="modal" data-bs-target="#modal-@img.Id" id="picBigBtn">
                                 <img src="@img.ImageUrl" class="d-block w-100" alt="..." id="pic">
                                 <div class="carousel-caption d-none d-md-block">
                                     <h5></h5>
@@ -178,22 +178,22 @@
                             </div>
                         }
                     }                          
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-                            <span class="" aria-hidden="true"><i class="bi bi-circle-fill " style="color:black"></i></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-                    <span class="" aria-hidden="true"><i class="bi bi-circle-fill" style="color:black"></i></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-                    </div>
                 </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                    <span class="" aria-hidden="true"><i class="bi bi-circle-fill " style="color:black"></i></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                    <span class="" aria-hidden="true"><i class="bi bi-circle-fill" style="color:black"></i></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
 
-        @foreach (var d in Model)
+        @foreach (var d in Model.ProductDetails)
         {
 
-            if (Model.IndexOf(d) == 0)
+            if (Model.ProductDetails.IndexOf(d) == 0)
             {
                 @* 商品明細 *@
                 <div class="col-12 col-md-6">
@@ -239,36 +239,21 @@
     <section>
         <h4 class="mt-5">你可能也喜歡</h4>
         <div class="row mt-2">
-            <div class="col-md-3 col-sm-4 col-6 mt-3 mb-2">
-                <a href="/Products/Details" class="text-decoration-none">
+            @foreach (var group in Model.ProductList)
+            {
+                @foreach (var p in group)
+                {
+                    <div class="col-md-3 col-sm-4 col-6 mt-3 mb-2">
+                        <a href="/Products/Details/@p.Id" class="text-decoration-none">
                     <div class="card hover">
-                        <img src="https://picsum.photos/300?=1" class="card-img-top" alt="商品1">
+                            <img src="@p.MainImage" class="card-img-top" alt="商品1">
                         <div class="card-body">
-                            <h5 class="card-title">商品名稱 1</h5>
+                            <h5 class="card-title">@p.Name</h5>
                         </div>
                     </div>
                 </a>
-            </div>
-            <div class="col-md-3 col-sm-4 col-6  mt-3 mb-2">
-                <a href="/Products/Details" class="text-decoration-none">
-                    <div class="card hover">
-                        <img src="https://picsum.photos/300?=2" class="card-img-top" alt="商品1">
-                        <div class="card-body">
-                            <h5 class="card-title">商品名稱2</h5>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-3 col-sm-4 col-6   mt-3 mb-2">
-                <a href="/Products/Details" class="text-decoration-none">
-                    <div class="card hover">
-                        <img src="https://picsum.photos/300?=3" class="card-img-top" alt="商品1">
-                        <div class="card-body">
-                            <h5 class="card-title">商品名稱 3</h5>
-                        </div>
-                    </div>
-                </a>
-            </div>
+            </div>}}          
+            
         </div>
     </section>
 </div>

@@ -2,7 +2,7 @@
 
 namespace ShopMaster.Areas.FrontEnd.ViewModelsF
 {
-    public class Product
+    public class Products
     {
         public long Id { get; set; }
 
