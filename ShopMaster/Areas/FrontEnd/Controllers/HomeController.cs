@@ -1,6 +1,8 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ShopMaster.Areas.BackEnd.Controllers;
 using ShopMaster.Areas.BackEnd.Models;
@@ -26,12 +28,13 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             _db = db;
         }
 
-        // 取產品資料
-        public async Task<IActionResult> Index()
-        {
+        
+        public async Task<IActionResult> Index(int? id)
+        {  
             var product = await _db.Products.ToListAsync();
             var productType = await _db.ProductTypes.ToListAsync();            
 
+            //取產品資料
             var productList = product.Join(productType,
                                         p => p.TypeId,
                                         pt => pt.Id,
@@ -48,10 +51,38 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                                         }).GroupBy(p => p.TypeId ?? 0)
                                           .ToList();
 
+            // 點選下拉選單商品
+            List<Products> productListLove = new List<Products>();
+            if (id.HasValue)
+            {
+                 productListLove = product.Join(productType,
+                                            p => p.TypeId,
+                                            pt => pt.Id,
+                                            (p, pt) => new ViewModelsF.Products
+                                            {
+                                                TypeId = pt.Id,
+                                                Id = p.Id,
+                                                Name = p.Name,
+                                                Price = p.Price,
+                                                MainImage = p.MainImage,
+                                                TypeName = pt.Name
+
+
+                                            }).Where(x => x.TypeId == id)
+                                              .ToList();
+
+            }
+
+
             var productsAll = new ProductsAll
             {
-                ProductList = productList
+                ProductList = productList,
+                ProductListLove = productListLove,
+                ProductTypeList = productType
             };
+
+
+            ViewData["TypeID"] = id;  
 
             return View(productsAll);
         }

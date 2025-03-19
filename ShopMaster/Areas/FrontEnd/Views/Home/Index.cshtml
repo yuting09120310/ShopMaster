@@ -3,6 +3,11 @@
 
 @{
     ViewData["Title"] = "首頁";
+
+
+    var typeId = ViewData["TypeID"];
+
+
 }
 
 <!-- Hero Section -->
@@ -42,26 +47,26 @@
     }
 
     card {
-        display: flex;
-        flex-direction: column;
-        height: 100%; /* 讓卡片的高度填滿其容器 */
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* 讓卡片的高度填滿其容器 */
     }
 
     .card-body {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between; /* 讓內容分佈並將按鈕推到底部 */
-        flex-grow: 1; /* 讓card-body佔據剩餘空間 */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* 讓內容分佈並將按鈕推到底部 */
+    flex-grow: 1; /* 讓card-body佔據剩餘空間 */
     }
 
     .card-button {
-        width: 100%; /* 按鈕寬度100%，填滿整個卡片底部 */
-        height: 50px; /* 按鈕的高度，這裡可以調整 */
-        border: none;
+    width: 100%; /* 按鈕寬度100%，填滿整個卡片底部 */
+    height: 50px; /* 按鈕的高度，這裡可以調整 */
+    border: none;
     }
 
     .mt-auto {
-        margin-top: auto; /* 這個類將推動按鈕到卡片底部 */
+    margin-top: auto; /* 這個類將推動按鈕到卡片底部 */
     }
 </style>  
 
@@ -90,30 +95,71 @@
     </button>
 </div>
 
+@{
+    if (typeId != null)
+    {
+        <section class="container my-5">
+            
+            <h2 class="fw-lighter" style="margin-top:17px">@Model.ProductListLove.Select(x => x.TypeName).FirstOrDefault()</h2>
 
-<section class="container my-5">
-    @foreach (var group in Model.ProductList){
-        //商品分類
-        <h2 class="fw-lighter" style="margin-top:17px">@group.Select(x => x.TypeName).Distinct().FirstOrDefault()</h2>
-
-        <div class="row mt-2">
-            @foreach (var product in group)
-            {
-                <div class="col-md-3 col-sm-4 col-6 mt-3 mb-2">
-                    <a href="/Products/Details/@product.Id" class="text-decoration-none">
-                        <div class="card hover">
-                            <img src=@product.MainImage class="card-img-top" alt="商品1">
-                            <div class="card-body">
-                                <h5 class="card-title">@product.Name</h5>
+            <div class="row mt-2">
+                @foreach (var group in Model.ProductListLove)
+                {
+                    // 下拉選單商品
+                    <div class="col-md-3 col-sm-4 col-6 mt-3 mb-2">
+                        <a href="/Products/Details/@group.Id" class="text-decoration-none">
+                            <div class="card hover">
+                                <img src=@group.MainImage class="card-img-top" alt="商品1">
+                                <div class="card-body">
+                                    <h5 class="card-title">@group.Name</h5>
+                                </div>
                             </div>
+                        </a>
+                    </div>}
+
+                </div>
+            
+        </section>
+
+    }
+    else
+    {
+
+        <section class="container my-5">
+
+            @foreach (var group in Model.ProductList)
+            {
+                //所有商品分類
+                <h2 class="fw-lighter" style="margin-top:17px">@group.Select(x => x.TypeName).Distinct().FirstOrDefault()</h2>
+
+                <div class="row mt-2">
+                    @foreach (var product in group)
+                    {
+                        <div class="col-md-3 col-sm-4 col-6 mt-3 mb-2">
+                            <a href="/Products/Details/@product.Id" class="text-decoration-none">
+                                <div class="card hover">
+                                    <img src=@product.MainImage class="card-img-top" alt="商品1">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@product.Name</h5>
+                                    </div>
+                                </div>
+                            </a>
                         </div>
-                    </a>
+                    }
+
+
                 </div>
             }
+        </section>
 
 
-    </div>}
-</section>
+
+    }
+
+
+
+}
+
 
 
 

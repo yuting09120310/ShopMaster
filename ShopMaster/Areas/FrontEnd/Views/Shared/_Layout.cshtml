@@ -1,6 +1,9 @@
-﻿﻿
+﻿@using ShopMaster.Areas.BackEnd.Models
+@model ShopMaster.Areas.FrontEnd.ViewModelsF.ProductsAll
+
 @{
-}
+    
+}﻿
 
 
 <!DOCTYPE html>
@@ -75,7 +78,7 @@
                 <button class="btn btn-warning fw-bold" type="submit" id="continue" onclick="window.location.href='@Url.Action("Index", "Product", new { area = "FrontEnd" })'">繼續購物</button>
             </div>
 
-            <div class="offcanvas-body">     </div>
+            <div class="offcanvas-body"> </div>
         </div>
 
 
@@ -91,11 +94,14 @@
                                 商品
                             </a>
                             <ul class="dropdown-menu " style=" font-size: 15px;">
-                                <li><a class="dropdown-item " href="">最新商品</a></li>
-                                <li><a class="dropdown-item " href="@Url.Action("Index", "Products", new { area = "FrontEnd" })">熱銷商品</a></li>
-                    <li><a class="dropdown-item " href="/Products/Index" >限定商品</a></li>
-                            <li><a class="dropdown-item " href="@Url.Action("Index", "Products", new { area = "FrontEnd" })" >特價商品</a></li> 
+
+                          @foreach (var item in Model.ProductTypeList)
+                            {
+                              <li><a class="dropdown-item" href="/Home/Index/@item.Id">@item.Name</a></li>
+                            }
+                               
                             </ul>
+
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/Admin/Index">關於我們</a>

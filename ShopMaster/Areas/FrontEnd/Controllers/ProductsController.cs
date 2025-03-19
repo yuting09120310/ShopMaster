@@ -70,8 +70,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             var productType = await _db.ProductTypes.ToListAsync();
             var productImg = await _db.ProductImages.ToListAsync();
 
-            //產品列表
-            //所有商品
+            //你可能喜歡的商品 
+            //A先找所有商品
             var productListLoveA = product.Join(productType,
                                         p => p.TypeId,
                                         pt => pt.Id,
@@ -83,11 +83,11 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                                             Price = p.Price,
                                             MainImage = p.MainImage
                                         }).ToList();
-            //點到的商品
+            //B你點到的商品
             var productListLoveB = productListLoveA.Where(x => x.Id == id).ToList();
 
 
-            //找同樣規格商品
+            //C找同樣規格商品
             List<Products> productListLoveC = new List<Products>();
             if (productListLoveB != null)
             {

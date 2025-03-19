@@ -28,6 +28,6 @@ namespace ShopMaster.Areas.FrontEnd.ViewModelsF
 
         public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
 
-        public virtual ProductType? Type { get; set; }
+        
     }
 }
