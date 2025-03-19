@@ -77,8 +77,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             var productsAll = new ProductsAll
             {
                 ProductList = productList,
-                ProductListLove = productListLove,
-               
+                ProductListLove = productListLove,               
             };
 
 
