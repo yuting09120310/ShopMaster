@@ -94,7 +94,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                  productListLoveC = productListLoveA
                                                   .Where(x => productListLoveB
                                                   .Select(y => y.TypeId)
-                                                  .Contains(x.TypeId)).ToList();  
+                                                  .Contains(x.TypeId)).ToList();
             }
 
 
