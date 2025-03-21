@@ -4,35 +4,27 @@ using Microsoft.AspNetCore.Mvc;
 namespace ShopMaster.Areas.FrontEnd.Controllers
 {
     [Area("FrontEnd")]
-    public class CartController : Controller
+    public class OrderController : Controller
     {
-        // GET: CartController
+        // GET: OrderController
         public ActionResult Index()
         {
             return View();
         }
 
-        public async Task<IActionResult> CartPartial(int? id)
-        {
-
-
-
-            return View();
-        }
-
-        // GET: CartController/Details/5
+        // GET: OrderController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: CartController/Create
+        // GET: OrderController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: CartController/Create
+        // POST: OrderController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -47,13 +39,13 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             }
         }
 
-        // GET: CartController/Edit/5
+        // GET: OrderController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: CartController/Edit/5
+        // POST: OrderController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -68,13 +60,13 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             }
         }
 
-        // GET: CartController/Delete/5
+        // GET: OrderController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: CartController/Delete/5
+        // POST: OrderController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)

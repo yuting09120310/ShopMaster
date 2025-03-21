@@ -20,6 +20,8 @@ public partial class shopmasterdbContext : DbContext
 
     public virtual DbSet<AdminGroup> AdminGroups { get; set; }
 
+    public virtual DbSet<Cart> Carts { get; set; }
+
     public virtual DbSet<Ecoupon> Ecoupons { get; set; }
 
     public virtual DbSet<EcouponEvent> EcouponEvents { get; set; }
@@ -47,19 +49,23 @@ public partial class shopmasterdbContext : DbContext
     public virtual DbSet<Rule> Rules { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseMySql("server=219.68.168.127;database=shopmasterdb;user id=ShopMasterDB;password=Alex0310", Microsoft.EntityFrameworkCore.ServerVersion.Parse("5.7.43-mysql"));
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseMySql("server=219.68.168.127;database=shopmasterdb;user id=ShopMasterDB;password=Alex0310", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.11.10-mariadb"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
-            .UseCollation("utf8mb4_general_ci")
-            .HasCharSet("utf8mb4");
+            .UseCollation("utf8mb3_general_ci")
+            .HasCharSet("utf8mb3");
 
         modelBuilder.Entity<Admin>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("Admin");
+            entity
+                .ToTable("Admin")
+                .HasCharSet("utf8mb4")
+                .UseCollation("utf8mb4_general_ci");
 
             entity.HasIndex(e => e.Email, "Email").IsUnique();
 
@@ -69,7 +75,7 @@ public partial class shopmasterdbContext : DbContext
 
             entity.Property(e => e.Id).HasColumnType("bigint(20)");
             entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp");
             entity.Property(e => e.Email).HasMaxLength(100);
             entity.Property(e => e.GroupId).HasColumnType("int(11)");
@@ -85,22 +91,41 @@ public partial class shopmasterdbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("AdminGroup");
+            entity
+                .ToTable("AdminGroup")
+                .HasCharSet("utf8mb4")
+                .UseCollation("utf8mb4_general_ci");
 
             entity.HasIndex(e => e.Name, "Name").IsUnique();
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
             entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp");
             entity.Property(e => e.Name).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<Cart>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("Cart");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnType("bigint(20)");
+            entity.Property(e => e.MemberId).HasColumnType("bigint(20)");
+            entity.Property(e => e.ProductId).HasColumnType("bigint(20)");
         });
 
         modelBuilder.Entity<Ecoupon>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ECoupon");
+            entity
+                .ToTable("ECoupon")
+                .HasCharSet("utf8mb4")
+                .UseCollation("utf8mb4_general_ci");
 
             entity.HasIndex(e => e.Code, "Code").IsUnique();
 
@@ -113,7 +138,7 @@ public partial class shopmasterdbContext : DbContext
             entity.Property(e => e.Id).HasColumnType("bigint(20)");
             entity.Property(e => e.Code).HasMaxLength(50);
             entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp");
             entity.Property(e => e.EcouponEventId)
                 .HasColumnType("bigint(20)")
@@ -142,7 +167,10 @@ public partial class shopmasterdbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ECouponEvent");
+            entity
+                .ToTable("ECouponEvent")
+                .HasCharSet("utf8mb4")
+                .UseCollation("utf8mb4_general_ci");
 
             entity.HasIndex(e => e.CodePrefix, "CodePrefix").IsUnique();
 
@@ -152,7 +180,7 @@ public partial class shopmasterdbContext : DbContext
                 .HasDefaultValueSql("'Discount'")
                 .HasColumnType("enum('Discount','FreeShipping')");
             entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp");
             entity.Property(e => e.Discount).HasPrecision(10, 2);
             entity.Property(e => e.ExpiryDays).HasColumnType("int(11)");
@@ -164,7 +192,10 @@ public partial class shopmasterdbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("Member");
+            entity
+                .ToTable("Member")
+                .HasCharSet("utf8mb4")
+                .UseCollation("utf8mb4_general_ci");
 
             entity.HasIndex(e => e.Email, "Email").IsUnique();
 
@@ -177,7 +208,7 @@ public partial class shopmasterdbContext : DbContext
             entity.Property(e => e.Address).HasMaxLength(255);
             entity.Property(e => e.Avatar).HasMaxLength(255);
             entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp");
             entity.Property(e => e.Email).HasMaxLength(100);
             entity.Property(e => e.MemberTypeId)
@@ -197,13 +228,16 @@ public partial class shopmasterdbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("MemberType");
+            entity
+                .ToTable("MemberType")
+                .HasCharSet("utf8mb4")
+                .UseCollation("utf8mb4_general_ci");
 
             entity.HasIndex(e => e.Name, "Name").IsUnique();
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
             entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp");
             entity.Property(e => e.Discount)
                 .HasPrecision(3, 2)
@@ -216,13 +250,16 @@ public partial class shopmasterdbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("MenuGroup");
+            entity
+                .ToTable("MenuGroup")
+                .HasCharSet("utf8mb4")
+                .UseCollation("utf8mb4_general_ci");
 
             entity.HasIndex(e => e.Name, "Name").IsUnique();
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
             entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp");
             entity.Property(e => e.Name).HasMaxLength(100);
             entity.Property(e => e.SortOrder)
@@ -234,13 +271,16 @@ public partial class shopmasterdbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("MenuSub");
+            entity
+                .ToTable("MenuSub")
+                .HasCharSet("utf8mb4")
+                .UseCollation("utf8mb4_general_ci");
 
             entity.HasIndex(e => e.GroupId, "GroupId");
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
             entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp");
             entity.Property(e => e.GroupId).HasColumnType("int(11)");
             entity.Property(e => e.Icon).HasMaxLength(100);
@@ -255,7 +295,10 @@ public partial class shopmasterdbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("Order");
+            entity
+                .ToTable("Order")
+                .HasCharSet("utf8mb4")
+                .UseCollation("utf8mb4_general_ci");
 
             entity.HasIndex(e => e.PaymentType, "FK_Order_PaymentType");
 
@@ -265,7 +308,7 @@ public partial class shopmasterdbContext : DbContext
 
             entity.Property(e => e.Id).HasColumnType("bigint(20)");
             entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp");
             entity.Property(e => e.MemberId).HasColumnType("bigint(20)");
             entity.Property(e => e.MemberTypeId)
@@ -294,7 +337,10 @@ public partial class shopmasterdbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("OrderDetail");
+            entity
+                .ToTable("OrderDetail")
+                .HasCharSet("utf8mb4")
+                .UseCollation("utf8mb4_general_ci");
 
             entity.HasIndex(e => e.OrderId, "OrderId");
 
@@ -302,7 +348,7 @@ public partial class shopmasterdbContext : DbContext
 
             entity.Property(e => e.Id).HasColumnType("bigint(20)");
             entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp");
             entity.Property(e => e.FinalPrice).HasPrecision(10, 2);
             entity.Property(e => e.OrderId).HasColumnType("bigint(20)");
@@ -326,13 +372,16 @@ public partial class shopmasterdbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("PayInfo");
+            entity
+                .ToTable("PayInfo")
+                .HasCharSet("utf8mb4")
+                .UseCollation("utf8mb4_general_ci");
 
             entity.HasIndex(e => e.Name, "Name").IsUnique();
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
             entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp");
             entity.Property(e => e.Description).HasColumnType("text");
             entity.Property(e => e.Name).HasMaxLength(50);
@@ -342,14 +391,17 @@ public partial class shopmasterdbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("Product");
+            entity
+                .ToTable("Product")
+                .HasCharSet("utf8mb4")
+                .UseCollation("utf8mb4_general_ci");
 
             entity.HasIndex(e => e.TypeId, "TypeId");
 
             entity.Property(e => e.Id).HasColumnType("bigint(20)");
             entity.Property(e => e.Content).HasColumnType("text");
             entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp");
             entity.Property(e => e.Description).HasColumnType("text");
             entity.Property(e => e.MainImage).HasMaxLength(255);
@@ -374,13 +426,16 @@ public partial class shopmasterdbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ProductImage");
+            entity
+                .ToTable("ProductImage")
+                .HasCharSet("utf8mb4")
+                .UseCollation("utf8mb4_general_ci");
 
             entity.HasIndex(e => e.ProductId, "ProductId");
 
             entity.Property(e => e.Id).HasColumnType("bigint(20)");
             entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp");
             entity.Property(e => e.ImageUrl).HasMaxLength(255);
             entity.Property(e => e.ProductId).HasColumnType("bigint(20)");
@@ -397,13 +452,16 @@ public partial class shopmasterdbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ProductType");
+            entity
+                .ToTable("ProductType")
+                .HasCharSet("utf8mb4")
+                .UseCollation("utf8mb4_general_ci");
 
             entity.HasIndex(e => e.Name, "Name").IsUnique();
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
             entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp");
             entity.Property(e => e.Name).HasMaxLength(100);
         });
@@ -414,7 +472,10 @@ public partial class shopmasterdbContext : DbContext
                 .HasName("PRIMARY")
                 .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
 
-            entity.ToTable("Rule");
+            entity
+                .ToTable("Rule")
+                .HasCharSet("utf8mb4")
+                .UseCollation("utf8mb4_general_ci");
 
             entity.HasIndex(e => e.MenuId, "MenuId");
 

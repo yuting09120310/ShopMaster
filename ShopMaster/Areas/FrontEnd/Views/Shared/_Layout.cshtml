@@ -30,6 +30,14 @@
             margin-top: 20px;
         }
 
+        #cart {
+            width: 106px;
+            height: 106px;
+            border-radius: 50%;
+           
+        }
+
+
         #cartCount {
             width: 30px;           
             border-radius: 35%;
@@ -71,7 +79,7 @@
                             <a class="nav-link " >
                                 <i class="bi bi-bucket fs-5 text-end  " data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" style="cursor: pointer;"></i>
                                 <span class="position-absolute  badge translate-middle rounded-pill  " id="cartCount" style="color:	white; background-color:	#FFED97;">
-                                    29
+                                    2
                                     <span class="visually-hidden">unread messages</span>
                                 </span>
                             </a>                            
@@ -132,8 +140,9 @@
 
                 </div>
 
-                <div class="d-grid gap-2 justify-content-center mt-2">
-                    <button class="btn btn-warning fw-bold" type="submit" id="continue" style="color:white;" onclick="window.location.href='@Url.Action("Index", "Product", new { area = "FrontEnd" })' ">結帳去</button>
+
+                <div class="d-grid gap-2 justify-content-center mt-4">
+                    <button class="btn btn-warning fw-bold" type="submit" id="cart" style="color:white;" onclick="window.location.href='@Url.Action("Index", "Cart", new { area = "FrontEnd" })' ">前往購物車</button>
                 </div>
             </div>
 
