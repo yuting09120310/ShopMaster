@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ShopMaster.Areas.BackEnd.Models;
 
 namespace ShopMaster.Areas.FrontEnd.Controllers
 {
@@ -11,14 +12,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         {
             return View();
         }
-
-        public async Task<IActionResult> CartPartial(int? id)
-        {
-
-
-
-            return View();
-        }
+        
 
         // GET: CartController/Details/5
         public ActionResult Details(int id)
@@ -37,6 +31,10 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
         {
+            //不用登入加入購物車
+            //先取 Product
+
+
             try
             {
                 return RedirectToAction(nameof(Index));
