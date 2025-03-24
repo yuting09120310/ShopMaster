@@ -11,8 +11,8 @@
     <div class="card-body">
         <h4>訂單編號：@Model.OrderId</h4>
         <p><strong>會員：</strong> @Model.MemberName (<span class="text-muted">@Model.MemberEmail</span>)</p>
-        <p><strong>總金額：</strong> <del class="text-muted">$@Model.TotalAmount</del></p>
-        <p><strong>折扣後金額：</strong> <span class="text-success">$@Model.FinalAmount</span></p>
+        <p><strong>總金額：</strong> <del class="text-muted">$@Model.TotalAmount.ToString("N0")</del></p>
+        <p><strong>折扣後金額：</strong> <span class="text-success">$@Model.FinalAmount.ToString("N0")</span></p>
         <p><strong>付款方式：</strong> @Model.PaymentType</p>
         <p>
             <strong>狀態：</strong>
@@ -40,8 +40,8 @@
             <tr>
                 <td>@item.ProductName</td>
                 <td>@item.Quantity</td>
-                <td>$@item.OriginalPrice</td>
-                <td>$@item.SubTotal</td>
+                <td>$@item.OriginalPrice.ToString("N0")</td>
+                <td>$@item.SubTotal.ToString("N0")</td>
             </tr>
         }
 
@@ -50,7 +50,7 @@
             <td colspan="1" class="text-end"><strong>會員折扣 </strong></td>
             <td colspan="1" class="text-end"></td>
             <td colspan="1" class="text-end"></td>
-            <td colspan="1" class="text-danger">-$@Model.MemberTotalDiscount</td>
+            <td colspan="1" class="text-danger">-$@Model.MemberTotalDiscount.ToString("N0")</td>
         </tr>
 
         <!-- 優惠券使用列表 -->
@@ -62,7 +62,7 @@
                     <td colspan="1" class="text-end"><strong>優惠券折扣：@coupon.Code</strong></td>
                     <td colspan="1" class="text-end"></td>
                     <td colspan="1" class="text-end"></td>
-                    <td colspan="1" class="text-danger">-$$@coupon.Discount</td>
+                    <td colspan="1" class="text-danger">-$$@coupon.Discount.ToString("N0")</td>
                 </tr>
             }
             

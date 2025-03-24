@@ -30,7 +30,7 @@
                 <tr>
                     <td>@order.Id</td>
                     <td>@order.Member.Name</td>
-                    <td>$@order.TotalAmount</td>
+                <td>$@order.TotalAmount.ToString("N0")</td>
                     <td>@(order.PaymentType == 1 ? "信用卡" : "銀行轉帳")</td>
                     <td>
                     @if (order.Status == 1)

@@ -64,7 +64,7 @@
                 </td>
                 <td>@product.Name</td>
                 <td>@(product.Type != null ? product.Type.Name : "無類別")</td>
-                <td>@product.Price</td>
+                <td>@product.Price.ToString("N0")</td>
                 <td>@product.Stock</td>
                 <td>
                     @if (product.Publish == 1)
@@ -80,7 +80,7 @@
                     <a href="@Url.Action("Edit", "Product", new { id = product.Id })" class="btn btn-warning btn-sm">編輯</a>
 
                     <form method="post" action="@Url.Action("Delete", "Product", new { id = product.Id })" style="display:inline;" onsubmit="return confirm('確定要刪除這個商品嗎？');">
-                        @Html.AntiForgeryToken() <!-- ✅ 獨立使用 -->
+                        @Html.AntiForgeryToken() 
                         <button type="submit" class="btn btn-danger btn-sm">刪除</button>
                     </form>
                 </td>
