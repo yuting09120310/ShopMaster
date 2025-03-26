@@ -40,7 +40,7 @@
                     <p>姓名: @Model.Name</p>
                     <p>Email: @Model.Email</p>
                     <p>電話: @Model.Phone</p>
-                    <a href="@Url.Action("EditProfile", "Member")" class="btn btn-warning text-white fw-bold" id="edit">編輯個人資料</a>
+                    <a href="@Url.Action("EditProfile", "Member", new { area = "FrontEnd" })" class="btn btn-warning text-white fw-bold" id="edit">編輯個人資料</a>
                 </div>
             </div>
         </div>
@@ -52,7 +52,7 @@
                 <div class="card-body">
                     <p>查看您的訂單歷史記錄和狀態。</p>
                     <div id="orderHistory" style="text-align: center">
-                        <a href="@Url.Action("Orders", "Member")" class="btn btn-warning text-white border  rounded-xl fw-bold" id="orderHistory">查看訂單</a>
+                        <a href="@Url.Action("Orders", "Member", new { area = "FrontEnd" })" class="btn btn-warning text-white border  rounded-xl fw-bold" id="orderHistory">查看訂單</a>
                     </div>
                 </div>
             </div>
