@@ -1,84 +1,51 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ShopMaster.Areas.BackEnd.Models;
 
 namespace ShopMaster.Areas.FrontEnd.Controllers
 {
     [Area("FrontEnd")]
-    public class CartController : Controller
+    public class AboutController : Controller
     {
-        private readonly shopmasterdbContext _db;
-
-        public CartController(shopmasterdbContext db)
-        {
-            _db = db;
-        }
-        // GET: CartController
+        // GET: AboutController
         public ActionResult Index()
         {
-            
-
-                return View();
+            return View();
         }
-        
 
-        // GET: CartController/Details/5
+        // GET: AboutController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: CartController/Create
+        // GET: AboutController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: CartController/Create
+        // POST: AboutController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(int? memberId, Product product)
+        public ActionResult Create(IFormCollection collection)
         {
-            
-            //先取 Product
-
-            if (memberId.HasValue)
+            try
             {
-
-
+                return RedirectToAction(nameof(Index));
             }
-            else
+            catch
             {
-                //不用登入加入購物車
-
-                if (ModelState.IsValid)
-                {
-
-                }
-                
-
+                return View();
             }
-
-
-
-            //try
-            //{
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //catch
-            //{
-            //    return View();
-            //}
-            return View();
         }
 
-        // GET: CartController/Edit/5
+        // GET: AboutController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: CartController/Edit/5
+        // POST: AboutController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -93,13 +60,13 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             }
         }
 
-        // GET: CartController/Delete/5
+        // GET: AboutController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: CartController/Delete/5
+        // POST: AboutController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
