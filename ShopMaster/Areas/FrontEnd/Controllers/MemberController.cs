@@ -77,5 +77,11 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 return builder.ToString();
             }
         }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Remove("MemberId");
+            return RedirectToAction("Index", "Home", new { Area = "FrontEnd" });
+        }
     }
 }
