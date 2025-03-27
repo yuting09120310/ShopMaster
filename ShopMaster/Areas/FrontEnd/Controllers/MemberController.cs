@@ -37,6 +37,46 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         }
 
 
+        [HttpGet]
+        public IActionResult EditProfile()
+        {
+            // 假設你有一個方法來獲取當前用戶的 ID
+            string? memberId = HttpContext.Session.GetString("MemberId");
+            var member = _db.Members.Find(Convert.ToInt64(memberId));
+
+            if (member == null)
+            {
+                return NotFound();
+            }
+
+            return View(member);
+        }
+
+        [HttpPost]
+        public IActionResult EditProfile(Member member)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingMember = _db.Members.Find(member.Id);
+                if (existingMember == null)
+                {
+                    return NotFound();
+                }
+
+                existingMember.Name = member.Name;
+                existingMember.Email = member.Email;
+                existingMember.Phone = member.Phone;
+                existingMember.Address = member.Address;
+
+                _db.SaveChanges();
+
+                return RedirectToAction("Profile");
+            }
+
+            return View(member);
+        }
+
+
         [HttpPost]
         public IActionResult Login(string Account, string Password)
         {
