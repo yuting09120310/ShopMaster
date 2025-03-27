@@ -32,5 +32,6 @@ namespace ShopMaster.Areas.FrontEnd.ViewModelsF
 
         public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
+        
     }
 }

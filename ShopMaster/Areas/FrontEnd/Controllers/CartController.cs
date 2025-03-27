@@ -98,7 +98,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
             var productsAll = new ProductsAll
             {
-                productCart = tempCart
+                ProductCart = tempCart
             };
 
             return Json(new { success = true, message = "商品已加入購物車", cartItemCount = tempCart.Count });
@@ -110,7 +110,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
             var productsAll = new ProductsAll
             {
-                productCart = tempCart
+                ProductCart = tempCart
             };
 
             return PartialView("_CartPartial", productsAll);

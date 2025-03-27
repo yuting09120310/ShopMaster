@@ -2,6 +2,9 @@
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using ShopMaster.Areas.BackEnd.Models;
+using ShopMaster.Areas.FrontEnd.ViewModelsF;
+
+
 
 namespace ShopMaster.Areas.FrontEnd.Controllers
 {
@@ -24,10 +27,17 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 return RedirectToAction("Login", "Member", new { Area = "FrontEnd" });
             }
 
-            var member = _db.Members.FirstOrDefault(x => x.Id.ToString() == memberId);
+            var member = _db.Members.FirstOrDefault(x => x.Id.ToString() == memberId);         
 
 
-            return View(member);
+
+            var productsAll = new ProductsAll
+            {
+                Member = member
+            };
+
+
+            return View(productsAll);
         }
 
 
@@ -49,11 +59,17 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 return NotFound();
             }
 
-            return View(member);
+            var productsAll = new ProductsAll
+            {
+                Member = member
+            };
+
+
+            return View(productsAll);
         }
 
         [HttpPost]
-        public IActionResult EditProfile(Member member)
+        public IActionResult EditProfile(BackEnd.Models.Member member)
         {
             if (ModelState.IsValid)
             {
@@ -73,7 +89,12 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 return RedirectToAction("Profile");
             }
 
-            return View(member);
+            var productsAll = new ProductsAll
+            {
+                Member = member
+            };
+
+            return View(productsAll);
         }
 
 

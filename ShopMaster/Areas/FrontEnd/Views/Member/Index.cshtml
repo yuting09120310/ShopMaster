@@ -1,4 +1,4 @@
-﻿@model ShopMaster.Areas.BackEnd.Models.Member
+﻿@model ShopMaster.Areas.FrontEnd.ViewModelsF.ProductsAll
 @{
     ViewData["Title"] = "會員中心";
 }
@@ -37,9 +37,9 @@
                     <i class="fas fa-user"></i> 個人資料
                 </div>
                 <div class="card-body">
-                    <p>姓名: @Model.Name</p>
-                    <p>Email: @Model.Email</p>
-                    <p>電話: @Model.Phone</p>
+                    <p>姓名: @Model.Member.Name</p>
+                    <p>Email: @Model.Member.Email</p>
+                    <p>電話: @Model.Member.Phone</p>
                     <a href="@Url.Action("EditProfile", "Member", new { area = "FrontEnd" })" class="btn btn-warning text-white fw-bold" id="edit">編輯個人資料</a>
                 </div>
             </div>
