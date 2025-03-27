@@ -180,8 +180,9 @@
             {
                 @* 商品明細 *@
                 <div class="col-12 col-md-6">
-                    <form>
-                    <h2 id="productName" style="color:black" class="mt-3">@d.Name</h2>
+                    <form method="post">
+                        <input type="hidden" name="productId" value="@d.Id" />
+                        <h2 id="productName" style="color:black" class="mt-3" asp-for="Name">@d.Name</h2>
                     <p class="text-start mt-3  " style="color:black; font-size:17px; ">@d.Description</p>
                     <P class="text-start  " style="color:black; ">@d.Price</P>
                     <div>
@@ -203,7 +204,7 @@
 
                         </div>
                         <div class="d-grid gap-2 justify-content-center mt-2 mb-1">
-                            <button class="btn btn-warning fw-bold" type="button" id="purchase" style="color:	white;">加入購物車</button>
+                                <button class="btn btn-warning fw-bold add-to-cart" type="submit" id="purchase" data-id="@d.Id" data-name="@d.Name" data-price="@d.Price" data-mainimage="@d.MainImage" style="color:	white;">加入購物車</button>
                         </div>
                     </div>
                     <div class="mt-4" id="describe">
@@ -260,7 +261,7 @@
 </div>
 
 
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
     const carousel = document.getElementById('carouselExampleCaptions');
@@ -305,7 +306,32 @@
         }
     });
 
+    $(document).ready(function() {
+        // 當加入購物車的按鈕被點擊時觸發
+        $('.add-to-cart').click(function() {
+                       
+            
+            var productId = $(this).data('id');              
+            var name = $(this).data('name');  
+            var price = $(this).data('price');  
+            var mainImage = $(this).data('mainimage');  
+            
+           
 
+            $.post('/Cart/AddToCart', {
+                productId: productId,
+                name: name,
+                price: price,
+                mainImage: mainImage,
+            }, function(response) {
+                if (response.success) {
+                    // 這裡可以根據回應顯示提示，或更新購物車顯示
+                    alert('商品已加入購物車');
+                }
+            });
+           
+        });
+    });
 
 </script>
 

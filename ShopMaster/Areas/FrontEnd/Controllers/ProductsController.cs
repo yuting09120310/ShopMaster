@@ -134,6 +134,9 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             return View(productsAll);
         }
 
+        
+
+
         // GET: ProductsController/Create
         public ActionResult Create()
         {

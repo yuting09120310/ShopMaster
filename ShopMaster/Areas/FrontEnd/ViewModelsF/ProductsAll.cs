@@ -15,5 +15,7 @@ namespace ShopMaster.Areas.FrontEnd.ViewModelsF
         //商品列表
         public  List<Products> ProductDetails { get; set; } = new List<Products>();
 
+        public  List<Cart> productCart { get; set; } = new List<Cart>();
+
         
     }}

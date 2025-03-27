@@ -9,6 +9,7 @@ namespace ShopMaster.Areas.FrontEnd.ViewModelsF
 
         public long? ProductId { get; set; }
 
-        public virtual ICollection<Product> ProductCart { get; set; } = new List<Product>();
+        public virtual ICollection<Product> CartItem { get; set; } = new List<Product>();
+        public virtual ICollection<Member> Member { get; set; } = new List<Member>();
     }
 }
