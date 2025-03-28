@@ -2,7 +2,10 @@
 
 @{
     int i = 0;
+    
 }
+
+
 <style>
     /* 顯示大張圖片 */
     .modal-content {
@@ -217,7 +220,7 @@
                 i++;
             }
         }
-
+       
     </div>
 
     <section>
@@ -305,8 +308,9 @@
             input.value = currentValue + 1;  // 可以無限加
         }
     });
-
+    
     $(document).ready(function() {
+        
         // 當加入購物車的按鈕被點擊時觸發
         $('.add-to-cart').click(function() {
                        
@@ -325,13 +329,23 @@
                 mainImage: mainImage,
             }, function(response) {
                 if (response.success) {
-                    // 這裡可以根據回應顯示提示，或更新購物車顯示
+                $('#cartCount').html(response.cartItemCount)
+                var cartItemCount = response.cartItemCount;  
+                // 存購物車數量
+                localStorage.setItem('cartItemCount', cartItemCount);
+
                     alert('商品已加入購物車');
+
+
                 }
             });
            
         });
+
+
     });
+
+
 
 </script>
 

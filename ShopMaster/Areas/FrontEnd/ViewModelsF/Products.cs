@@ -24,6 +24,8 @@ namespace ShopMaster.Areas.FrontEnd.ViewModelsF
 
         public int Stock { get; set; }
 
+        public int Count { get; set; }
+
         public int? TypeId { get; set; }
 
         public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();

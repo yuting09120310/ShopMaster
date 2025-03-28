@@ -19,6 +19,7 @@ namespace ShopMaster.Areas.FrontEnd.ViewModelsF
         public  List<Cart> ProductCart { get; set; } = new List<Cart>();
 
         public BackEnd.Models.Member? Member { get; set; } 
+        //public Member? Member { get; set; } 
 
 
     }

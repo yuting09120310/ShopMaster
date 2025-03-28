@@ -1,7 +1,9 @@
 ﻿@using ShopMaster.Areas.BackEnd.Models
 @inject shopmasterdbContext _dbContext
 
+@{
 
+}
 
 
 
@@ -35,19 +37,17 @@
             width: 106px;
             height: 106px;
             border-radius: 50%;
-           
         }
 
 
         #cartCount {
-            width: 30px;           
+            width: 30px;
             border-radius: 35%;
         }
-        .badge{
-            line-height:1.5;
-        }
 
-        
+        .badge {
+            line-height: 1.5;
+        }
 
     </style>
 
@@ -59,6 +59,10 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container">
                 <a class="navbar-brand fw-bold fs-3 ps-2" href="/Home/Index">ShopMaster</a>
+
+                @RenderSection("cont", required: false)
+
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -77,18 +81,20 @@
                             <a class="nav-link pl-4 " href="/Member/Index"><i class="bi bi-person-circle fs-5"></i></a>
                         </li>
                         <li class="list-group-item bg-light  " style="border:none">
-                            <a class="nav-link " >
+                            <a class="nav-link ">
                                 <i class="bi bi-bucket fs-5 text-end  " data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" style="cursor: pointer;" id="openCartBtn"></i>
                                 <span class="position-absolute  badge translate-middle rounded-pill  " id="cartCount" style="color:	white; background-color:	#FFED97;">
-                                    2
                                     <span class="visually-hidden">unread messages</span>
                                 </span>
-                            </a>                            
-                        </li>           
+
+
+
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
-        </nav>      
+        </nav>
 
         <div class="offcanvas offcanvas-end" data-bs-backdrop="true" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
             <div class="offcanvas-header " style="border-bottom: 1px solid lightgray">
@@ -98,7 +104,7 @@
             <div class=" d-flex justify-content-center"> <h5 class="offcanvas-title" id="offcanvasRightLabel"></h5></div>
 
             <div class="offcanvas-body " style="" id="cartContent">
-            @* 購物車 *@
+                @* 購物車 *@
                 @await Html.PartialAsync("_CartPartial")
 
 
@@ -108,8 +114,8 @@
 
 
 
-       
-       
+
+
 
 
         <nav class="navbar navbar-expand-lg bg-light ">
@@ -125,11 +131,11 @@
                             </a>
                             <ul class="dropdown-menu " style=" font-size: 15px;">
 
-                    @foreach (var item in _dbContext.ProductTypes)
-                            {
-                              <li><a class="dropdown-item" href="/Home/Index/@item.Id">@item.Name</a></li>
-                            }
-                               
+                                @foreach (var item in _dbContext.ProductTypes)
+                                {
+                                    <li><a class="dropdown-item" href="/Home/Index/@item.Id">@item.Name</a></li>
+                                }
+
                             </ul>
 
                         </li>
@@ -150,21 +156,23 @@
 
     <main>
         @RenderBody()
+
     </main>
 
     <!-- 頁腳 -->
     <footer class="text-dark text-center py-3 mt-5 border-top border-dark">
+
         <p>
             © 2025 ShopMaster. All Rights Reserved. |
             <a href="/BackEnd/" class="text-dark text-decoration-none">後台管理</a>
         </p>
     </footer>
-   
-    
-    
+
+
+
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+
 
 
 
@@ -180,19 +188,31 @@
          const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
          const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
 
-                    $(document).ready(function() {
-            // 當點擊開啟購物車按鈕時觸發
-            $('#openCartBtn').click(function() {
-               
-                $.get('/Cart/GetCart', function(result) {
-                    $('#cartContent').html(result); // 顯示購物車內容
-                    
-                });
+
+        $(document).ready(function() {
+                  // 讀取 localStorage 中的 cartItemCount
+        var cartItemCount = localStorage.getItem('cartItemCount');
+
+        // 如果有購物車數量，更新頁面中的 #cartCount
+        if (cartItemCount) 
+        {
+            $('#cartCount').html(cartItemCount);
+        } 
+        else
+        {
+            $('#cartCount').html('0');  
+        }
+
+        $('#openCartBtn').click(function() {
+            $.get('/Cart/GetCart', function(result) {
+            $('#cartContent').html(result); // 顯示購物車內容
+
             });
         });
+    });
 
 
-           
+
     </script>
 
 

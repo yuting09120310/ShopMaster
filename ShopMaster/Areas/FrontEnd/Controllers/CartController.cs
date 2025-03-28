@@ -30,13 +30,18 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         [HttpPost]
         public IActionResult AddToCart(int productId, string name, decimal price,string mainImage )
         {
-            var product =  _db.Products.ToList();
-            var cartDb = _db.Carts.ToList();
+            var product = _db.Products.ToList();
+            var cart = _db.Carts.ToList();
             var member = _db.Members.ToList();
 
             //先組暫時的購物車 
-            tempCart = cartDb.Join(product, c => c.ProductId, p => p.Id, (c, p) => new { c, p })
-                .Join(member, cp => cp.p.Id, m => m.Id,
+            tempCart = cart.Join(product,
+                c => c.ProductId,
+                p => p.Id,
+                (c, p) => new { c, p })
+                .Join(member,
+                cp => cp.p.Id,
+                m => m.Id,
                 (cp, m) 
                 => new ViewModelsF.Cart 
                 { 
@@ -50,13 +55,14 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                             Name = m.Name,                            
                         }
                     },
-                    CartItem = new List<Product>
+                    CartItem = new List<Products>
                     {
-                        new Product
+                        new Products
                         {
                             Name = cp.p.Name,
                             Price = cp.p.Price,
-                            MainImage = cp.p.MainImage                    
+                            MainImage = cp.p.MainImage,
+                            
                         
                         }
                     }
@@ -64,42 +70,50 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
                 }).ToList();
 
-            //var cart = HttpContext.Session.Get<List<Cart>>("Cart") ?? new List<Cart>();
+            
              tempCart = HttpContext.Session.Get<List<Cart>>("tempCart") ?? new List<Cart>();
-
-            //var existingItem = cart.FirstOrDefault(c => c.ProductId == productId);
+           
             var existingItem = tempCart.FirstOrDefault(c => c.ProductId == productId);
+            
             if (existingItem != null)
             {
-               
-
-
+              
 
             }
             else
             {
                 tempCart.Add(new Cart { ProductId = productId,
 
-                    CartItem = new List<Product>
+                    CartItem = new List<Products>
                     {
-                        new Product
-                        {
+                        new Products
+                        { 
                             Name = name,
                             Price = price,
-                            MainImage = mainImage                            
-
+                            MainImage = mainImage,
+                            Count = 1
+                            
                         }
+                        
                     }
-
+                   
                 });
+                
             }
+
+
+            //var tempCartTwo = tempCart.Select(x => x.ProductId).Distinct().ToList();
 
             HttpContext.Session.Set("tempCart", tempCart);
 
+
+
+            ViewBag.CartItemCount = tempCart.Count;
             var productsAll = new ProductsAll
             {
                 ProductCart = tempCart
             };
+           
 
             return Json(new { success = true, message = "商品已加入購物車", cartItemCount = tempCart.Count });
         }
@@ -112,6 +126,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             {
                 ProductCart = tempCart
             };
+
+           
 
             return PartialView("_CartPartial", productsAll);
         }
