@@ -90,8 +90,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                         { 
                             Name = name,
                             Price = price,
-                            MainImage = mainImage,
-                            Count = 1
+                            MainImage = mainImage                           
                             
                         }
                         
