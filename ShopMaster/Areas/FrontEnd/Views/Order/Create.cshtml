@@ -1,0 +1,153 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<style>
+    #pay {
+        width: 86px;
+        height: 86px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center
+    }
+
+
+
+
+
+</style>
+<div class="container" style="padding-top: 120px">
+    <div class="row">
+        <div class="col">
+    <h3 class="text-start fw-bold text-warning  mt-4 mb-3">結帳</h3>
+        </div>
+    </div>
+
+    <div class="row ">
+        @* 收件資料 *@
+        <div class="col-md-7 mb-4 order-2 order-md-1 ">
+            <h5 class="text-start fw-bold text-secondary mb-3"></h5>
+            <div class="card mb-4">
+                <div class="card-header fw-bold text-secondary" style="background-color:transparent">
+                    <i class="fas fa-user-edit"></i> 聯絡資訊
+                </div>
+                <div class="card-body ">
+                   
+                        <div class="form-group mb-2">
+                            <label for="Name ">姓名</label>
+                            <input type="text" class="form-control my-2" id="Name" name="Name" value="" required />
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="Email">Email</label>
+                            <input type="email" class="form-control my-2" id="Email" name="Email" value="" required />
+                        </div>
+                    <div class="form-group ">
+                            <label for="Phone">電話</label>
+                        <input type="text" class="form-control mt-2 " id="Phone" name="Phone" value="" />
+                        </div>
+                                          
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header fw-bold text-secondary" style="background-color:transparent">
+                    <i class="fas fa-user-edit"></i> 運送
+                </div>
+                <div class="card-body">
+                    
+                       
+                        <div class="form-group mb-2">
+                            <label for="Address">地址 / 取貨門市</label>
+                            <input type="text" class="form-control my-2" id="Address" name="Address" value="" />
+                        </div>
+
+                    <div class="form-group mb-2">
+                        <label for="Address">運送方式</label>
+                        <select class="form-select mt-2" aria-label="Default select example">
+                            <option selected>請選擇運送方式</option>
+                            <option value="1">郵寄掛號</option>
+                            <option value="2">宅配</option>
+                            <option value="3">小七貨到付款</option>
+                            <option value="3">小七貨到不付款</option>
+                            <option value="3">全家貨到付款</option>
+                            <option value="3">全家貨到不付款</option>
+                        </select>
+                    </div>
+
+                   
+                        
+                    
+                </div>
+
+              
+
+
+            </div>
+            @* 付款 *@
+            <div class="card">
+                
+                <div class="card-body">
+
+                    <div class="form-group mb-2">
+                        <label for="Address">付款方式</label>
+                        <select class="form-select mt-2" aria-label="Default select example">
+                            <option selected>請選擇付款方式</option>
+                            <option value="1">貨到付款</option>
+                            <option value="2">ATM轉帳</option>
+                            <option value="3">信用卡</option>
+                           
+                        </select>
+                    </div>
+
+
+
+                </div>
+
+
+
+
+            </div>
+
+            <div class="d-grid gap-2 justify-content-center mt-5">
+                <button class="btn btn-warning fw-bold" type="submit" id="pay" style="color:white;" onclick="window.location.href='@Url.Action("Create", "Cart", new { area = "FrontEnd" })' ">去結帳 !</button>
+            </div>
+
+
+
+
+
+            
+        </div>
+        @* 商品資料 *@
+        <div class="col-md-5 mb-4 order-1 order-md-2 ">
+            <h5 class="text-start fw-bold text-secondary  mb-3 d-none d-lg-block  "></h5>
+
+
+
+            <button class="btn btn-light d-lg-none w-100 fw-bold text-secondary fs-5" type="button" data-bs-toggle="collapse" data-bs-target="#responsiveCollapse" aria-expanded="false" aria-controls="responsiveCollapse" >
+                商品明細
+            </button>
+
+            <!-- Collapse 元素 -->
+            <div id="responsiveCollapse" class="collapse d-lg-block">
+                <div class="card card-body mt-2" >
+                    這是 Collapse 的內容，它在大螢幕上總是可見，而在小螢幕上需要按下按鈕才能顯示。
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+
+
+
+
+
+</div>

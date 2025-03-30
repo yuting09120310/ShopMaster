@@ -54,9 +54,16 @@
         </div>
 
         <div class="row">
+            <div class="col d-flex justify-content-end mt-2">
+                <h5 class="fw-bold text-secondary me-5">合計  </h5>
+                <span class="me-4 ">  NT999</span>
+            </div>
+        </div>
+
+        <div class="row">
 
             <div class="d-grid gap-2 justify-content-end mt-4 ">
-                <button class="btn btn-warning fw-bold add-to-cart" type="submit" id="purchase"  style="color:	white;">結帳去</button>
+                <button class="btn btn-warning fw-bold add-to-cart" type="button" id="purchase" style="color:	white;" onclick="window.location.href='@Url.Action("Create", "Order", new { area = "FrontEnd" })'">結帳去</button>
             </div>
         
         </div>
