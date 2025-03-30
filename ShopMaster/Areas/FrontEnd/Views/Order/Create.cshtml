@@ -15,15 +15,11 @@
         align-items: center
     }
 
-
-
-
-
 </style>
 <div class="container" style="padding-top: 120px">
     <div class="row">
         <div class="col">
-    <h3 class="text-start fw-bold text-warning  mt-4 mb-3">結帳</h3>
+            <h3 class="text-start fw-bold text-warning  mt-4 mb-3">結帳</h3>
         </div>
     </div>
 
@@ -36,20 +32,20 @@
                     <i class="fas fa-user-edit"></i> 聯絡資訊
                 </div>
                 <div class="card-body ">
-                   
-                        <div class="form-group mb-2">
-                            <label for="Name ">姓名</label>
-                            <input type="text" class="form-control my-2" id="Name" name="Name" value="" required />
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="Email">Email</label>
-                            <input type="email" class="form-control my-2" id="Email" name="Email" value="" required />
-                        </div>
+
+                    <div class="form-group mb-2">
+                        <label for="Name ">姓名</label>
+                        <input type="text" class="form-control my-2" id="Name" name="Name" value="" required />
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="Email">Email</label>
+                        <input type="email" class="form-control my-2" id="Email" name="Email" value="" required />
+                    </div>
                     <div class="form-group ">
-                            <label for="Phone">電話</label>
+                        <label for="Phone">電話</label>
                         <input type="text" class="form-control mt-2 " id="Phone" name="Phone" value="" />
-                        </div>
-                                          
+                    </div>
+
                 </div>
             </div>
 
@@ -58,12 +54,12 @@
                     <i class="fas fa-user-edit"></i> 運送
                 </div>
                 <div class="card-body">
-                    
-                       
-                        <div class="form-group mb-2">
-                            <label for="Address">地址 / 取貨門市</label>
-                            <input type="text" class="form-control my-2" id="Address" name="Address" value="" />
-                        </div>
+
+
+                    <div class="form-group mb-2">
+                        <label for="Address">地址 / 取貨門市</label>
+                        <input type="text" class="form-control my-2" id="Address" name="Address" value="" />
+                    </div>
 
                     <div class="form-group mb-2">
                         <label for="Address">運送方式</label>
@@ -78,18 +74,18 @@
                         </select>
                     </div>
 
-                   
-                        
-                    
+
+
+
                 </div>
 
-              
+
 
 
             </div>
             @* 付款 *@
             <div class="card">
-                
+
                 <div class="card-body">
 
                     <div class="form-group mb-2">
@@ -99,7 +95,7 @@
                             <option value="1">貨到付款</option>
                             <option value="2">ATM轉帳</option>
                             <option value="3">信用卡</option>
-                           
+
                         </select>
                     </div>
 
@@ -107,20 +103,17 @@
 
                 </div>
 
-
-
-
             </div>
 
             <div class="d-grid gap-2 justify-content-center mt-5">
-                <button class="btn btn-warning fw-bold" type="submit" id="pay" style="color:white;" onclick="window.location.href='@Url.Action("Create", "Cart", new { area = "FrontEnd" })' ">去結帳 !</button>
+                <button class="btn btn-warning fw-bold" type="submit" id="pay" style="color:white;" onclick="window.location.href='@Url.Action("Create", "Cart", new { area = "FrontEnd" })' ">結帳 !</button>
             </div>
 
 
 
 
 
-            
+
         </div>
         @* 商品資料 *@
         <div class="col-md-5 mb-4 order-1 order-md-2 ">
@@ -128,14 +121,73 @@
 
 
 
-            <button class="btn btn-light d-lg-none w-100 fw-bold text-secondary fs-5" type="button" data-bs-toggle="collapse" data-bs-target="#responsiveCollapse" aria-expanded="false" aria-controls="responsiveCollapse" >
+            <button class="btn btn-light d-lg-none w-100 fw-bold text-secondary fs-5" type="button" data-bs-toggle="collapse" data-bs-target="#responsiveCollapse" aria-expanded="false" aria-controls="responsiveCollapse">
                 商品明細
             </button>
 
             <!-- Collapse 元素 -->
             <div id="responsiveCollapse" class="collapse d-lg-block">
-                <div class="card card-body mt-2" >
-                    這是 Collapse 的內容，它在大螢幕上總是可見，而在小螢幕上需要按下按鈕才能顯示。
+                <div class="card card-body mt-2 ">
+                    <div class="row d-flex">
+                        <div class="col-3 ">
+
+
+                            <img src="/upload/product/2/main.jpg" class="d-block fixed-size-img " alt="" style="width: 80px; height: 60px">
+
+
+                        </div>
+                        <div class="col-6 d-flex " style="overflow-wrap: break-word; word-break: break-word;">
+
+                            <p class="text-start">筆電</p>
+                            <p class="text-center ms-2">20</p>
+
+
+
+                        </div>
+                        <div class="col-3 text-end">
+
+
+
+                            <span class=" d-block text-start">NT900</span>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                @* 折扣碼 *@
+                <div class="card mt-3 bg-light">
+
+                    <div class="card-body">
+
+                        <div class="form-group mb-2">
+                            <label for="" class="text-secondary fw-bold">有優惠券嗎 ?</label>
+                            <select class="form-select mt-2" aria-label="Default select example">
+                                <option selected>請選擇優惠券</option>
+                                <option value="1">aaaaa</option>
+                                <option value="2">vvvvvv</option>
+                                <option value="3">vvvvvv</option>
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="d-flex justify-content-between   mt-3 mx-1">
+                    <p class="">合計</p>
+                    <p class="">99</p>
+                </div>
+
+                <div class="d-flex justify-content-between  mx-1" style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">
+                    <p>運費</p>
+                    <p>60</p>
+                </div>
+
+                <div class="d-flex justify-content-between mt-5 mx-1">
+                    <p>總金額</p>
+                    <h4 class="fw-bold">60</h4>
                 </div>
             </div>
 
