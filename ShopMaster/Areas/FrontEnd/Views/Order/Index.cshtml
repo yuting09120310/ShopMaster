@@ -13,16 +13,7 @@
         align-items: center
     }
 
-    #orderHistory {
-        width: 90px;
-        height: 90px;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center
-    }
-
-
+   
 
 </style>
 
@@ -49,8 +40,8 @@
 
             <div class="row ">
 
-                <div class="col d-flex justify-content-end mb-4 me-4" >
-                    <a href="@Url.Action("Details", "Order", new { area = "FrontEnd" })" class="btn btn-warning text-white border  rounded-xl fw-bold" id="orderHistory" style="text-align: end">訂單明細</a>
+                <div class="col d-flex justify-content-end mb-3 me-3" >
+                    <a href="@Url.Action("Details", "Order", new { area = "FrontEnd" })" class="btn btn-light text-secondary  fw-bold" id="orderHistory" >訂單明細</a>
                 </div>
 
             </div>
