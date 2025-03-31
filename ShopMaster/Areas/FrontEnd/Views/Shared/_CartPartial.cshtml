@@ -23,8 +23,13 @@
     {
         if (Model.ProductCart.Count() != 0)
         {
+            <form method="post" asp-action="Create" asp-controller="Cart" asp-area="FrontEnd">
             @foreach (var i in Model.ProductCart)
-            {
+                {
+                    <input type="hidden" memberId="memberId" value="@i.Id" />
+
+
+
                 <div class="row d-flex mb-3 ">
                     <div class="col-3 ">
 
@@ -54,9 +59,12 @@
             }
 
 
-            <div class="d-grid gap-2 justify-content-center mt-4">
-                <button class="btn btn-warning fw-bold" type="submit" id="cart" style="color:white;" onclick="window.location.href='@Url.Action("Create", "Cart", new { area = "FrontEnd" })' ">前往購物車</button>
-            </div>
+
+
+                <div class="d-grid gap-2 justify-content-center mt-4">
+                    <button class="btn btn-warning fw-bold" type="submit" id="cart" style="color:white;" >前往購物車</button>
+                </div>
+            </form>
         }
         else
         {
@@ -80,3 +88,8 @@
 
 
 
+@* 
+             <div class="d-grid gap-2 justify-content-center mt-4">
+        <button class="btn btn-warning fw-bold" type="submit" id="cart" style="color:white;" onclick="window.location.href='@Url.Action("Create", "Cart", new { area = "FrontEnd" })' ">前往購物車</button>
+    
+</div> *@

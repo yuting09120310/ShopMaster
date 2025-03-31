@@ -107,7 +107,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
 
 
-            ViewBag.CartItemCount = tempCart.Count;
+          
             var productsAll = new ProductsAll
             {
                 ProductCart = tempCart
@@ -146,7 +146,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         // POST: CartController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(int? memberId, Product product)
+        public ActionResult Create(int? memberId, Products products )
         {
             
             //先取 Product
