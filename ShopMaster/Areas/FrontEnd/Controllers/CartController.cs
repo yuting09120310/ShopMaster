@@ -29,8 +29,9 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
 
         List<Cart> tempCart = new List<Cart>();
+        IGrouping<long?, Cart> tempCart2 ;
 
-        public object Name { get; private set; }
+
 
         [HttpPost]
         public IActionResult AddToCart(int productId, string name, decimal price,string mainImage )
@@ -47,9 +48,9 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 .Join(member,
                 cp => cp.p.Id,
                 m => m.Id,
-                (cp, m) 
-                => new ViewModelsF.Cart 
-                { 
+                (cp, m)
+                => new ViewModelsF.Cart
+                {
                     //Id = cp.c.Id,
                     ProductId = cp.p.Id,
                     MemberId = m.Id,
@@ -57,7 +58,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                     {
                         new Member
                         {
-                            Name = m.Name,                            
+                            Name = m.Name,
                         }
                     },
                     CartItem = new List<Products>
@@ -67,8 +68,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                             Name = cp.p.Name,
                             Price = cp.p.Price,
                             MainImage = cp.p.MainImage,
-                            
-                        
+
+
                         }
                     }
 
@@ -79,45 +80,66 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
              tempCart = HttpContext.Session.Get<List<Cart>>("tempCart") ?? new List<Cart>();
            
             var existingItem = tempCart.FirstOrDefault(c => c.ProductId == productId);
-            
+
+
             if (existingItem != null)
             {
-              
-
-            }
-            else
-            {
-                tempCart.Add(new Cart { ProductId = productId,
+                tempCart.Add(new Cart
+                {
+                    ProductId = productId,
 
                     CartItem = new List<Products>
                     {
                         new Products
-                        { 
+                        {
                             Name = name,
                             Price = price,
-                            MainImage = mainImage                           
-                            
+                            MainImage = mainImage
+
                         }
-                        
+
                     }
-                   
+
                 });
-                
+
             }
+            else
+            {
+                tempCart.Add(new Cart
+                {
+                    ProductId = productId,
+
+                    CartItem = new List<Products>
+                    {
+                        new Products
+                        {
+                            Name = name,
+                            Price = price,
+                            MainImage = mainImage
+
+                        }
+
+                    }
+
+                });
+
+            }
+
+
+
 
 
             //var tempCartTwo = tempCart.Select(x => x.ProductId).Distinct().ToList();
 
             HttpContext.Session.Set("tempCart", tempCart);
-
-
-
           
             var productsAll = new ProductsAll
             {
                 ProductCart = tempCart
             };
-            
+
+
+
 
             return Json(new { success = true, message = "商品已加入購物車", cartItemCount = tempCart.Count });
         }
@@ -189,7 +211,21 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
                     });
 
+                     
+                    //商品數量
+                    var count = productsAll.ProductCart.GroupBy(x => x.ProductId)
+                        .Select(g => new
+                        {
+                            productId = g.Key,
+                            count = g.Count(),
+                            CartItem = g.SelectMany(x => x.CartItem).ToList()
+
+
+
+                        }).ToList();
+
                     
+
 
                     _db.Carts.AddRange(cartCreate);
                     _db.SaveChanges();
