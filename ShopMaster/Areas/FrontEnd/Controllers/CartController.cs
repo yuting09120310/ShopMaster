@@ -7,6 +7,8 @@ using ShopMaster.Areas.FrontEnd.Utility;
 using Cart = ShopMaster.Areas.FrontEnd.ViewModelsF.Cart;
 using Microsoft.EntityFrameworkCore;
 using Member = ShopMaster.Areas.FrontEnd.ViewModelsF.Member;
+using System.Collections.Generic;
+using System.Xml.Linq;
 namespace ShopMaster.Areas.FrontEnd.Controllers
 {
     [Area("FrontEnd")]
@@ -26,7 +28,10 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         }
 
 
-        List<Cart> tempCart = new List<Cart>(); 
+        List<Cart> tempCart = new List<Cart>();
+
+        public object Name { get; private set; }
+
         [HttpPost]
         public IActionResult AddToCart(int productId, string name, decimal price,string mainImage )
         {
@@ -45,7 +50,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 (cp, m) 
                 => new ViewModelsF.Cart 
                 { 
-                    Id = cp.c.Id,
+                    //Id = cp.c.Id,
                     ProductId = cp.p.Id,
                     MemberId = m.Id,
                     Member = new List<Member>
@@ -112,7 +117,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             {
                 ProductCart = tempCart
             };
-           
+            
 
             return Json(new { success = true, message = "商品已加入購物車", cartItemCount = tempCart.Count });
         }
@@ -146,14 +151,13 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         // POST: CartController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(int? memberId, Products products )
+        public ActionResult Create(List<Cart> cart )
         {
-            
+            tempCart = HttpContext.Session.Get<List<Cart>>("tempCart") ?? new List<Cart>();
             //先取 Product
 
-            if (memberId.HasValue)
+            if (tempCart.Any(m=>m.MemberId.HasValue))
             {
-
 
             }
             else
@@ -162,11 +166,38 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
                 if (ModelState.IsValid)
                 {
+                    var productsAll = new ProductsAll
+                    {
+                        ProductCart = tempCart               
 
-                }
-                
+                    };
 
-            }
+                    var existingIds = _db.Carts.Select(c => c.Id).ToList();
+                    int newId = 1; 
+                    while (existingIds.Contains(newId))
+                    {
+                        newId++; 
+                    }
+
+                    var cartCreate = productsAll.ProductCart.Select((c,index) => new ShopMaster.Areas.BackEnd.Models.Cart
+                    {
+
+                        Id = newId++,
+                        ProductId = c.ProductId,
+                        MemberId = c.MemberId.HasValue ? c.MemberId.Value : 0
+
+
+                    });
+
+                    
+
+                    _db.Carts.AddRange(cartCreate);
+                    _db.SaveChanges();
+
+
+                    return View(productsAll);
+                }                
+            };
 
 
 

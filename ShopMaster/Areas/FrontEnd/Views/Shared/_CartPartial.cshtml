@@ -26,9 +26,9 @@
             <form method="post" asp-action="Create" asp-controller="Cart" asp-area="FrontEnd">
             @foreach (var i in Model.ProductCart)
                 {
-                    <input type="hidden" memberId="memberId" value="@i.Id" />
+                    <input type="hidden" asp-for="ProductCart[0].ProductId" value="@i.ProductId" />
 
-
+                    
 
                 <div class="row d-flex mb-3 ">
                     <div class="col-3 ">
