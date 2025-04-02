@@ -95,7 +95,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                             Name = name,
                             Price = price,
                             MainImage = mainImage
-
+                            
                         }
 
                     }
@@ -218,7 +218,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                         {
                             productId = g.Key,
                             count = g.Count(),
-                            CartItem = g.SelectMany(x => x.CartItem).ToList()
+                           
 
 
 
