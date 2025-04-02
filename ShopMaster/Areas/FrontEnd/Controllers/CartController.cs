@@ -148,9 +148,11 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         {
             tempCart = HttpContext.Session.Get<List<Cart>>("tempCart") ?? new List<Cart>();
 
+            var getCartTemp = tempCart.DistinctBy(p => p.ProductId).ToList();
+
             var productsAll = new ProductsAll
             {
-                ProductCart = tempCart
+                ProductCart = getCartTemp
             };
 
            
@@ -188,12 +190,9 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    var productsAll = new ProductsAll
-                    {
-                        ProductCart = tempCart               
+                    
 
-                    };
-
+                    //新增購物車至資料庫
                     var existingIds = _db.Carts.Select(c => c.Id).ToList();
                     int newId = 1; 
                     while (existingIds.Contains(newId))
@@ -201,7 +200,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                         newId++; 
                     }
 
-                    var cartCreate = productsAll.ProductCart.Select((c,index) => new ShopMaster.Areas.BackEnd.Models.Cart
+                    var cartCreateDb = tempCart.Select((c,index) => new ShopMaster.Areas.BackEnd.Models.Cart
                     {
 
                         Id = newId++,
@@ -213,21 +212,27 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
                      
                     //商品數量
-                    var count = productsAll.ProductCart.GroupBy(x => x.ProductId)
+                    var count = tempCart.GroupBy(x => x.ProductId)
                         .Select(g => new
                         {
                             productId = g.Key,
-                            count = g.Count(),
-                           
-
+                            count = g.Count(),                   
 
 
                         }).ToList();
 
-                    
+                    ViewBag.count = count;
+
+                    var getCartTemp = tempCart.DistinctBy(p => p.ProductId).ToList();
 
 
-                    _db.Carts.AddRange(cartCreate);
+                    var productsAll = new ProductsAll
+                    {
+                        ProductCart = getCartTemp
+
+                    };
+
+                    _db.Carts.AddRange(cartCreateDb);
                     _db.SaveChanges();
 
 
