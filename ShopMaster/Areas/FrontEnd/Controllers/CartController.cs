@@ -126,10 +126,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             }
 
 
-
-
-
-            //var tempCartTwo = tempCart.Select(x => x.ProductId).Distinct().ToList();
+           
 
             HttpContext.Session.Set("tempCart", tempCart);
           

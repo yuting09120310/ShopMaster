@@ -190,8 +190,8 @@
 
 
         $(document).ready(function() {
-                  // 讀取 localStorage 中的 cartItemCount
-        var cartItemCount = localStorage.getItem('cartItemCount');
+         var cartItemCount = sessionStorage.getItem('cartItemCount');
+       
 
         // 如果有購物車數量，更新頁面中的 #cartCount
         if (cartItemCount) 
