@@ -189,7 +189,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         // POST: CartController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(List<Cart> cart, long totalInputKey, long totalInputValue)
+        public ActionResult Create(List<Cart> cart)
         {
             countInputDy = HttpContext.Session.Get<Dictionary<long, long>>("totalInput") ?? new Dictionary<long, long>();
 
@@ -228,20 +228,59 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
 
                     //商品數量
-                    var count = tempCart.GroupBy(x => x.ProductId)
-                        .Select(g => new
-                        {
-                            productId = g.Key,
-                            count = g.Count(),
+                    //var count = tempCart.GroupBy(x => x.ProductId)
+                    //    .Select(g => new
+                    //    {
+                    //        productId = g.Key,
+                    //        count = g.Count(),
 
 
-                        }).ToList();
+                    //    }).ToList();
 
-                    ViewBag.count = count;
+                    //ViewBag.count = count;
+
+                    //自行輸入商品數量
                     ViewBag.totalInputDictionary = countInputDy;
+                                       
+
+
 
                     var getCartTemp = tempCart.DistinctBy(p => p.ProductId).ToList();
+                    // 商品金額
+                    var price = getCartTemp.Select(c => c.CartItem.Select(p => new { c.ProductId,p.Price })).ToList();
+                    Dictionary<long, decimal> priceDy = new Dictionary<long, decimal>();
 
+                    decimal totalPrice = 0;
+
+                    foreach (var c in countInputDy)
+                    {
+                        if (getCartTemp.Select(p => p.ProductId).ToList().Contains(c.Key))
+                        {
+
+                            // 獲取該 ProductId 的所有價格
+                            var productPrices = getCartTemp
+                                .Where(p => p.ProductId == c.Key)  // 篩選出匹配的 ProductId
+                                .SelectMany(p => p.CartItem.Select(x => x.Price))  // 獲取該 ProductId 對應的所有價格
+                                .ToList();
+
+                            // 計算總價格
+                            foreach (var pp in productPrices)
+                            {                               
+                                   totalPrice = pp * (decimal)c.Value;  
+                            }
+
+                            if (!priceDy.ContainsKey(c.Key))
+                            {
+                                priceDy.Add(c.Key, totalPrice);
+                            }
+
+                            
+
+                        }
+
+                    }
+                    
+                    ViewBag.totalPrice = priceDy;
 
                     var productsAll = new ProductsAll
                     {

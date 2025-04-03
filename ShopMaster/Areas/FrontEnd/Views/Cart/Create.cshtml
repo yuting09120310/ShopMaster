@@ -1,9 +1,5 @@
-﻿@model ShopMaster.Areas.FrontEnd.ViewModelsF.ProductsAll
-@{
-
-
-
-}
+﻿
+@model ShopMaster.Areas.FrontEnd.ViewModelsF.ProductsAll
 
 
 <style>
@@ -59,36 +55,58 @@
                                     if (c.ProductId == i.Key)
                                     {
 
-                                        <div class="input-group mb-3 ms-2 border-left-0 col-3" style="height:38px; width:100px; border-left: none;" id="count">
-                                            <button class="btn" type="button" id="button-minus" style="border-color: #dee2e6; border-right: none;">-</button>
+                                        <div class="input-group mb-3 ms-2 border-left-0 col-3" style="height:38px; width:100px; border-left: none;" id="count-@i.Key" >
+                                            <button class="btn" type="button" id="button-minus-@i.Key"  style="border-color: #dee2e6; border-right: none;">-</button>
                                             <input type="text" class="form-control border-left-0" value="@i.Value" id="count-input-@i.Key" aria-label="Example text with button addon" aria-describedby="button-addon1" style="border-right: none; border-left: none; text-align: center; padding-right: 0px;
-                                                 padding-left: 0px;">
-                                            <button class="btn" type="button" id="button-plus" style="border-color: #dee2e6; border-left: none;">+</button>
+                                                     padding-left: 0px;">
+                                            <button class="btn" type="button" id="button-plus-@i.Key"  style="border-color: #dee2e6; border-left: none;">+</button>
 
                                         </div>
                                         <div class="col-1 text-center mt-2"> <i class="bi bi-trash3"></i>  </div>
                                     }
                                 }
 
-                            }                       
-
-
-                            @foreach (var p in c.CartItem.Select(c => c.Price).ToList())
-                            {
-
-                                <p class="card-text col-2 text-end mt-2" >"@p"</p>
                             }
+
+
+                             @{
+
+                                foreach (var p in ViewBag.totalPrice)
+                                {
+
+                                    if (c.ProductId == p.Key)
+                                    {
+                                        <p class="card-text col-2 text-end mt-2">"@p.Value"</p>
+
+                                    }
+
+
+                                }}
+                             
+
                         </div>
+                    </div>
                 </div>
-            </div>}
-      
+                
+            
+            
+            }
+
 
         </div>
 
         <div class="row">
             <div class="col d-flex justify-content-end mt-2">
                 <h5 class="fw-bold text-secondary me-5">合計  </h5>
-                <span class="me-4 ">  NT999</span>
+
+                <span class="me-4">
+                    @((ViewBag.totalPrice.Values as IEnumerable<decimal>)?.Sum() ?? 0)
+                </span>
+
+
+
+
+               
             </div>
         </div>
 
@@ -97,35 +115,36 @@
             <div class="d-grid gap-2 justify-content-end mt-4 ">
                 <button class="btn btn-warning fw-bold add-to-cart" type="button" id="purchase" style="color:	white;" onclick="window.location.href='@Url.Action("Create", "Order", new { area = "FrontEnd" })'">結帳去</button>
             </div>
-        
+
         </div>
     </form>
 </div>
 
 <script>
-
-    // 以下數字加總
-        const buttonMinus = document.getElementById('button-minus');
-        const buttonPlus = document.getElementById('button-plus');
-        const input = document.querySelector('#count input');
+   
 
 
 
-             // 監聽減號按鈕事件
-        buttonMinus.addEventListener('click', function() {
+                // 監聽所有的按鈕和輸入框
+    document.querySelectorAll('.input-group').forEach(group => {
+        const buttonMinus = group.querySelector('[id^=button-minus]');
+        const buttonPlus = group.querySelector('[id^=button-plus]');
+        const input = group.querySelector('input');
+
+        // 監聽減號按鈕事件
+        buttonMinus.addEventListener('click', function () {
             let currentValue = parseInt(input.value);
-            if (!isNaN(currentValue) && currentValue > 1) {  // 保證數字不小於 1
+            if (!isNaN(currentValue) && currentValue > 1) { // 保證數字不小於 1
                 input.value = currentValue - 1;
             }
         });
 
         // 監聽加號按鈕事件
-        buttonPlus.addEventListener('click', function() {
+        buttonPlus.addEventListener('click', function () {
             let currentValue = parseInt(input.value);
             if (!isNaN(currentValue)) {
-                input.value = currentValue + 1;  // 可以無限加
+                input.value = currentValue + 1; // 可以無限加
             }
         });
-
-
+    });
 </script>
