@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Member = ShopMaster.Areas.FrontEnd.ViewModelsF.Member;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using System.Diagnostics.Eventing.Reader;
 namespace ShopMaster.Areas.FrontEnd.Controllers
 {
     [Area("FrontEnd")]
@@ -22,19 +23,19 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         }
         // GET: CartController
         public ActionResult Index()
-        {           
+        {
 
-                return View();
+            return View();
         }
 
 
         List<Cart> tempCart = new List<Cart>();
-        IGrouping<long?, Cart> tempCart2 ;
-
-
+        
+        Dictionary<long, long> countInputDy = new Dictionary<long, long>();
+        
 
         [HttpPost]
-        public IActionResult AddToCart(int productId, string name, decimal price,string mainImage )
+        public IActionResult AddToCart(int productId, string name, decimal price, string mainImage, int countInput)
         {
             var product = _db.Products.ToList();
             var cart = _db.Carts.ToList();
@@ -76,9 +77,9 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
                 }).ToList();
 
-            
-             tempCart = HttpContext.Session.Get<List<Cart>>("tempCart") ?? new List<Cart>();
-           
+
+            tempCart = HttpContext.Session.Get<List<Cart>>("tempCart") ?? new List<Cart>();
+
             var existingItem = tempCart.FirstOrDefault(c => c.ProductId == productId);
 
 
@@ -95,7 +96,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                             Name = name,
                             Price = price,
                             MainImage = mainImage
-                            
+
                         }
 
                     }
@@ -124,22 +125,38 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 });
 
             }
-
-
            
 
             HttpContext.Session.Set("tempCart", tempCart);
-          
+
             var productsAll = new ProductsAll
             {
                 ProductCart = tempCart
             };
 
+            //手動輸入數量
+
+            Dictionary<long, long> totalInput = HttpContext.Session.Get<Dictionary<long, long>>("totalInput") ?? new Dictionary<long, long>();
 
 
+            if (!totalInput.ContainsKey(productId))
+            {
+                totalInput.Add(productId, countInput);
+            }
+            else
+            {
+                totalInput[productId] += countInput;
+            }
+            
 
-            return Json(new { success = true, message = "商品已加入購物車", cartItemCount = tempCart.Count });
+            HttpContext.Session.Set("totalInput", totalInput);
+
+            countInputDy = HttpContext.Session.Get<Dictionary<long, long>>("totalInput") ?? new Dictionary<long, long>();
+
+            return Json(new { success = true, message = "商品已加入購物車", cartItemCount = countInputDy.Values.Sum() });
         }
+
+
 
         public IActionResult GetCart()
         {
@@ -172,12 +189,16 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         // POST: CartController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(List<Cart> cart )
+        public ActionResult Create(List<Cart> cart, long totalInputKey, long totalInputValue)
         {
+            countInputDy = HttpContext.Session.Get<Dictionary<long, long>>("totalInput") ?? new Dictionary<long, long>();
+
             tempCart = HttpContext.Session.Get<List<Cart>>("tempCart") ?? new List<Cart>();
+
+           
             //先取 Product
 
-            if (tempCart.Any(m=>m.MemberId.HasValue))
+            if (tempCart.Any(m => m.MemberId.HasValue))
             {
 
             }
@@ -187,38 +208,37 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    
 
                     //新增購物車至資料庫
                     var existingIds = _db.Carts.Select(c => c.Id).ToList();
-                    int newId = 1; 
+                    int newId = 1;
                     while (existingIds.Contains(newId))
                     {
-                        newId++; 
+                        newId++;
                     }
 
-                    var cartCreateDb = tempCart.Select((c,index) => new ShopMaster.Areas.BackEnd.Models.Cart
+                    var cartCreateDb = tempCart.Select((c, index) => new ShopMaster.Areas.BackEnd.Models.Cart
                     {
 
                         Id = newId++,
                         ProductId = c.ProductId,
                         MemberId = c.MemberId.HasValue ? c.MemberId.Value : 0
 
-
                     });
 
-                     
+
                     //商品數量
                     var count = tempCart.GroupBy(x => x.ProductId)
                         .Select(g => new
                         {
                             productId = g.Key,
-                            count = g.Count(),                   
+                            count = g.Count(),
 
 
                         }).ToList();
 
                     ViewBag.count = count;
+                    ViewBag.totalInputDictionary = countInputDy;
 
                     var getCartTemp = tempCart.DistinctBy(p => p.ProductId).ToList();
 
@@ -234,8 +254,9 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
 
                     return View(productsAll);
-                }                
-            };
+                }
+            }
+            ;
 
 
 

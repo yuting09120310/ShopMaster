@@ -201,7 +201,7 @@
 
                                 <div class="input-group mb-3 ms-2 border-left-0" style="height:38px; width:110px; border-left: none;" id="count">
                                     <button class="btn" type="button" id="button-minus" style="border-color: #dee2e6; border-right: none;">-</button>
-                                    <input type="text" class="form-control border-left-0" value="1" id="count-input" aria-label="Example text with button addon" aria-describedby="button-addon1" style="border-right: none; border-left: none; text-align: center">
+                                    <input type="text" class="form-control border-left-0" value="1" id="countInput" aria-label="Example text with button addon" aria-describedby="button-addon1" style="border-right: none; border-left: none; text-align: center">
                                     <button class="btn" type="button" id="button-plus" style="border-color: #dee2e6; border-left: none;">+</button>
                                 </div>
 
@@ -314,6 +314,7 @@
         // 當加入購物車的按鈕被點擊時觸發
         $('.add-to-cart').click(function() {
 
+            var countInput = $('#countInput').val();
             var productId = $(this).data('id');
             var name = $(this).data('name');
             var price = $(this).data('price');
@@ -324,6 +325,7 @@
                 name: name,
                 price: price,
                 mainImage: mainImage,
+                countInput: countInput
             }, function(response) {
                 if (response.success) {              
 

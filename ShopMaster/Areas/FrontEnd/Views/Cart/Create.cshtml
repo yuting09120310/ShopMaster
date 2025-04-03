@@ -54,14 +54,14 @@
 
                             @{
 
-                                foreach (var i in ViewBag.count)
+                                foreach (var i in ViewBag.totalInputDictionary)
                                 {
-                                    if (c.ProductId == i.productId)
+                                    if (c.ProductId == i.Key)
                                     {
 
                                         <div class="input-group mb-3 ms-2 border-left-0 col-3" style="height:38px; width:100px; border-left: none;" id="count">
                                             <button class="btn" type="button" id="button-minus" style="border-color: #dee2e6; border-right: none;">-</button>
-                                            <input type="text" class="form-control border-left-0" value="@i.count" id="count-input" aria-label="Example text with button addon" aria-describedby="button-addon1" style="border-right: none; border-left: none; text-align: center; padding-right: 0px;
+                                            <input type="text" class="form-control border-left-0" value="@i.Value" id="count-input-@i.Key" aria-label="Example text with button addon" aria-describedby="button-addon1" style="border-right: none; border-left: none; text-align: center; padding-right: 0px;
                                                  padding-left: 0px;">
                                             <button class="btn" type="button" id="button-plus" style="border-color: #dee2e6; border-left: none;">+</button>
 
