@@ -35,4 +35,5 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}",
     defaults: new { area = "FrontEnd" });
 
+
 app.Run();

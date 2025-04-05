@@ -2,11 +2,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using ShopMaster.Areas.BackEnd.Models;
-using ShopMaster.Areas.FrontEnd.ViewModelsF;
-using ShopMaster.Areas.FrontEnd.Utility;
-using Cart = ShopMaster.Areas.FrontEnd.ViewModelsF.Cart;
 using Microsoft.EntityFrameworkCore;
-using Member = ShopMaster.Areas.FrontEnd.ViewModelsF.Member;
 namespace ShopMaster.Areas.FrontEnd.Controllers
 {
     [Area("FrontEnd")]
@@ -18,209 +14,34 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         {
             _db = db;
         }
-        // GET: CartController
-        public ActionResult Index()
-        {           
 
-                return View();
+        public class AddCartRequest
+        {
+            public long ProductId { get; set; }
+            public string Color { get; set; }
+            public int Quantity { get; set; }
         }
 
 
-        List<Cart> tempCart = new List<Cart>(); 
         [HttpPost]
-        public IActionResult AddToCart(int productId, string name, decimal price,string mainImage )
+        public ActionResult AddCart([FromBody] AddCartRequest request)
         {
-            var product = _db.Products.ToList();
-            var cart = _db.Carts.ToList();
-            var member = _db.Members.ToList();
-
-            //先組暫時的購物車 
-            tempCart = cart.Join(product,
-                c => c.ProductId,
-                p => p.Id,
-                (c, p) => new { c, p })
-                .Join(member,
-                cp => cp.p.Id,
-                m => m.Id,
-                (cp, m) 
-                => new ViewModelsF.Cart 
-                { 
-                    Id = cp.c.Id,
-                    ProductId = cp.p.Id,
-                    MemberId = m.Id,
-                    Member = new List<Member>
-                    {
-                        new Member
-                        {
-                            Name = m.Name,                            
-                        }
-                    },
-                    CartItem = new List<Products>
-                    {
-                        new Products
-                        {
-                            Name = cp.p.Name,
-                            Price = cp.p.Price,
-                            MainImage = cp.p.MainImage,
-                            
-                        
-                        }
-                    }
-
-
-                }).ToList();
-
-            
-             tempCart = HttpContext.Session.Get<List<Cart>>("tempCart") ?? new List<Cart>();
-           
-            var existingItem = tempCart.FirstOrDefault(c => c.ProductId == productId);
-            
-            if (existingItem != null)
+            if (request == null || request.ProductId <= 0 || request.Quantity <= 0)
             {
-              
-
-            }
-            else
-            {
-                tempCart.Add(new Cart { ProductId = productId,
-
-                    CartItem = new List<Products>
-                    {
-                        new Products
-                        { 
-                            Name = name,
-                            Price = price,
-                            MainImage = mainImage                           
-                            
-                        }
-                        
-                    }
-                   
-                });
-                
+                return BadRequest("Invalid product ID, color, or quantity.");
             }
 
-
-            //var tempCartTwo = tempCart.Select(x => x.ProductId).Distinct().ToList();
-
-            HttpContext.Session.Set("tempCart", tempCart);
-
-
-
-          
-            var productsAll = new ProductsAll
+            // 假設有一個 Cart 物件來表示購物車
+            var cart = new Cart
             {
-                ProductCart = tempCart
-            };
-           
-
-            return Json(new { success = true, message = "商品已加入購物車", cartItemCount = tempCart.Count });
-        }
-
-        public IActionResult GetCart()
-        {
-            tempCart = HttpContext.Session.Get<List<Cart>>("tempCart") ?? new List<Cart>();
-
-            var productsAll = new ProductsAll
-            {
-                ProductCart = tempCart
+                ProductId = request.ProductId,
             };
 
-           
+            // 將購物車項目添加到數據庫
+            _db.Carts.Add(cart);
+            _db.SaveChanges();
 
-            return PartialView("_CartPartial", productsAll);
-        }
-
-        // GET: CartController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: CartController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: CartController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(int? memberId, Products products )
-        {
-            
-            //先取 Product
-
-            if (memberId.HasValue)
-            {
-
-
-            }
-            else
-            {
-                //不用登入加入購物車
-
-                if (ModelState.IsValid)
-                {
-
-                }
-                
-
-            }
-
-
-
-            //try
-            //{
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //catch
-            //{
-            //    return View();
-            //}
-            return View();
-        }
-
-        // GET: CartController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: CartController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: CartController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: CartController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return Ok("Product added to cart successfully.");
         }
     }
 }

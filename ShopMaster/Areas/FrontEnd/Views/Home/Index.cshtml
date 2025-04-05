@@ -1,174 +1,86 @@
-﻿@model  ShopMaster.Areas.FrontEnd.ViewModelsF.ProductsAll
-
-
+﻿@* @model  ShopMaster.Areas.FrontEnd.ViewModelsF.ProductsAll
 @{
     ViewData["Title"] = "首頁";
-
-
     var typeId = ViewData["TypeID"];
-
-
 }
 
-<!-- Hero Section -->
-@* <header class="bg-primary text-white text-center py-5">
-    <div class="container">
-        <h1 class="display-4">歡迎來到 ShopMaster</h1>
-        <p class="lead">我們提供最好的商品，讓您購物更輕鬆！</p>
-        <a href="/Product" class="btn btn-light btn-lg">查看商品</a>
-    </div>
-</header> *@
-
-<style>
-
-    /* 保持圖片比例 */
-    /* .carousel-inner img {
-    width: 100%;
-    height: auto; 
-    } */
+@await Html.PartialAsync("_Banner")
 
 
-    /* 初始样式 */
-    .hover {
-    position: relative;
-    padding-bottom: 10px;
-    color: black;
-    border-radius: 10px;
-    line-height: 200px;
-    transition: transform 0.3s ease, opacity 0.3s ease; /* 添加过渡效果 */
-    opacity: 1; /* 默认不透明 */
-    }
+<div class="container-fluid">
 
-    /* 悬停时的浮动和半透明效果 */
-    .hover:hover {
-    transform: translateY(-8px); /* 向上浮动 */
-    opacity: 0.7; /* 半透明 */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* 阴影 */
-    }
+    <!-- Start Categories Banner Area -->
+    <section class="categories-banner-area pt-100 pb-70">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                @{
+                    foreach (var group in Model.ProductList){
+                        <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="single-categories-box">
+                                <img src="~/frontEnd/assets/img/categories/img1.jpg" alt="image">
 
-    card {
-    display: flex;
-    flex-direction: column;
-    height: 100%; /* 讓卡片的高度填滿其容器 */
-    }
-
-    .card-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* 讓內容分佈並將按鈕推到底部 */
-    flex-grow: 1; /* 讓card-body佔據剩餘空間 */
-    }
-
-    .card-button {
-    width: 100%; /* 按鈕寬度100%，填滿整個卡片底部 */
-    height: 50px; /* 按鈕的高度，這裡可以調整 */
-    border: none;
-    }
-
-    .mt-auto {
-    margin-top: auto; /* 這個類將推動按鈕到卡片底部 */
-    }
-</style>  
-
-
-
-
-<div id="carouselExampleControls" class="carousel slide " data-bs-ride="carousel" >
-    <div class="carousel-inner" style="padding-top: 110px">
-        <div class="carousel-item active">
-            <img src="https://picsum.photos/700/300" class="d-block w-100" alt="...">
-        </div>
-        <div class="carousel-item">
-            <img src="https://picsum.photos/700/300" class="d-block w-100" alt="...">
-        </div>
-        <div class="carousel-item">
-            <img src="https://picsum.photos/700/300" class="d-block w-100" alt="...">
-        </div>
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev" style="padding-top: 110px">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next" style="padding-top: 110px">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
-</div>
-
-@{
-    if (typeId != null)
-    {
-        <section class="container my-5">
-            
-            <h2 class="fw-lighter" style="margin-top:17px">@Model.ProductListLove.Select(x => x.TypeName).FirstOrDefault()</h2>
-
-            <div class="row mt-2">
-                @foreach (var group in Model.ProductListLove)
-                {
-                    // 下拉選單商品
-                    <div class="col-md-3 col-sm-4 col-6 mt-3 mb-2">
-                        <a href="/Products/Details/@group.Id" class="text-decoration-none">
-                            <div class="card hover">
-                                <img src=@group.MainImage class="card-img-top" alt="商品1">
-                                <div class="card-body">
-                                    <h5 class="card-title">@group.Name</h5>
+                                <div class="content text-white">
+                                    <h3>@group.FirstOrDefault().TypeName</h3>
+                                    <a href="products-right-sidebar.html" class="default-btn">Discover Now</a>
                                 </div>
+                                <a href="products-right-sidebar.html" class="link-btn"></a>
                             </div>
-                        </a>
-                    </div>}
-
-                </div>
-            
-        </section>
-
-    }
-    else
-    {
-
-        <section class="container my-5">
-
-            @foreach (var group in Model.ProductList)
-            {
-                //所有商品分類
-                <h2 class="fw-lighter" style="margin-top:17px">@group.Select(x => x.TypeName).Distinct().FirstOrDefault()</h2>
-
-                <div class="row mt-2">
-                    @foreach (var product in group)
-                    {
-                        <div class="col-md-3 col-sm-4 col-6 mt-3 mb-2">
-                            <a href="/Products/Details/@product.Id" class="text-decoration-none">
-                                <div class="card hover">
-                                    <img src=@product.MainImage class="card-img-top" alt="商品1">
-                                    <div class="card-body">
-                                        <h5 class="card-title">@product.Name</h5>
-                                    </div>
-                                </div>
-                            </a>
                         </div>
                     }
+                    
+                }
+            
+            </div>
+        </div>
+    </section>
+    <!-- End Categories Banner Area -->
 
 
-                </div>
-            }
-        </section>
+    <!-- Start Products Area -->
+    <section class="products-area pb-70">
+        <div class="container">
 
+             @{
+                 foreach (var group in Model.ProductList)
+                 {
+                    <div class="section-title">
+                        <h2>@group.FirstOrDefault().TypeName</h2>
+                    </div>
 
+                    <div class="row justify-content-center">
+                        @foreach(var a in group)
+                        {
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                <div class="single-products-box">
+                                    <div class="products-image">
+                                        <a href="/Products/Details/@a.Id">
+                                            <img src="@Url.Content(a.MainImage)" class="main-image" alt="image">
+                                            <img src="@Url.Content(a.MainImage)" class="hover-image" alt="image">
+                                        </a>
+                                    </div>
 
-    }
+                                    <div class="products-content">
+                                        <h3><a href="/Products/Details/@a.Id">@a.Name</a></h3>
+                                        <div class="price">
+                                            <span class="new-price">$@a.Price.ToString("N0")</span>
+                                        </div>
+                                        <div class="star-rating">
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                            <i class='bx bxs-star'></i>
+                                        </div>
+                                        <a href="cart.html" class="add-to-cart">Add to Cart</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                 }
+             }
+        </div>
+    </section>
+    <!-- End Products Area -->
 
-
-
-}
-
-
-
-
-@*  <form id="myForm" method="post" asp-action="Details" asp-controller="Products" asp-area="FrontEnd" class="d-flex flex-column flex-grow-1">
-    <!-- 隱藏欄位來儲存卡片標題 -->
-    <input type="hidden" name="productId" id="productId" value="@product.Id">
-
-    <!-- 提交按鈕 -->
-    <button type="submit" class="btn btn-danger card-button">Submit</button>
-</form> *@
-                           
-
+</div> *@

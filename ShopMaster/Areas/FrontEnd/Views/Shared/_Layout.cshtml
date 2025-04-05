@@ -1,223 +1,304 @@
-﻿@using ShopMaster.Areas.BackEnd.Models
-@inject shopmasterdbContext _dbContext
-
-@{
-
-}
-
-
-
-
-
-<!DOCTYPE html>
-<html lang="zh-TW">
+﻿<!DOCTYPE html>
+<html lang="zxx">
 <head>
+    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@ViewData["Title"] - ShopMaster</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <style>
-        @@media (min-width: 768px) {
-            .offcanvas-end {
-                display: block; /* Make sure offcanvas is visible on larger screens */
-            }
-        }
+    <!-- Links of CSS files -->
+    <link rel="stylesheet" href="~/frontEnd/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/frontEnd/assets/css/animate.min.css">
+    <link rel="stylesheet" href="~/frontEnd/assets/css/boxicons.min.css">
+    <link rel="stylesheet" href="~/frontEnd/assets/css/flaticon.css">
+    <link rel="stylesheet" href="~/frontEnd/assets/css/magnific-popup.min.css">
+    <link rel="stylesheet" href="~/frontEnd/assets/css/nice-select.min.css">
+    <link rel="stylesheet" href="~/frontEnd/assets/css/slick.min.css">
+    <link rel="stylesheet" href="~/frontEnd/assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/frontEnd/assets/css/meanmenu.min.css">
+    <link rel="stylesheet" href="~/frontEnd/assets/css/rangeSlider.min.css">
+    <link rel="stylesheet" href="~/frontEnd/assets/css/style.css">
+    <link rel="stylesheet" href="~/frontEnd/assets/css/dark.css">
+    <link rel="stylesheet" href="~/frontEnd/assets/css/responsive.css">
 
-        #continue {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            margin-top: 20px;
-        }
+    <title>電商星球</title>
 
-        #cart {
-            width: 106px;
-            height: 106px;
-            border-radius: 50%;
-        }
-
-
-        #cartCount {
-            width: 30px;
-            border-radius: 35%;
-        }
-
-        .badge {
-            line-height: 1.5;
-        }
-
-    </style>
-
+    <link rel="icon" type="image/png" href="~/frontEnd/assets/img/favicon.png">
 </head>
 <body>
-
-    <!-- 導航列 -->
-    <div class="fixed-top">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    
+    <div class="navbar-area">
+        <div class="xton-responsive-nav">
             <div class="container">
-                <a class="navbar-brand fw-bold fs-3 ps-2" href="/Home/Index">ShopMaster</a>
-
-                @RenderSection("cont", required: false)
-
-
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-            </div>
-            <div class="d-flex container">
-                <div class="col-9">
-                    <form class="d-flex ps-5 mt-2 " role="search">
-                        <input class="form-control   me-0" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn" style="border:none" type="submit"><i class="bi bi-search fs-5 me-4"></i></button>
-                    </form>
+                <div class="xton-responsive-menu">
+                    <div class="logo">
+                        <a href="index.html">
+                            <img src="~/frontEnd/assets/img/logo.png" class="main-logo" alt="logo">
+                            <img src="~/frontEnd/assets/img/white-logo.png" class="white-logo" alt="logo">
+                        </a>
+                    </div>
                 </div>
-                <div class="col-3">
-                    <ul class="list-group list-group-horizontal mt-2 position-relative ">
-                        <li class="list-group-item bg-light pe-2 " style="border:none">
-                            <a class="nav-link pl-4 " href="/Member/Index"><i class="bi bi-person-circle fs-5"></i></a>
-                        </li>
-                        <li class="list-group-item bg-light  " style="border:none">
-                            <a class="nav-link ">
-                                <i class="bi bi-bucket fs-5 text-end  " data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" style="cursor: pointer;" id="openCartBtn"></i>
-                                <span class="position-absolute  badge translate-middle rounded-pill  " id="cartCount" style="color:	white; background-color:	#FFED97;">
-                                    <span class="visually-hidden">unread messages</span>
-                                </span>
-
-
-
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <div class="offcanvas offcanvas-end" data-bs-backdrop="true" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-            <div class="offcanvas-header " style="border-bottom: 1px solid lightgray">
-                <h4 class="offcanvas-title fw-bold " id="offcanvasRightLabel">您的購物車</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class=" d-flex justify-content-center"> <h5 class="offcanvas-title" id="offcanvasRightLabel"></h5></div>
-
-            <div class="offcanvas-body " style="" id="cartContent">
-                @* 購物車 *@
-                @await Html.PartialAsync("_CartPartial")
-
-
             </div>
         </div>
 
-
-
-
-
-
-
-
-        <nav class="navbar navbar-expand-lg bg-light ">
+        <div class="xton-nav">
             <div class="container">
-                <div class="collapse navbar-collapse offset-md-1 mb-1 " id="navbarNav">
-                    <ul class="navbar-nav fw-bold" style=" font-size: 16px;">
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="/Home/Index">首頁</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                商品
-                            </a>
-                            <ul class="dropdown-menu " style=" font-size: 15px;">
+                <nav class="navbar navbar-expand-md navbar-light">
+                    <a class="navbar-brand" href="index.html">
+                        <img src="~/frontEnd/assets/img/logo.png" class="main-logo" alt="logo">
+                        <img src="~/frontEnd/assets/img/white-logo.png" class="white-logo" alt="logo">
+                    </a>
 
-                                @foreach (var item in _dbContext.ProductTypes)
-                                {
-                                    <li><a class="dropdown-item" href="/Home/Index/@item.Id">@item.Name</a></li>
-                                }
+                    <div class="collapse navbar-collapse mean-menu" style="display: block;">
+                        <ul class="navbar-nav">
+                            
+                            <li class="nav-item">
+                                <a href="index.html" class="nav-link active">首頁</a>
+                            </li>
 
-                            </ul>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">Blog <i class="bx bx-chevron-down"></i></a>
+                                <ul class="dropdown-menu">
+                                    <li class="nav-item"><a href="blog-1.html" class="nav-link">Grid (2 in Row)</a></li>
+                                    <li class="nav-item"><a href="blog-2.html" class="nav-link">Grid (3 in Row)</a></li>
+                                    <li class="nav-item"><a href="blog-3.html" class="nav-link">Grid (4 in Row)</a></li>
+                                    <li class="nav-item"><a href="blog-4.html" class="nav-link">Grid (Full Width)</a></li>
+                                    <li class="nav-item"><a href="blog-5.html" class="nav-link">Right Sidebar</a></li>
+                                    <li class="nav-item"><a href="blog-6.html" class="nav-link">Masonry (3 in Row)</a></li>
+                                </ul>
+                            </li>
 
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/About/Index">關於我們</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Contact/Index">聯絡我們</a>
-                        </li>
-                    </ul>
-                </div>
+                            <li class="nav-item">
+                                <a href="about.html" class="nav-link">關於我們</a>
+                            </li>
+
+
+
+                        </ul>
+
+                        <div class="others-option">
+                            <div class="option-item">
+                                <div class="search-btn-box">
+                                    <a href="login.html"><i class="bx bxs-user" style="font-size: 24px;"></i></a>
+                                </div>
+                            </div>
+
+                            <div class="option-item">
+                                <div class="search-btn-box">
+                                    <i class="search-btn bx bx-search-alt" style="font-size: 24px;"></i>
+                                </div>
+                            </div>
+
+                            <div class="option-item">
+                                <div class="cart-btn">
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#shoppingCartModal"><i class="bx bx-shopping-bag" style="font-size: 24px;"></i><span>3</span></a>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </nav>
             </div>
-        </nav>
+        </div>
     </div>
 
-    <!-- 主要內容 -->
 
 
-    <main>
-        @RenderBody()
-
-    </main>
-
-    <!-- 頁腳 -->
-    <footer class="text-dark text-center py-3 mt-5 border-top border-dark">
-
-        <p>
-            © 2025 ShopMaster. All Rights Reserved. |
-            <a href="/BackEnd/" class="text-dark text-decoration-none">後台管理</a>
-        </p>
-    </footer>
+    @RenderBody()
 
 
+    <!-- Start QuickView Modal Area -->
+    <div class="modal fade productsQuickView" id="productsQuickView" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class='bx bx-x'></i></span>
+                </button>
+
+                <div class="row align-items-center justify-content-center">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="products-image">
+                            <img src="assets/img/quick-view-img.jpg" alt="image">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6">
+                        <div class="products-content">
+                            <h3><a href="#">Long Sleeve Leopard T-Shirt</a></h3>
+
+                            <div class="price">
+                                <span class="old-price">$210.00</span>
+                                <span class="new-price">$200.00</span>
+                            </div>
+
+                            <div class="products-review">
+                                <div class="rating">
+                                    <i class='bx bxs-star'></i>
+                                    <i class='bx bxs-star'></i>
+                                    <i class='bx bxs-star'></i>
+                                    <i class='bx bxs-star'></i>
+                                    <i class='bx bxs-star'></i>
+                                </div>
+                                <a href="#" class="rating-count">3 reviews</a>
+                            </div>
+
+                            <ul class="products-info">
+                                <li><span>Vendor:</span> <a href="#">Lereve</a></li>
+                                <li><span>Availability:</span> <a href="#">In stock (7 items)</a></li>
+                                <li><span>Products Type:</span> <a href="#">T-Shirt</a></li>
+                            </ul>
+
+                            <div class="products-color-switch">
+                                <h4>Color:</h4>
+
+                                <ul>
+                                    <li><a href="#" data-bs-toggle="tooltip" data-placement="top" title="Black" class="color-black"></a></li>
+                                    <li><a href="#" data-bs-toggle="tooltip" data-placement="top" title="White" class="color-white"></a></li>
+                                    <li><a href="#" data-bs-toggle="tooltip" data-placement="top" title="Green" class="color-green"></a></li>
+                                    <li><a href="#" data-bs-toggle="tooltip" data-placement="top" title="Yellow Green" class="color-yellowgreen"></a></li>
+                                    <li><a href="#" data-bs-toggle="tooltip" data-placement="top" title="Teal" class="color-teal"></a></li>
+                                </ul>
+                            </div>
+
+                            <div class="products-size-wrapper">
+                                <h4>Size:</h4>
+
+                                <ul>
+                                    <li><a href="#">XS</a></li>
+                                    <li class="active"><a href="#">S</a></li>
+                                    <li><a href="#">M</a></li>
+                                    <li><a href="#">XL</a></li>
+                                    <li><a href="#">XXL</a></li>
+                                </ul>
+                            </div>
+
+                            <div class="products-add-to-cart">
+                                <div class="input-counter">
+                                    <span class="minus-btn"><i class='bx bx-minus'></i></span>
+                                    <input type="text" value="1">
+                                    <span class="plus-btn"><i class='bx bx-plus'></i></span>
+                                </div>
+
+                                <button type="submit" class="default-btn">Add to Cart</button>
+                            </div>
+
+                            <a href="#" class="view-full-info">View Full Info</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End QuickView Modal Area -->
 
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Start Shopping Cart Modal -->
+    <div class="modal right fade shoppingCartModal" id="shoppingCartModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class='bx bx-x'></i></span>
+                </button>
+
+                <div class="modal-body">
+                    <h3>My Cart (3)</h3>
+
+                    <div class="products-cart-content">
+                        <div class="products-cart">
+                            <div class="products-image">
+                                <a href="#"><img src="~/frontEnd/assets/img/products/img1.jpg" alt="image"></a>
+                            </div>
+
+                            <div class="products-content">
+                                <h3><a href="#">Long Sleeve Leopard T-Shirt</a></h3>
+                                <span>Blue / XS</span>
+                                <div class="products-price">
+                                    <span>1</span>
+                                    <span>x</span>
+                                    <span class="price">$250.00</span>
+                                </div>
+                                <a href="#" class="remove-btn"><i class='bx bx-trash'></i></a>
+                            </div>
+                        </div>
+
+                        <div class="products-cart">
+                            <div class="products-image">
+                                <a href="#"><img src="~/frontEnd/assets/img/products/img2.jpg" alt="image"></a>
+                            </div>
+
+                            <div class="products-content">
+                                <h3><a href="#">Causal V-Neck Soft Raglan</a></h3>
+                                <span>Blue / XS</span>
+                                <div class="products-price">
+                                    <span>1</span>
+                                    <span>x</span>
+                                    <span class="price">$200.00</span>
+                                </div>
+                                <a href="#" class="remove-btn"><i class='bx bx-trash'></i></a>
+                            </div>
+                        </div>
+
+                        <div class="products-cart">
+                            <div class="products-image">
+                                <a href="#"><img src="~/frontEnd/assets/img/products/img3.jpg" alt="image"></a>
+                            </div>
+
+                            <div class="products-content">
+                                <h3><a href="#">Hanes Men's Pullover</a></h3>
+                                <span>Blue / XS</span>
+                                <div class="products-price">
+                                    <span>1</span>
+                                    <span>x</span>
+                                    <span class="price">$200.00</span>
+                                </div>
+                                <a href="#" class="remove-btn"><i class='bx bx-trash'></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="products-cart-subtotal">
+                        <span>Subtotal</span>
+
+                        <span class="subtotal">$650.00</span>
+                    </div>
+
+                    <div class="products-cart-btn">
+                        <a href="#" class="default-btn">Proceed to Checkout</a>
+                        <a href="#" class="optional-btn">View Shopping Cart</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Shopping Cart Modal -->
 
 
+    <!-- Start Footer Area -->
+    @await Html.PartialAsync("_Footer")
+    <!-- End Footer Area -->
 
+    <div class="go-top"><i class='bx bx-up-arrow-alt'></i></div>
 
+    <!-- Links of JS files -->
+    <script src="~/frontEnd/assets/js/jquery.min.js"></script>
+    <script src="~/frontEnd/assets/js/popper.min.js"></script>
+    <script src="~/frontEnd/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="~/frontEnd/assets/js/owl.carousel.min.js"></script>
+    <script src="~/frontEnd/assets/js/magnific-popup.min.js"></script>
+    <script src="~/frontEnd/assets/js/parallax.min.js"></script>
+    <script src="~/frontEnd/assets/js/rangeSlider.min.js"></script>
+    <script src="~/frontEnd/assets/js/nice-select.min.js"></script>
+    <script src="~/frontEnd/assets/js/meanmenu.min.js"></script>
+    <script src="~/frontEnd/assets/js/isotope.pkgd.min.js"></script>
+    <script src="~/frontEnd/assets/js/slick.min.js"></script>
+    <script src="~/frontEnd/assets/js/sticky-sidebar.min.js"></script>
+    <script src="~/frontEnd/assets/js/wow.min.js"></script>
+    <script src="~/frontEnd/assets/js/form-validator.min.js"></script>
+    <script src="~/frontEnd/assets/js/contact-form-script.js"></script>
+    <script src="~/frontEnd/assets/js/ajaxchimp.min.js"></script>
+    <script src="~/frontEnd/assets/js/main.js"></script>
 
-    <script>
-
-        // 啟用tooltip
-         var tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-         tooltipTriggerList.forEach(function (tooltipTriggerEl) { new bootstrap.Tooltip(tooltipTriggerEl);
-         });
-
-         // 啟用Popovers
-         const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-         const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
-
-
-        $(document).ready(function() {
-                  // 讀取 localStorage 中的 cartItemCount
-        var cartItemCount = localStorage.getItem('cartItemCount');
-
-        // 如果有購物車數量，更新頁面中的 #cartCount
-        if (cartItemCount) 
-        {
-            $('#cartCount').html(cartItemCount);
-        } 
-        else
-        {
-            $('#cartCount').html('0');  
-        }
-
-        $('#openCartBtn').click(function() {
-            $.get('/Cart/GetCart', function(result) {
-            $('#cartContent').html(result); // 顯示購物車內容
-
-            });
-        });
-    });
-
-
-
-    </script>
-
-
-
-
+    @await RenderSectionAsync("Scripts", required: false)
 
 </body>
 </html>

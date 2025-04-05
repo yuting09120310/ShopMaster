@@ -1,366 +1,353 @@
-﻿@model ShopMaster.Areas.FrontEnd.ViewModelsF.ProductsAll
-
+﻿@model ShopMaster.Areas.FrontEnd.ViewModels.ProductDetailsViewModel
 @{
-    int i = 0;
-    
+
 }
 
+<div class="container-fluid">
 
-<style>
-    /* 顯示大張圖片 */
-    .modal-content {
-        background-color: transparent;
-    }
-
-    #picBtn {
-        position: relative; /* 確保按鈕內的圖片可以定位 */
-        border: none;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover; /* 保持圖片的比例並填滿按鈕區域 */
-    }
-
-    /* 點選商品小圖片預設狀態下，按鈕完全不透明 */
-    .list-group-item {
-        transition: opacity 0.3s ease;
-        opacity: 1;
-    }
-
-        /* 當按鈕被點擊（active）時，讓其變為半透明 */
-        .list-group-item:active {
-            opacity: 0.5;
-        }
-
-        /* 當按鈕獲得焦點時，也保持半透明效果 */
-        .list-group-item:focus {
-            opacity: 0.5;
-        }
-
-    .inactive {
-        opacity: 0.5; /* 透明度設定為 0.5 */
-    }
-
-
-    /* 點選商品初始样式 */
-    .hover {
-        position: relative;
-        padding-bottom: 10px;
-        color: black;
-        border-radius: 10px;
-        line-height: 200px;
-        transition: transform 0.3s ease, opacity 0.3s ease; /* 添加過渡效果 */
-        opacity: 1;
-    }
-
-        /* 懸停時的浮動和半透明效果 */
-        .hover:hover {
-            transform: translateY(-8px); /* 向上浮動 */
-            opacity: 0.7; /* 半透明 */
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-    /* 以下商品明細 */
-
-    #productName {
-        font-weight: bolder;
-    }
-
-    /* 隱藏預設的 radio 按鈕 */
-    .form-check-input {
-        display: none;
-    }
-    /* 自定義圓形按鈕，使用圖片作為背景 */
-    .radio-btn .form-check-label {
-        position: relative;
-        padding-left: 50px; /* 留下空間給圖片 */
-        cursor: pointer;
-        font-size: 18px;
-        line-height: 25px;
-        color: red;
-        border: 2px solid #ccc;
-    }
-
-        .radio-btn .form-check-label.blue:before {
-            background-color: blue; /* 若指定了 blue 顏色 */
-        }
-    /* 當選中後，圓形變為半透明 */
-    .form-check-input:checked {
-        background-color: rgba(240, 250, 186, 0.5); /* 選中後變成半透明紅色 */
-        /*  border-color: rgba(255, 0, 0, 0.5); */ /* 邊框顏色也變半透明 */
-    }
-
-    #purchase {
-        width: 110px;
-        height: 110px;
-        border-radius: 50%;
-    }
-
-    #describe {
-        border-radius: 0.375rem;
-        border: 1px solid lightgray;
-        padding: 10px;
-    }
-</style>
-
-
-<div class="container" style="padding-top: 115px">
-    <div class="row mt-5">
-
-
-        @* 商品照片 *@
-        <div class="col-md-1 col-2">
-
-            <div class="list-group ">
-
-                @foreach (var p in Model.ProductDetails)
-                {
-                    <button type="button" class="list-group-item list-group-item-action btn btn-lg mb-2" id="picBtn" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="@Model.ProductDetails.IndexOf(p)">
-                        <img src="@p.ProductImage" class="d-block w-100" alt="..." id="pic0">
-                    </button>
-
-                }
+    <div class="page-title-area">
+        <div class="container">
+            <div class="page-title-content">
+                <h2>@Model.Product.Name</h2>
+                <ul>
+                    <li><a href="index.html">首頁</a></li>
+                    <li>商品資訊</li>
+                </ul>
             </div>
-
         </div>
+    </div>
 
+    <section class="product-details-area pt-100 pb-70">
+        <div class="container">
+            <div class="products-details-image-slider owl-carousel owl-theme owl-loaded owl-drag">
 
-        <div class="col-md-5 col-10" style="padding-left: 0px;padding-right: 0px">
-
-            <div id="carouselExampleCaptions" class="carousel slide ">
-                <div class="carousel-inner">
-
-                    @foreach (var p in Model.ProductDetails)
-                    {
-                        @foreach (var img in p.ProductImages)
+                <div class="owl-stage-outer">
+                    <div class="owl-stage" style="transform: translate3d(-1326px, 0px, 0px); transition: 0.25s; width: 4420px;">
+                        
+                        @foreach (var image in Model.Product.ProductImages)
                         {
-
-                            <div class=" btn carousel-item @(Model.ProductDetails.IndexOf(p) == 0 ? "active" : "") py-0 px-0" style="border:none" data-bs-toggle="modal" data-bs-target="#modal-@img.Id" id="picBigBtn">
-                                <img src="@img.ImageUrl" class="d-block w-100" alt="..." id="pic" style="padding:10px">
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h5></h5>
-                                    <p></p>
-                                </div>
-                            </div>
-
-                            <div class="modal fade" id="modal-@img.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content" style="border:none">
-                                        <div class="modal-header" style="border:none">
-
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <img src="@img.ImageUrl" class="d-block w-100" alt="...">
-                                        </div>
-
-                                    </div>
+                            <div class="owl-item" style="width: 412px; margin-right: 30px;">
+                                <div class="image">
+                                    <img src="@image.ImageUrl" alt="product image">
                                 </div>
                             </div>
                         }
-                    }
+
+
+                    </div>
+                </div><div class="owl-nav"><button type="button" role="presentation" class="owl-prev"><i class="flaticon-left"></i></button><button type="button" role="presentation" class="owl-next"><i class="flaticon-right-arrow"></i></button></div><div class="owl-dots disabled"></div>
+            </div>
+
+            <div class="products-details-desc">
+                <h3>@Model.Product.Name</h3>
+
+                <div class="price">
+                    <span class="new-price">$@Model.Product.Price</span>
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-                    <span class="" aria-hidden="true"><i class="bi bi-circle-fill " style="color:black"></i></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-                    <span class="" aria-hidden="true"><i class="bi bi-circle-fill" style="color:black"></i></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
+
+                <div class="products-review">
+                    <div class="rating">
+                        <i class="bx bx-star"></i>
+                        <i class="bx bx-star"></i>
+                        <i class="bx bx-star"></i>
+                        <i class="bx bx-star"></i>
+                        <i class="bx bx-star"></i>
+                    </div>
+                    <a class="rating-count">3 reviews</a>
+                </div>
+
+                <ul class="products-info">
+                    <li><span>庫存數量:</span> <a>@Model.Product.Stock (個)</a></li>
+                </ul>
+
+                <div class="products-size-wrapper">
+                    <span>顏色:</span>
+
+                    <ul>
+                        <li><a>黑色</a></li>
+                        <li><a>灰色</a></li>
+                        <li><a>金色</a></li>
+                        <li><a>白色</a></li>
+                    </ul>
+                </div>
+
+                <div class="products-add-to-cart">
+                    <div class="input-counter">
+                        <span class="minus-btn"><i class="bx bx-minus"></i></span>
+                        <input type="text" value="1">
+                        <span class="plus-btn"><i class="bx bx-plus"></i></span>
+                    </div>
+
+                    <button id="add-to-cart-btn" type="submit" class="default-btn"><i class="fas fa-cart-plus"></i> 加入購物車</button>
+                </div>
+
+            </div>
+
+            <div class="tab products-details-tab">
+                <ul class="tabs active">
+                    <li class="current">
+                        <a href="#">
+                            <div class="dot"></div> 商品描述
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            <div class="dot"></div> 商品規格
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            <div class="dot"></div> 寄送方法
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            <div class="dot"></div> 評論區
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tabs-item">
+                        <div class="products-details-tab-content">
+                            <p>
+                                @Model.Product.Description
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="tabs-item">
+                        <div class="products-details-tab-content">
+                            <p>
+                                @Model.Product.Content
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="tabs-item">
+                        <div class="products-details-tab-content">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <tbody>
+                                        <tr>
+                                            <td>Shipping</td>
+                                            <td>This item Ship to USA</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Delivery</td>
+                                            <td>
+                                                Estimated between Wednesday 07/31/2024 and Monday 08/05/2024 <br>
+                                                Will usually ship within 1 bussiness day.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tabs-item">
+                        <div class="products-details-tab-content">
+                            <div class="products-review-form">
+                                <h3>Customer Reviews</h3>
+
+                                <div class="review-title">
+                                    <div class="rating">
+                                        <i class="bx bxs-star"></i>
+                                        <i class="bx bxs-star"></i>
+                                        <i class="bx bxs-star"></i>
+                                        <i class="bx bxs-star"></i>
+                                        <i class="bx bx-star"></i>
+                                    </div>
+                                    <p>Based on 3 reviews</p>
+                                    <a href="#" class="default-btn">Write a Review</a>
+                                </div>
+
+                                <div class="review-comments">
+                                    <div class="review-item">
+                                        <div class="rating">
+                                            <i class="bx bxs-star"></i>
+                                            <i class="bx bxs-star"></i>
+                                            <i class="bx bxs-star"></i>
+                                            <i class="bx bxs-star"></i>
+                                            <i class="bx bx-star"></i>
+                                        </div>
+                                        <h3>Good</h3>
+                                        <span><strong>Admin</strong> on <strong>Sep 21, 2024</strong></span>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+                                    </div>
+
+                                    <div class="review-item">
+                                        <div class="rating">
+                                            <i class="bx bxs-star"></i>
+                                            <i class="bx bxs-star"></i>
+                                            <i class="bx bxs-star"></i>
+                                            <i class="bx bxs-star"></i>
+                                            <i class="bx bx-star"></i>
+                                        </div>
+                                        <h3>Good</h3>
+                                        <span><strong>Admin</strong> on <strong>Sep 21, 2024</strong></span>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+                                    </div>
+
+                                    <div class="review-item">
+                                        <div class="rating">
+                                            <i class="bx bxs-star"></i>
+                                            <i class="bx bxs-star"></i>
+                                            <i class="bx bxs-star"></i>
+                                            <i class="bx bxs-star"></i>
+                                            <i class="bx bx-star"></i>
+                                        </div>
+                                        <h3>Good</h3>
+                                        <span><strong>Admin</strong> on <strong>Sep 21, 2024</strong></span>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+                                    </div>
+                                </div>
+
+                                <div class="review-form">
+                                    <h3>Write a Review</h3>
+
+                                    <form>
+                                        <div class="row justify-content-center">
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" id="name" name="name" placeholder="Enter your name" class="form-control">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="email" id="email" name="email" placeholder="Enter your email" class="form-control">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-12 col-md-12">
+                                                <div class="form-group">
+                                                    <input type="text" id="review-title" name="review-title" placeholder="Enter your review a title" class="form-control">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-12 col-md-12">
+                                                <div class="form-group">
+                                                    <textarea name="review-body" id="review-body" cols="30" rows="6" placeholder="Write your comments here" class="form-control"></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-12 col-md-12">
+                                                <button type="submit" class="default-btn">Submit Review</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        @foreach (var d in Model.ProductDetails)
-        {
-
-            if (Model.ProductDetails.IndexOf(d) == 0)
-            {
-                @* 商品明細 *@
-                <div class="col-12 col-md-6">
-                    <form method="post">
-                        <input type="hidden" name="memberId" value="@d.Id" />
-                        <h2 id="productName" style="color:black" class="mt-3" asp-for="Name">@d.Name</h2>
-                    <p class="text-start mt-3  " style="color:black; font-size:17px; ">@d.Description</p>
-                    <P class="text-start  " style="color:black; ">@d.Price</P>
-                    <div>
-
-                        <div class="d-flex mt-5">
-                            <select class="form-select" aria-label="尺寸" style="height:38px; width:100px">
-                                <option selected>尺寸</option>
-                                <option value="1">XS</option>
-                                <option value="2">S</option>
-                                <option value="3">M</option>
-                            </select>
-                            @* 數量 *@
-
-                            <div class="input-group mb-3 ms-2 border-left-0" style="height:38px; width:110px; border-left: none;" id="count">
-                                <button class="btn" type="button" id="button-minus" style="border-color: #dee2e6; border-right: none;">-</button>
-                                <input type="text" class="form-control border-left-0" value="1" id="count-input" aria-label="Example text with button addon" aria-describedby="button-addon1" style="border-right: none; border-left: none; text-align: center">
-                                <button class="btn" type="button" id="button-plus" style="border-color: #dee2e6; border-left: none;">+</button>
-                            </div>
-
-                        </div>
-                        <div class="d-grid gap-2 justify-content-center mt-2 mb-1">
-                                <button class="btn btn-warning fw-bold add-to-cart" type="submit" id="purchase" data-id="@d.Id" data-name="@d.Name" data-price="@d.Price" data-mainimage="@d.MainImage" style="color:	white;">加入購物車</button>
-                        </div>
-                    </div>
-                    <div class="mt-4" id="describe">
-                        <p class="text-start my-0 ">
-                            @d.Content
-                        </p>
-                    </div>
-                    </form>
+        <div class="related-products">
+            <div class="container">
+                <div class="section-title">
+                    <h2>您可能感興趣...</h2>
                 </div>
-                i++;
-            }
-        }
-       
-    </div>
 
-    <section>
-        <h4 class="mt-5">你可能也喜歡</h4>
-        <div class="row mt-2">
-            @foreach (var p in Model.ProductListLove)
-            {
+                <div class="products-slides owl-carousel owl-theme owl-loaded owl-drag">
+                    <div class="owl-stage-outer">
+                        <div class="owl-stage" style="transform: translate3d(-1768px, 0px, 0px); transition: 0.25s; width: 5304px;">
+                            
+                            @foreach (var product in Model.RecommendedProducts)
+                            {
+                                <div class="owl-item" style="width: 412px; margin-right: 30px;">
+                                    <div class="single-products-box">
+                                        <div class="products-image d-flex align-items-center justify-content-center" style="height: 300px; overflow: hidden;">
 
-                <div class="col-md-3 col-sm-4 col-6 mt-3 mb-2">
-                    <a href="/Products/Details/@p.Id" class="text-decoration-none">
-                        <div class="card hover">
-                            <img src="@p.MainImage" class="card-img-top" alt="商品1">
-                            <div class="card-body">
-                                <h5 class="card-title">@p.Name</h5>
-                            </div>
+                                            <a href="@Url.Action("Details", "Products", new { id = product.Id })">
+                                                <img src="@product.MainImage" class="img-fluid w-100 h-100" style="object-fit: cover;" alt="@product.Name">
+                                                <img src="@product.MainImage" class="img-fluid w-100 h-100 position-absolute" style="object-fit: cover; top: 0; left: 0;" alt="@product.Name">
+                                            </a>
+                                        </div>
+
+                                        <div class="products-content">
+                                            <h3><a href="@Url.Action("Details", "Products", new { id = product.Id })">@product.Name</a></h3>
+                                            <div class="price">
+                                                @* @if (product.OldPrice.HasValue)
+                                                {
+                                                    <span class="old-price">$@product.OldPrice.Value</span>
+                                                } *@
+                                                <span class="new-price">$@product.Price</span>
+                                            </div>
+                                            <div class="star-rating">
+                                                <i class="bx bxs-star"></i>
+                                                <i class="bx bxs-star"></i>
+                                                <i class="bx bxs-star"></i>
+                                                <i class="bx bxs-star"></i>
+                                                <i class="bx bxs-star"></i>
+                                            </div>
+                                            <a class="add-to-cart">$@product.Price</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+
                         </div>
-                    </a>
+                    </div><div class="owl-nav"><button type="button" role="presentation" class="owl-prev"><i class="flaticon-left"></i></button><button type="button" role="presentation" class="owl-next"><i class="flaticon-right-arrow"></i></button></div><div class="owl-dots disabled"></div>
                 </div>
-            }
-
+            </div>
         </div>
     </section>
+
 </div>
 
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#add-to-cart-btn').click(function() {
+                var productId = '@Model.Product.Id';
+                var selectedColor = $('.products-size-wrapper ul li.active a').text();
+                var quantity = $('.input-counter input').val();
 
-<!-- Modal -->
+                $.ajax({
+                    url: '@Url.Action("AddCart", "Cart", new { area = "FrontEnd" })',
+                    type: 'POST',
+                    data: JSON.stringify({ productId: productId, color: selectedColor, quantity: quantity }),
+                    contentType: 'application/json; charset=utf-8',
+                    success: function(response) {
+                        alert('商品已成功加入購物車');
+                    },
+                    error: function(xhr, status, error) {
+                        alert('加入購物車時發生錯誤');
+                    }
+                });
+            });
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content" style="border:none">
-            <div class="modal-header" style="border:none">
+            // 顏色選擇邏輯
+            $('.products-size-wrapper ul li a').click(function() {
+                $('.products-size-wrapper ul li').removeClass('active');
+                $(this).parent().addClass('active');
+            });
 
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <img src="https://picsum.photos/300?=0" class="d-block w-100" alt="...">
-            </div>
+            // 數量增減邏輯
+            $('.input-counter .plus-btn').click(function() {
+                var input = $(this).siblings('input');
+                var currentValue = parseInt(input.val());
+                input.val(currentValue + 1);
+            });
 
-        </div>
-    </div>
-</div>
-
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script>
-    const carousel = document.getElementById('carouselExampleCaptions');
-    const buttons = document.querySelectorAll('.list-group .btn');
-
-    // 在輪播切換完成後更新按鈕透明度
-    carousel.addEventListener('slid.bs.carousel', function(event) {
-      // 移除所有按鈕的半透明效果
-      buttons.forEach(button => button.classList.remove('inactive'));
-
-      // 根據當前的 active 項來設置透明度
-      const activeIndex = Array.from(carousel.querySelectorAll('.carousel-item')).findIndex(item => item.classList.contains('active'));
-
-      // 將對應的按鈕設為半透明
-      buttons[activeIndex].classList.add('inactive');
-    });
-
-    // 初始化，當頁面加載時設置第一個按鈕為半透明
-    buttons[0].classList.add('inactive');
-
-
-    // 以下數字加總
-    const buttonMinus = document.getElementById('button-minus');
-    const buttonPlus = document.getElementById('button-plus');
-    const input = document.querySelector('#count input');
-
-
-
-         // 監聽減號按鈕事件
-    buttonMinus.addEventListener('click', function() {
-        let currentValue = parseInt(input.value);
-        if (!isNaN(currentValue) && currentValue > 1) {  // 保證數字不小於 1
-            input.value = currentValue - 1;
-        }
-    });
-
-    // 監聽加號按鈕事件
-    buttonPlus.addEventListener('click', function() {
-        let currentValue = parseInt(input.value);
-        if (!isNaN(currentValue)) {
-            input.value = currentValue + 1;  // 可以無限加
-        }
-    });
-    
-    $(document).ready(function() {
-        
-        // 當加入購物車的按鈕被點擊時觸發
-        $('.add-to-cart').click(function() {
-                       
-            
-            var productId = $(this).data('id');              
-            var name = $(this).data('name');  
-            var price = $(this).data('price');  
-            var mainImage = $(this).data('mainimage');  
-            
-           
-
-            $.post('/Cart/AddToCart', {
-                productId: productId,
-                name: name,
-                price: price,
-                mainImage: mainImage,
-            }, function(response) {
-                if (response.success) {
-                $('#cartCount').html(response.cartItemCount)
-                var cartItemCount = response.cartItemCount;  
-                // 存購物車數量
-                localStorage.setItem('cartItemCount', cartItemCount);
-
-                    alert('商品已加入購物車');
-
-
+            $('.input-counter .minus-btn').click(function() {
+                var input = $(this).siblings('input');
+                var currentValue = parseInt(input.val());
+                if (currentValue > 1) {
+                    input.val(currentValue - 1);
                 }
             });
-           
         });
+    </script>
+}
 
-
-    });
-
-
-
-</script>
-
-@* 參考 *@
-@* <div class="form-check radio-btn" id="colorCheckA">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefaultA" >
-                    <label class="form-check-label" for="flexRadioDefaultA" style="background-image: url('https://picsum.photos/300?=1')" ;>
-                        紅
-                    </label>                  
-
-                </div>
-                <div class="form-check radio-btn" id="colorCheckB">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefaultB">
-                    <label class="form-check-label" for="flexRadioDefaultB" style="background-image: url('https://picsum.photos/300?=2?')" ;>
-                        黑
-                    </label>
-
-                </div> *@
