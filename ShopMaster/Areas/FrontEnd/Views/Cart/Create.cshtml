@@ -27,6 +27,8 @@
 
 
                 <div class="row g-0 justify-content-center " id="cartB-@c.ProductId" >
+                   
+                    
                     <div class="col-md-4 col-3" style="padding: 10px;">
 
 
@@ -96,15 +98,13 @@
 
        
 
-                <div class="row">
-                
+                <div class="row">              
             
                     <div class="col d-flex justify-content-end mt-2">
                         <h5 class="fw-bold text-secondary me-5">合計  </h5>
                         <span class="me-4" id="cartFinally">
                             @((ViewBag.totalPrice.Values as IEnumerable<decimal>)?.Sum() ?? 0)
                         </span>
-
                     </div>
                 </div>          
             
@@ -116,8 +116,12 @@
         </div>
     </form>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+
+    
+
 
     //合計
     const finallyTotalElement = document.getElementById('cartFinally');
@@ -131,35 +135,62 @@
         const priceInput = group.querySelector('input[type=hidden]') // 隱藏的價格
         const totalPriceElement = group.querySelector('p[id^=total-price]');
         const unitPrice = parseFloat(priceInput.value)
+        const productId = input.id
+        const id = group.dataset.id
 
-        
+        var quantity = parseInt(input.value) //數量
+
+
+
          // 更新金額
-    function updateTotalPrice() {
-        const quantity = parseInt(input.value) || 1; // 確保數量為有效值
-        const totalPrice = unitPrice * quantity; // 計算總價
-        totalPriceElement.textContent = totalPrice.toFixed(2); // 更新總價顯示        
-
+        function updateTotalPrice() {
+          quantity = parseInt(input.value) || 1; // 確保數量為有效值
+          const totalPrice = unitPrice * quantity; // 計算總價
+          totalPriceElement.textContent = totalPrice.toFixed(2); // 更新總價顯示        
           finallyTotal = 0
+
         //合計
         document.querySelectorAll('[id^=cartB]').forEach(cart => {
-            const total = cart.querySelector('p[id^=total-price]');
-         
+            const total = cart.querySelector('p[id^=total-price]');         
             if (total) {
                  finallyTotal += parseFloat(total.textContent) || 0; // 確保正確累加               
             }
         });
+
          finallyTotalElement.textContent = finallyTotal.toFixed(2);
-    }
+        }
 
 
-        // 監聽減號按鈕事件
-        buttonMinus.addEventListener('click', function () {
-            let currentValue = parseInt(input.value);
-            if (!isNaN(currentValue) && currentValue > 1) { // 保證數字不小於 1
-                 input.value = currentValue - 1;
-               updateTotalPrice()
+        // 處理減號按鈕點擊
+    function handleMinusClick() {
+        let currentValue = parseInt(input.value);
+        if (!isNaN(currentValue) && currentValue > 1) {
+            input.value = currentValue - 1;
+            updateTotalPrice(); // 更新金額
+        }
+
+        // 發送 AJAX 請求
+        $.post('/Cart/Edit', {
+            productId: productId,
+            id: id,
+            quantity: quantity // 傳遞數量
+        }, function (response) {
+             const updatedItems = response.updatedItems; // 從後端獲取的最新商品數量
+           Object.keys(updatedItems).forEach(productID => {
+           const itemElement = document.querySelector(`[id^="cartB${productID}"]`);
+            if (itemElement) {
+                const quantityInput = itemElement.querySelector('[id^=count-input]');
+               
             }
         });
+
+        }).fail(function () {
+             alert('更新購物車失敗！');
+        });
+    }
+
+          
+
 
         // 監聽加號按鈕事件
         buttonPlus.addEventListener('click', function () {
@@ -169,6 +200,13 @@
              updateTotalPrice()
             }
         });
+
+        // 綁定事件，先移除再綁定，避免重複
+    buttonMinus.removeEventListener('click', handleMinusClick); // 確保移除
+    buttonMinus.addEventListener('click', handleMinusClick);
+
+
+
          updateTotalPrice()
     });
 

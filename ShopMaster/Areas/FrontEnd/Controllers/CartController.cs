@@ -32,6 +32,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         List<Cart> tempCart = new List<Cart>();
         
         Dictionary<long, long> countInputDy = new Dictionary<long, long>();
+        Dictionary<long, long> countInputEdit = new Dictionary<long, long>();
+        Dictionary<long, long> priceEdit = new Dictionary<long, long>();
         
 
         [HttpPost]
@@ -241,9 +243,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
                     //自行輸入商品數量
                     ViewBag.totalInputDictionary = countInputDy;
-                                       
 
-
+                    HttpContext.Session.Set("countInputDy", countInputDy);
 
                     var getCartTemp = tempCart.DistinctBy(p => p.ProductId).ToList();
                     // 商品金額
@@ -275,13 +276,14 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                             }
 
                             
-
                         }
 
                     }
                     
                     ViewBag.totalPrice = priceDy;
 
+                    HttpContext.Session.Set("priceDy", priceDy);
+                   
                     var productsAll = new ProductsAll
                     {
                         ProductCart = getCartTemp
@@ -311,19 +313,37 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         }
 
         // GET: CartController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id )
         {
+
             return View();
         }
 
         // POST: CartController/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        
+        public ActionResult Edit(int id, string productId, int quantity)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                int productID = int.Parse( productId.Substring(productId.Length - 1));
+
+                countInputEdit = HttpContext.Session.Get<Dictionary<long, long>>("countInputDy") ?? new Dictionary<long, long>();
+
+                if (!countInputEdit.ContainsKey(productID))
+                {
+                    countInputEdit.Add(productID, quantity);
+                }
+                else
+                {
+                    countInputEdit[productID] = quantity;
+                }
+
+                HttpContext.Session.Set("countInputDy", countInputEdit);
+                priceEdit = HttpContext.Session.Get<Dictionary<long, long>>("priceDy") ?? new Dictionary<long, long>();
+
+
+                return Json(new { success = true, message = "已更新購物車", cartItemCount = countInputDy.Values.Sum(), updatedItems = countInputEdit });
             }
             catch
             {
