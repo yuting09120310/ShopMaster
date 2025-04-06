@@ -266,7 +266,7 @@
                                     <div class="single-products-box">
                                         <div class="products-image d-flex align-items-center justify-content-center" style="height: 300px; overflow: hidden;">
 
-                                            <a href="@Url.Action("Details", "Products", new { id = product.Id })">
+                                            <a href="@Url.Action("Details", "Products", new { id = product.Id, area = "FrontEnd" })">
                                                 <img src="@product.MainImage" class="img-fluid w-100 h-100" style="object-fit: cover;" alt="@product.Name">
                                                 <img src="@product.MainImage" class="img-fluid w-100 h-100 position-absolute" style="object-fit: cover; top: 0; left: 0;" alt="@product.Name">
                                             </a>
