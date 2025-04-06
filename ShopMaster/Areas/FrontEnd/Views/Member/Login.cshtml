@@ -1,33 +1,50 @@
-﻿@*    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{}
+﻿<!-- Start Page Title -->
+<div class="page-title-area">
+    <div class="container">
+        <div class="page-title-content">
+            <h2>我的帳戶</h2>
+            <ul>
+                <li><a href="index.html">首頁</a></li>
+                <li>登入</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- End Page Title -->
+<!-- Start Login Area -->
+<section class="login-area ptb-100">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-6">
+                <div class="login-content">
+                    <h2>登入</h2>
 
-    <style>
-        #go {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;            
-        }
-    </style>
+                    <form class="login-form" method="post" action="/Member/Login">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="用戶名或電子郵件地址" id="Account" name="Account">
+                        </div>
 
-<div class="container" style="padding-top: 110px">
-        <div class="row justify-content-center mt-5">
-        
-            <div class="col-4">
-            <form method="post" action="/Member/Login">
-                <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="Account" name="Account" placeholder="name@example.com">
-                    <label for="floatingInput">信箱</label>
+                        <div class="form-group">
+                            <input type="password" class="form-control" placeholder="密碼" id="Password" name="Password">
+                        </div>
+
+                        <button type="submit" class="default-btn">登入</button>
+
+                        <a href="#" class="forgot-password">忘記密碼？</a>
+                    </form>
                 </div>
-                <div class="form-floating">
-                    <input type="password" class="form-control" id="Password" name="Password" placeholder="Password">
-                    <label for="floatingPassword">密碼</label>
+            </div>
+
+            <div class="col-lg-6 col-md-6">
+                <div class="new-customer-content">
+                    <h2>新客戶</h2>
+
+                    <span>創建帳戶</span>
+                    <p>在我們的商店註冊一個免費帳戶。註冊快速且簡單。這使您能夠從我們的商店訂購。要開始購物，請點擊註冊。</p>
+                    <a href="signup.html" class="optional-btn">創建帳戶</a>
                 </div>
-                <div id="goDiv" class="d-flex justify-content-center mt-4">
-                    <button type="submit" class="btn btn-warning text-center fw-bold" id="go">GO !</button>
-                </div>
-            </form>
             </div>
         </div>
     </div>
-
+</section>
+<!-- End Login Area -->

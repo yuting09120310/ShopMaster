@@ -86,14 +86,14 @@
                         <div class="single-products-box">
                             <!-- 圖片容器固定高度，並置中 -->
                             <div class="products-image d-flex align-items-center justify-content-center" style="height: 300px; overflow: hidden;">
-                                <a href="Products/Details/@item.Id" class="position-relative w-100 h-100">
+                                <a asp-area="FrontEnd" asp-action="Details" asp-controller="Products" asp-route-id="@item.Id" class="position-relative w-100 h-100">
                                     <img src="@item.MainImage" class="main-image img-fluid w-100 h-100" style="object-fit: cover;" alt="image">
                                     <img src="@item.MainImage" class="hover-image img-fluid w-100 h-100 position-absolute" style="object-fit: cover; top: 0; left: 0;" alt="image">
                                 </a>
                             </div>
 
                             <div class="products-content">
-                                <h3><a href="Products/Details/@item.Id">@item.Name</a></h3>
+                                <h3><a asp-area="FrontEnd" asp-action="Details" asp-controller="Products" asp-route-id="@item.Id">@item.Name</a></h3>
                                 <div class="price">
                                     <span class="new-price">$@item.Price</span>
                                 </div>
@@ -147,14 +147,14 @@
                         <div class="single-products-box">
                             <!-- 圖片容器固定高度，並置中 -->
                             <div class="products-image d-flex align-items-center justify-content-center" style="height: 300px; overflow: hidden;">
-                                <a href="Products/Details/@item.Id" class="position-relative w-100 h-100">
+                                <a asp-area="FrontEnd" asp-action="Details" asp-controller="Products" asp-route-id="@item.Id" class="position-relative w-100 h-100">
                                     <img src="@item.MainImage" class="main-image img-fluid w-100 h-100" style="object-fit: cover;" alt="image">
                                     <img src="@item.MainImage" class="hover-image img-fluid w-100 h-100 position-absolute" style="object-fit: cover; top: 0; left: 0;" alt="image">
                                 </a>
                             </div>
 
                             <div class="products-content">
-                                <h3><a href="Products/Details/@item.Id">@item.Name</a></h3>
+                                <h3><a asp-area="FrontEnd" asp-action="Details" asp-controller="Products" asp-route-id="@item.Id">@item.Name</a></h3>
                                 <div class="price">
                                     <span class="new-price">$@item.Price</span>
                                 </div>

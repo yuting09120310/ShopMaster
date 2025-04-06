@@ -1,62 +1,44 @@
-﻿@* @model ShopMaster.Areas.FrontEnd.ViewModelsF.ProductsAll
-@{
-    ViewData["Title"] = "會員中心";
-}
-
-<style>
-
-
-    #orderHistory{
-        width: 90px;
-        height: 90px;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center
-    }
-
-    #edit {
-        width: 122px;
-        height: 122px;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center
-    }
-
-</style>
-
-<h2>會員中心</h2>
-
-<section class="container my-5" style="padding-top: 120px">
-    <div class="  row d-flex text-end fs-4 mb-3"><div class="col ml-auto"><a href="/Member/Logout" style="color: inherit; text-decoration: none;"><i class="bi bi-box-arrow-right  "></i></a></div></div>
-    <div class="row">
-        <div class="col-md-6 mb-4">
-            <div class="card">
-                <div class="card-header text-secondary fw-bold " style="background-color:transparent">
-                    <i class="fas fa-user"></i> 個人資料
-                </div>
-                <div class="card-body">
-                    <p>姓名: @Model.Member.Name</p>
-                    <p>Email: @Model.Member.Email</p>
-                    <p>電話: @Model.Member.Phone</p>
-                    <a href="@Url.Action("EditProfile", "Member", new { area = "FrontEnd" })" class="btn btn-warning text-white fw-bold" id="edit">編輯個人資料</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 mb-4">
-            <div class="card">
-                <div class="card-header  text-secondary fw-bold" style="background-color:transparent">
-                    <i class="fas fa-shopping-cart"></i> 訂單
-                </div>
-                <div class="card-body">
-                    <p>查看您的訂單歷史記錄和狀態。</p>
-                    <div id="orderHistory" style="text-align: center">
-                        <a href="@Url.Action("Index", "Order", new { area = "FrontEnd" })" class="btn btn-warning text-white border  rounded-xl fw-bold" id="orderHistory">查看訂單</a>
-                    </div>
-                </div>
+﻿<div class="container-fluid">
+    <div class="page-title-area">
+        <div class="container">
+            <div class="page-title-content">
+                <h2>會員中心</h2>
+                <ul>
+                    <li><a href="index.html">首頁</a></li>
+                    <li>商品資訊</li>
+                </ul>
             </div>
         </div>
     </div>
-   
-</section> *@
+
+
+    <div class="row justify-content-center pt-100 pb-100">
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="single-categories-box">
+                <img src="~/frontend/assets/img/member/img1.jpg" alt="image">
+
+                <div class="content">
+                    <span>Manage Your Profile</span>
+                    <h3>會員資料</h3>
+                    <a href="/Member/EditProfile" class="default-btn">立即管理</a>
+                </div>
+                <a href="/Member/EditProfile" class="link-btn"></a>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="single-categories-box">
+                <img src="~/frontend/assets/img/member/img2.jpg" alt="image">
+
+                <div class="content">
+                    <span>Manage Orders</span>
+                    <h3>訂單管理</h3>
+                    <a href="products-right-sidebar.html" class="default-btn">立即管理</a>
+                </div>
+                <a href="products-right-sidebar.html" class="link-btn"></a>
+            </div>
+        </div>
+    </div>
+
+
+</div>

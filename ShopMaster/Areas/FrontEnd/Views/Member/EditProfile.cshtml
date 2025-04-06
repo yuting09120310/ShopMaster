@@ -1,69 +1,69 @@
-﻿@* @model ShopMaster.Areas.FrontEnd.ViewModelsF.ProductsAll
+﻿@model ShopMaster.Areas.FrontEnd.ViewModels.EditProfileViewModel
 
-@{
-    ViewData["Title"] = "編輯個人資料";
-    Layout = "~/Areas/FrontEnd/Views/Shared/_Layout.cshtml";
-}
-<style>
+<!-- Start Page Title -->
+<div class="page-title-area">
+    <div class="container">
+        <div class="page-title-content">
+            <h2>編輯個人資料</h2>
+            <ul>
+                <li><a href="/Home/Index">首頁</a></li>
+                <li>編輯個人資料</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- End Page Title -->
+<!-- Start Edit Profile Area -->
+<section class="edit-profile-area ptb-100">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="edit-profile-content">
+                    <h2>編輯個人資料</h2>
 
-
-    #editFinish, #cancle {
-        width: 90px;
-        height: 90px;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center
-    }
-
-</style>
-
-<h2>編輯個人資料</h2>
-
-<div class="container mt-4" style="padding-top: 120px">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header fw-bold text-secondary" style="background-color:transparent">
-                    <i class="fas fa-user-edit"></i> 編輯個人資料
-                </div>
-                <div class="card-body">
-                    <form asp-action="EditProfile" method="post">
-                        <div class="form-group mb-2">
-                            <label for="Name ">姓名</label>
-                            <input type="text" class="form-control my-2" id="Name" name="Name" value="@Model.Member.Name" required />
+                    <form asp-controller="Member" asp-action="EditProfile" asp-area="frontend" method="post" enctype="multipart/form-data" class="edit-profile-form">
+                        <input id="Id" name="Id" value="@Model.Id" hidden />
+                        <div class="form-group">
+                            <label for="Name">姓名</label>
+                            <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" required>
                         </div>
-                        <div class="form-group mb-2">
-                            <label for="Email">Email</label>
-                            <input type="email" class="form-control my-2" id="Email" name="Email" value="@Model.Member.Email" required />
+
+                        <div class="form-group">
+                            <label for="Email">電子郵件</label>
+                            <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" required>
                         </div>
-                        <div class="form-group mb-2">
-                            <label for="Phone">電話</label>
-                            <input type="text" class="form-control my-2" id="Phone" name="Phone" value="@Model.Member.Phone" />
+
+                        <div class="form-group">
+                            <label for="Phone">電話號碼</label>
+                            <input type="text" class="form-control" id="Phone" name="Phone" value="@Model.Phone">
                         </div>
-                        <div class="form-group mb-2">
+
+                        <div class="form-group">
                             <label for="Address">地址</label>
-                            <input type="text" class="form-control my-2" id="Address" name="Address" value="@Model.Member.Address" />
+                            <input type="text" class="form-control" id="Address" name="Address" value="@Model.Address">
                         </div>
-                        <div class="d-flex mt-3 justify-content-between">
-                        <button type="submit" class="btn btn-warning fw-bold" id="editFinish" style="color:white">保存變更</button>
-                            <a href="@Url.Action("Profile", "Member")" class="btn btn-secondary fw-bold ms-3" id="cancle" style="color:white">取消</a>
+
+                        <div class="form-group">
+                            <label for="Birthday">生日</label>
+                            <input type="date" class="form-control" id="Birthday" name="Birthday" value="@Model.Birthday?.ToString("yyyy-MM-dd")">
                         </div>
+
+                        <div class="form-group mb-5">
+                            <label for="Avatar">頭像</label>
+                            @if (!string.IsNullOrEmpty(Model.Avatar))
+                            {
+                                <div class="mb-3">
+                                    <img src="@Model.Avatar" alt="Avatar" class="img-thumbnail" style="max-width: 150px;">
+                                </div>
+                            }
+                            <input type="file" class="form-control" id="AvatarFile" name="AvatarFile">
+                        </div>
+
+                        <button type="submit" class="default-btn">保存變更</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<style>
-    @@media (max-width: 767.98px) {
-        .card
-
-    {
-        margin-bottom: 20px;
-    }
-
-    }
-</style>
- *@
+</section>
+<!-- End Edit Profile Area -->
