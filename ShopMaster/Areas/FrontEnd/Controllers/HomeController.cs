@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using ShopMaster.Areas.BackEnd.Controllers;
 using ShopMaster.Areas.BackEnd.Models;
 using ShopMaster.Areas.FrontEnd.Models;
+using ShopMaster.Areas.FrontEnd.ViewModels;
 using ErrorViewModel = ShopMaster.Areas.FrontEnd.Models.ErrorViewModel;
 
 namespace ShopMaster.Areas.FrontEnd.Controllers
@@ -28,62 +29,30 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         }
 
         
-        public async Task<IActionResult> Index(int? id)
+        public IActionResult Index()
         {
-            //var product = await _db.Products.ToListAsync();
-            //var productType = await _db.ProductTypes.ToListAsync();            
+            HomeViewModel viewModel = new HomeViewModel();
 
-            ////取產品資料
-            //var productList = product.Join(productType,
-            //                            p => p.TypeId,
-            //                            pt => pt.Id,
-            //                            (p, pt) => new ViewModelsF.Products
-            //                            {
-            //                                TypeId = pt.Id,
-            //                                Id = p.Id,
-            //                                Name = p.Name,
-            //                                Price = p.Price,
-            //                                MainImage = p.MainImage,
-            //                                TypeName = pt.Name
+            // 抓取賣得最好的6個產品
+            viewModel.HotProducts = _db.OrderDetails
+                .GroupBy(od => od.ProductId)
+                .Select(g => new
+                {
+                    Product = g.Key,
+                    TotalQuantity = g.Sum(od => od.Quantity)
+                })
+                .OrderByDescending(g => g.TotalQuantity)
+                .Take(6)
+                .Join(_db.Products, g => g.Product, p => p.Id, (g, p) => p)
+                .ToList();
 
+            // 抓取最新上架的6個產品
+            viewModel.NewsProducts = _db.Products
+                .OrderByDescending(p => p.Id) // 假設 Id 表示產品的上架時間
+                .Take(6)
+                .ToList();
 
-            //                            }).GroupBy(p => p.TypeId ?? 0)
-            //                              .ToList();
-
-            //// 點選下拉選單商品
-            //List<Products> productListLove = new List<Products>();
-            //if (id.HasValue)
-            //{
-            //     productListLove = product.Join(productType,
-            //                                p => p.TypeId,
-            //                                pt => pt.Id,
-            //                                (p, pt) => new ViewModelsF.Products
-            //                                {
-            //                                    TypeId = pt.Id,
-            //                                    Id = p.Id,
-            //                                    Name = p.Name,
-            //                                    Price = p.Price,
-            //                                    MainImage = p.MainImage,
-            //                                    TypeName = pt.Name
-
-
-            //                                }).Where(x => x.TypeId == id)
-            //                                  .ToList();
-
-            //}
-
-
-            //var productsAll = new ProductsAll
-            //{
-            //    ProductList = productList,
-            //    ProductListLove = productListLove,               
-            //};
-
-
-            //ViewData["TypeID"] = id;  
-
-            //return View(productsAll);
-            return View();
+            return View(viewModel);
         }
     }
 }

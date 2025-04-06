@@ -1,4 +1,4 @@
-﻿@* @model  ShopMaster.Areas.FrontEnd.ViewModelsF.ProductsAll
+﻿@model  ShopMaster.Areas.FrontEnd.ViewModels.HomeViewModel
 @{
     ViewData["Title"] = "首頁";
     var typeId = ViewData["TypeID"];
@@ -7,80 +7,171 @@
 @await Html.PartialAsync("_Banner")
 
 
-<div class="container-fluid">
+<!-- Start Categories Banner Area -->
+<section class="categories-banner-area pt-100 pb-70">
+    <div class="container-fluid">
+        <div class="section-title">
+            <h2>商品類別</h2>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="single-categories-box">
+                    <img src="~/frontend/assets/img/categories/img1.jpg" alt="image">
 
-    <!-- Start Categories Banner Area -->
-    <section class="categories-banner-area pt-100 pb-70">
-        <div class="container-fluid">
-            <div class="row justify-content-center">
-                @{
-                    foreach (var group in Model.ProductList){
-                        <div class="col-lg-3 col-md-6 col-sm-6">
-                            <div class="single-categories-box">
-                                <img src="~/frontEnd/assets/img/categories/img1.jpg" alt="image">
+                    <div class="content text-white">
+                        <span>Don’t Miss Today</span>
+                        <h3>50% OFF</h3>
+                        <a href="products-right-sidebar.html" class="default-btn">Discover Now</a>
+                    </div>
+                    <a href="products-right-sidebar.html" class="link-btn"></a>
+                </div>
+            </div>
 
-                                <div class="content text-white">
-                                    <h3>@group.FirstOrDefault().TypeName</h3>
-                                    <a href="products-right-sidebar.html" class="default-btn">Discover Now</a>
-                                </div>
-                                <a href="products-right-sidebar.html" class="link-btn"></a>
-                            </div>
-                        </div>
-                    }
-                    
-                }
-            
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="single-categories-box">
+                    <img src="~/frontend/assets/img/categories/img2.jpg" alt="image">
+
+                    <div class="content">
+                        <span>New Collection</span>
+                        <h3>Need Now</h3>
+                        <a href="products-right-sidebar.html" class="default-btn">Discover Now</a>
+                    </div>
+                    <a href="products-right-sidebar.html" class="link-btn"></a>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="single-categories-box">
+                    <img src="~/frontend/assets/img/categories/img3.jpg" alt="image">
+
+                    <div class="content">
+                        <span>Your Looks</span>
+                        <h3>Must Haves</h3>
+                        <a href="products-right-sidebar.html" class="default-btn">Discover Now</a>
+                    </div>
+                    <a href="products-right-sidebar.html" class="link-btn"></a>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="single-categories-box">
+                    <img src="~/frontend/assets/img/categories/img4.jpg" alt="image">
+
+                    <div class="content text-white">
+                        <span>Take 20% OFF</span>
+                        <h3>Winter Spring!</h3>
+                        <a href="products-right-sidebar.html" class="default-btn">Discover Now</a>
+                    </div>
+                    <a href="products-right-sidebar.html" class="link-btn"></a>
+                </div>
             </div>
         </div>
-    </section>
-    <!-- End Categories Banner Area -->
+    </div>
+</section>
+<!-- End Categories Banner Area -->
 
-
-    <!-- Start Products Area -->
-    <section class="products-area pb-70">
-        <div class="container">
-
-             @{
-                 foreach (var group in Model.ProductList)
-                 {
-                    <div class="section-title">
-                        <h2>@group.FirstOrDefault().TypeName</h2>
-                    </div>
-
-                    <div class="row justify-content-center">
-                        @foreach(var a in group)
-                        {
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="single-products-box">
-                                    <div class="products-image">
-                                        <a href="/Products/Details/@a.Id">
-                                            <img src="@Url.Content(a.MainImage)" class="main-image" alt="image">
-                                            <img src="@Url.Content(a.MainImage)" class="hover-image" alt="image">
-                                        </a>
-                                    </div>
-
-                                    <div class="products-content">
-                                        <h3><a href="/Products/Details/@a.Id">@a.Name</a></h3>
-                                        <div class="price">
-                                            <span class="new-price">$@a.Price.ToString("N0")</span>
-                                        </div>
-                                        <div class="star-rating">
-                                            <i class='bx bxs-star'></i>
-                                            <i class='bx bxs-star'></i>
-                                            <i class='bx bxs-star'></i>
-                                            <i class='bx bxs-star'></i>
-                                            <i class='bx bxs-star'></i>
-                                        </div>
-                                        <a href="cart.html" class="add-to-cart">Add to Cart</a>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                 }
-             }
+<!-- Start Products Area -->
+<section class="products-area pb-70">
+    <div class="container">
+        <div class="section-title">
+            <span class="sub-title">歡迎參考</span>
+            <h2>最新商品</h2>
         </div>
-    </section>
-    <!-- End Products Area -->
 
-</div> *@
+        <div class="row justify-content-center">
+            @{
+                @foreach (var item in Model.NewsProducts)
+                {
+                    <div class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="single-products-box">
+                            <!-- 圖片容器固定高度，並置中 -->
+                            <div class="products-image d-flex align-items-center justify-content-center" style="height: 300px; overflow: hidden;">
+                                <a href="Products/Details/@item.Id" class="position-relative w-100 h-100">
+                                    <img src="@item.MainImage" class="main-image img-fluid w-100 h-100" style="object-fit: cover;" alt="image">
+                                    <img src="@item.MainImage" class="hover-image img-fluid w-100 h-100 position-absolute" style="object-fit: cover; top: 0; left: 0;" alt="image">
+                                </a>
+                            </div>
+
+                            <div class="products-content">
+                                <h3><a href="Products/Details/@item.Id">@item.Name</a></h3>
+                                <div class="price">
+                                    <span class="new-price">$@item.Price</span>
+                                </div>
+                                <div class="star-rating">
+                                    <i class='bx bxs-star'></i>
+                                    <i class='bx bxs-star'></i>
+                                    <i class='bx bxs-star'></i>
+                                    <i class='bx bxs-star'></i>
+                                    <i class='bx bxs-star'></i>
+                                </div>
+                                <a class="add-to-cart">$@item.Price</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            }
+
+        </div>
+    </div>
+</section>
+<!-- End Products Area -->
+
+
+<!-- Start Offer Area -->
+<section class="offer-area bg-image1 ptb-100 jarallax" data-jarallax='{"speed": 0.3}'>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-6">
+                <div class="offer-content">
+                    <span class="sub-title">Best Sellers!</span>
+                    <h2>熱銷產品</h2>
+                    <p>立即搶購，數量有限</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Offer Area -->
+
+
+<!-- Start Products Area -->
+<section class="products-area pt-100 pb-70">
+    <div class="container">
+
+        <div class="row justify-content-center">
+            @{
+                @foreach (var item in Model.HotProducts)
+                {
+                    <div class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="single-products-box">
+                            <!-- 圖片容器固定高度，並置中 -->
+                            <div class="products-image d-flex align-items-center justify-content-center" style="height: 300px; overflow: hidden;">
+                                <a href="Products/Details/@item.Id" class="position-relative w-100 h-100">
+                                    <img src="@item.MainImage" class="main-image img-fluid w-100 h-100" style="object-fit: cover;" alt="image">
+                                    <img src="@item.MainImage" class="hover-image img-fluid w-100 h-100 position-absolute" style="object-fit: cover; top: 0; left: 0;" alt="image">
+                                </a>
+                            </div>
+
+                            <div class="products-content">
+                                <h3><a href="Products/Details/@item.Id">@item.Name</a></h3>
+                                <div class="price">
+                                    <span class="new-price">$@item.Price</span>
+                                </div>
+                                <div class="star-rating">
+                                    <i class='bx bxs-star'></i>
+                                    <i class='bx bxs-star'></i>
+                                    <i class='bx bxs-star'></i>
+                                    <i class='bx bxs-star'></i>
+                                    <i class='bx bxs-star'></i>
+                                </div>
+                                <a class="add-to-cart">$@item.Price</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</section>
+<!-- End Products Area -->
