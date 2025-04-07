@@ -91,7 +91,7 @@
 
                             <div class="option-item">
                                 <div class="cart-btn">
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#shoppingCartModal"><i class="bx bx-shopping-bag" style="font-size: 24px;"></i><span>3</span></a>
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#shoppingCartModal" onclick="loadCartItems()"><i class="bx bx-shopping-bag" style="font-size: 24px;"></i><span>3</span></a>
                                 </div>
                             </div>
 
@@ -194,6 +194,10 @@
 
 
     <!-- Start Shopping Cart Modal -->
+    @* @await Html.PartialAsync("_Cart") *@
+    <!-- End Shopping Cart Modal -->
+
+    <!-- Start Shopping Cart Modal -->
     <div class="modal right fade shoppingCartModal" id="shoppingCartModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -202,77 +206,17 @@
                 </button>
 
                 <div class="modal-body">
-                    <h3>My Cart (3)</h3>
+                    <h3>購物車</h3>
 
-                    <div class="products-cart-content">
-                        <div class="products-cart">
-                            <div class="products-image">
-                                <a href="#"><img src="~/frontEnd/assets/img/products/img1.jpg" alt="image"></a>
-                            </div>
-
-                            <div class="products-content">
-                                <h3><a href="#">Long Sleeve Leopard T-Shirt</a></h3>
-                                <span>Blue / XS</span>
-                                <div class="products-price">
-                                    <span>1</span>
-                                    <span>x</span>
-                                    <span class="price">$250.00</span>
-                                </div>
-                                <a href="#" class="remove-btn"><i class='bx bx-trash'></i></a>
-                            </div>
-                        </div>
-
-                        <div class="products-cart">
-                            <div class="products-image">
-                                <a href="#"><img src="~/frontEnd/assets/img/products/img2.jpg" alt="image"></a>
-                            </div>
-
-                            <div class="products-content">
-                                <h3><a href="#">Causal V-Neck Soft Raglan</a></h3>
-                                <span>Blue / XS</span>
-                                <div class="products-price">
-                                    <span>1</span>
-                                    <span>x</span>
-                                    <span class="price">$200.00</span>
-                                </div>
-                                <a href="#" class="remove-btn"><i class='bx bx-trash'></i></a>
-                            </div>
-                        </div>
-
-                        <div class="products-cart">
-                            <div class="products-image">
-                                <a href="#"><img src="~/frontEnd/assets/img/products/img3.jpg" alt="image"></a>
-                            </div>
-
-                            <div class="products-content">
-                                <h3><a href="#">Hanes Men's Pullover</a></h3>
-                                <span>Blue / XS</span>
-                                <div class="products-price">
-                                    <span>1</span>
-                                    <span>x</span>
-                                    <span class="price">$200.00</span>
-                                </div>
-                                <a href="#" class="remove-btn"><i class='bx bx-trash'></i></a>
-                            </div>
-                        </div>
+                    <div class="products-cart-content" id="cartItemsContainer">
+                        <!-- 購物車項目將由 AJAX 動態載入 -->
                     </div>
-
-                    <div class="products-cart-subtotal">
-                        <span>Subtotal</span>
-
-                        <span class="subtotal">$650.00</span>
-                    </div>
-
-                    <div class="products-cart-btn">
-                        <a href="#" class="default-btn">Proceed to Checkout</a>
-                        <a href="#" class="optional-btn">View Shopping Cart</a>
-                    </div>
+                    
                 </div>
             </div>
         </div>
     </div>
     <!-- End Shopping Cart Modal -->
-
 
     <!-- Start Footer Area -->
     @await Html.PartialAsync("_Footer")
@@ -300,6 +244,21 @@
     <script src="~/frontEnd/assets/js/main.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        function loadCartItems() {
+            $.ajax({
+                url: '@Url.Action("GetCartPartial", "Cart", new { area = "FrontEnd" })',
+                type: 'GET',
+                success: function (data) {
+                    $('#cartItemsContainer').html(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error loading cart items:', error);
+                }
+            });
+        }
+    </script>
 
 </body>
 </html>

@@ -43,5 +43,16 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
             return Ok("Product added to cart successfully.");
         }
+
+
+        [HttpGet]
+        public ActionResult GetCartPartial()
+        {
+            string? memberId = HttpContext.Session.GetString("MemberId");
+
+            var cartItems = _db.Carts.Where(c => c.MemberId == Convert.ToInt64(memberId)).ToList();
+
+            return PartialView("_CartPartial", cartItems);
+        }
     }
 }
