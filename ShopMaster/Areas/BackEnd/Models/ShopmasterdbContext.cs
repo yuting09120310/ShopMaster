@@ -44,6 +44,8 @@ public partial class shopmasterdbContext : DbContext
 
     public virtual DbSet<ProductImage> ProductImages { get; set; }
 
+    public virtual DbSet<ProductSpec> ProductSpecs { get; set; }
+
     public virtual DbSet<ProductType> ProductTypes { get; set; }
 
     public virtual DbSet<Rule> Rules { get; set; }
@@ -446,6 +448,23 @@ public partial class shopmasterdbContext : DbContext
             entity.HasOne(d => d.Product).WithMany(p => p.ProductImages)
                 .HasForeignKey(d => d.ProductId)
                 .HasConstraintName("ProductImage_ibfk_1");
+        });
+
+        modelBuilder.Entity<ProductSpec>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("ProductSpec");
+
+            entity.HasIndex(e => e.ProductId, "ProductSpec_ibfk_1");
+
+            entity.Property(e => e.Id).HasColumnType("bigint(11)");
+            entity.Property(e => e.ProductId).HasColumnType("bigint(11)");
+            entity.Property(e => e.SpecText).HasMaxLength(200);
+
+            entity.HasOne(d => d.Product).WithMany(p => p.ProductSpecs)
+                .HasForeignKey(d => d.ProductId)
+                .HasConstraintName("ProductSpec_ibfk_1");
         });
 
         modelBuilder.Entity<ProductType>(entity =>

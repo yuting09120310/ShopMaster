@@ -28,16 +28,20 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 .Where(p => p.Id == id)
                 .FirstOrDefault();
 
+            if (product == null)
+            {
+                return NotFound();
+            }
+
             var productimg = _db.ProductImages
                 .Where(p => p.ProductId == id)
                 .ToList();
 
             product.ProductImages = productimg;
 
-            if (product == null)
-            {
-                return NotFound();
-            }
+            product.ProductSpecs = _db.ProductSpecs
+                .Where(p => p.ProductId == id)
+                .ToList();
 
             // 推薦同類型商品（排除自己）
             var recommended = _db.Products

@@ -18,31 +18,57 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         public class AddCartRequest
         {
             public long ProductId { get; set; }
-            public string Color { get; set; }
+            public string SpecId { get; set; }
             public int Quantity { get; set; }
         }
 
 
         [HttpPost]
-        public ActionResult AddCart([FromBody] AddCartRequest request)
+        public ActionResult AddCart(long productId, string specId, int quantity)
         {
-            if (request == null || request.ProductId <= 0 || request.Quantity <= 0)
+            if (productId <= 0 || string.IsNullOrEmpty(specId) || quantity <= 0)
             {
-                return BadRequest("Invalid product ID, color, or quantity.");
+                return BadRequest("Invalid product ID, spec ID, or quantity.");
             }
 
-            // 假設有一個 Cart 物件來表示購物車
+            // 確認會員是否已登入
+            string? memberId = HttpContext.Session.GetString("MemberId");
+            if (string.IsNullOrEmpty(memberId))
+            {
+                return Unauthorized("請先登入會員。");
+            }
+
+            // 檢查商品是否存在
+            var product = _db.Products.Include(p => p.ProductSpecs)
+                                      .FirstOrDefault(p => p.Id == productId);
+            if (product == null)
+            {
+                return NotFound("商品不存在。");
+            }
+
+            // 檢查規格是否存在
+            var spec = product.ProductSpecs.FirstOrDefault(s => s.Id.ToString() == specId);
+            if (spec == null)
+            {
+                return NotFound("商品規格不存在。");
+            }
+
+            // 新增購物車項目
             var cart = new Cart
             {
-                ProductId = request.ProductId,
+                MemberId = Convert.ToInt64(memberId),
+                ProductId = productId,
+                ProductSpec = spec.Id.ToString(),
+                Quantity = quantity
             };
 
-            // 將購物車項目添加到數據庫
             _db.Carts.Add(cart);
             _db.SaveChanges();
 
-            return Ok("Product added to cart successfully.");
+            return Ok(new { message = "商品已成功加入購物車。" });
         }
+
+
 
 
         [HttpGet]

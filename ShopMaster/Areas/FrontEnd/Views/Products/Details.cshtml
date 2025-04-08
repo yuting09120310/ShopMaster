@@ -23,7 +23,7 @@
 
                 <div class="owl-stage-outer">
                     <div class="owl-stage" style="transform: translate3d(-1326px, 0px, 0px); transition: 0.25s; width: 4420px;">
-                        
+
                         @foreach (var image in Model.Product.ProductImages)
                         {
                             <div class="owl-item" style="width: 412px; margin-right: 30px;">
@@ -64,10 +64,12 @@
                     <span>顏色:</span>
 
                     <ul>
-                        <li><a>黑色</a></li>
-                        <li><a>灰色</a></li>
-                        <li><a>金色</a></li>
-                        <li><a>白色</a></li>
+                        @foreach (var spec in Model.Product.ProductSpecs)
+                        {
+                            <li data-spec-id="@spec.Id">
+                                <a href="javascript:void(0);">@spec.SpecText</a>
+                            </li>
+                        }
                     </ul>
                 </div>
 
@@ -307,40 +309,53 @@
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#add-to-cart-btn').click(function() {
+                $(document).ready(function () {
+            // 加入購物車邏輯
+            $('#add-to-cart-btn').click(function () {
                 var productId = '@Model.Product.Id';
-                var selectedColor = $('.products-size-wrapper ul li.active a').text();
+                var selectedSpecId = $('.products-size-wrapper ul li.active').data('spec-id'); // 取得選中的 spec.Id
                 var quantity = $('.input-counter input').val();
+
+                if (!selectedSpecId) {
+                    alert('請選擇一個顏色！');
+                    return;
+                }
 
                 $.ajax({
                     url: '@Url.Action("AddCart", "Cart", new { area = "FrontEnd" })',
                     type: 'POST',
-                    data: JSON.stringify({ productId: productId, color: selectedColor, quantity: quantity }),
-                    contentType: 'application/json; charset=utf-8',
-                    success: function(response) {
-                        alert('商品已成功加入購物車');
+                    data: {
+                        productId: productId,
+                        specId: selectedSpecId,
+                        quantity: quantity
                     },
-                    error: function(xhr, status, error) {
-                        alert('加入購物車時發生錯誤');
+                    success: function (response) {
+                        alert(response.message || '商品已成功加入購物車');
+                    },
+                    error: function (xhr, status, error) {
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            alert(xhr.responseJSON.message);
+                        } else {
+                            alert('加入購物車時發生錯誤');
+                        }
                     }
                 });
             });
 
             // 顏色選擇邏輯
-            $('.products-size-wrapper ul li a').click(function() {
+            $('.products-size-wrapper ul li a').click(function () {
                 $('.products-size-wrapper ul li').removeClass('active');
                 $(this).parent().addClass('active');
             });
 
             // 數量增減邏輯
-            $('.input-counter .plus-btn').click(function() {
+            $('.input-counter .plus-btn').click(function () {
                 var input = $(this).siblings('input');
                 var currentValue = parseInt(input.val());
                 input.val(currentValue + 1);
             });
 
-            $('.input-counter .minus-btn').click(function() {
+            $('.input-counter .minus-btn').click(function () {
                 var input = $(this).siblings('input');
                 var currentValue = parseInt(input.val());
                 if (currentValue > 1) {
@@ -348,6 +363,8 @@
                 }
             });
         });
+
+
     </script>
 }
 

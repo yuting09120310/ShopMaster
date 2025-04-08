@@ -16,4 +16,5 @@ public partial class Cart
     public string ProductSpec { get; set; } = null!;
 
     public virtual Product Product { get; set; }
+
 }
