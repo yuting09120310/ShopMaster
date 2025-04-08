@@ -5,16 +5,16 @@
     {
         <div class="products-cart">
             <div class="products-image">
-                <a href="#"><img src="~/frontEnd/assets/img/products/item.ProductId.jpg" alt="image"></a>
+                <a href="#"><img src="@item.Product.MainImage" alt="image"></a>
             </div>
 
             <div class="products-content">
-                <h3><a href="#">Product @item.ProductId</a></h3>
+                <h3><a href="#">@item.Product.Name</a></h3>
                 <span>item.Color</span>
                 <div class="products-price">
-                    <span>item.Quantity</span>
+                    <span>@item.Quantity</span>
                     <span>x</span>
-                    <span class="price">$item.Price</span>
+                    <span class="price">$@item.Product.Price</span>
                 </div>
                 <a href="#" class="remove-btn"><i class='bx bx-trash'></i></a>
             </div>
@@ -23,13 +23,12 @@
 </div>
 
 <div class="products-cart-subtotal">
-    <span>Subtotal</span>
-    <span class="subtotal">$Model.Sum(item => item.Price * item.Quantity)</span>
+    <span>總計</span>
+    <span class="subtotal">$@Model.Sum(item => item.Product.Price * item.Quantity)</span>
 </div>
 
 <div class="products-cart-btn">
-    <a href="#" class="default-btn">Proceed to Checkout</a>
-    <a href="#" class="optional-btn">View Shopping Cart</a>
+    <a href="#" class="default-btn">結帳</a>
 </div>
 
 

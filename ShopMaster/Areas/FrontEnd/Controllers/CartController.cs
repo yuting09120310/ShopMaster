@@ -52,6 +52,13 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
             var cartItems = _db.Carts.Where(c => c.MemberId == Convert.ToInt64(memberId)).ToList();
 
+            foreach(var cartItem in cartItems)
+            {
+                cartItem.Product = _db.Products
+                    .Where(p => p.Id == cartItem.ProductId)
+                    .FirstOrDefault();
+            }
+
             return PartialView("_CartPartial", cartItems);
         }
     }

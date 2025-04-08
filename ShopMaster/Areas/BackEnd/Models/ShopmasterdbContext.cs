@@ -111,11 +111,11 @@ public partial class shopmasterdbContext : DbContext
 
             entity.ToTable("Cart");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnType("bigint(20)");
+            entity.Property(e => e.Id).HasColumnType("bigint(20)");
             entity.Property(e => e.MemberId).HasColumnType("bigint(20)");
             entity.Property(e => e.ProductId).HasColumnType("bigint(20)");
+            entity.Property(e => e.ProductSpec).HasMaxLength(999);
+            entity.Property(e => e.Quantity).HasColumnType("int(11)");
         });
 
         modelBuilder.Entity<Ecoupon>(entity =>
