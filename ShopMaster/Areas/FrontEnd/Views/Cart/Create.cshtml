@@ -238,7 +238,7 @@
         const productID = productId.split('count-input-').pop()
         const imageSrc = mainImage.src;
         const nameText = name.textContent
-
+        
         var quantity = parseInt(input.value) //數量
 
 
@@ -281,7 +281,16 @@
             countInput: quantity
         }, function (response) {
              alert('已更新購物車！');
-          console.log(response)
+            sessionStorage.setItem('cartItemCount', response.cartItemCount);
+             var cartItemCount = sessionStorage.getItem('cartItemCount');
+          if (cartItemCount)
+        {
+            $('#cartCount').html(cartItemCount);
+        }
+        else
+        {
+            $('#cartCount').html('0');
+        }
 
         }).fail(function () {
              alert('更新購物車失敗！');
@@ -308,7 +317,18 @@
             countInput: quantity
         }, function (response) {
              alert('已更新購物車！');
-          console.log(response)
+            
+             sessionStorage.setItem('cartItemCount', response.cartItemCount);
+             var cartItemCount = sessionStorage.getItem('cartItemCount');
+             console.log(cartItemCount)
+          if (response.cartItemCount)
+        {
+            $('#cartCount').html(cartItemCount);
+        }
+        else
+        {
+            $('#cartCount').html('0');
+        }
 
         }).fail(function () {
              alert('更新購物車失敗！');
