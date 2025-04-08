@@ -35,7 +35,7 @@
 
                         @foreach (var img in c.CartItem.Select(c => c.MainImage).ToList())
                         {
-                            <img src="@img" class="img-fluid rounded-start d-block" alt="Responsive image" style="height:100px; width:120px">
+                            <img src="@img" class="img-fluid rounded-start d-block" alt="Responsive image" style="height:100px; width:120px" id="mainImage-@c.ProductId">
                         }
                     </div>
                     <div class="col-md-8 col-9">
@@ -43,7 +43,7 @@
 
                             @foreach (var name in c.CartItem.Select(c => c.Name).ToList())
                             {
-                                <p class="card-title col-4">"@name"</p>
+                                <p class="card-title col-4" id="name-@c.ProductId">"@name"</p>
                             }
 
                             @* 數量 *@
@@ -59,7 +59,10 @@
                                             <button class="btn" type="button" id="button-minus-@i.Key" style="border-color: #dee2e6; border-right: none;">-</button>
                                             <input type="text" class="form-control border-left-0" value="@i.Value" id="count-input-@i.Key" aria-label="Example text with button addon" aria-describedby="button-addon1" style="border-right: none; border-left: none; text-align: center; padding-right: 0px;
                                                          padding-left: 0px;">
-                                            <button class="btn" type="button" id="button-plus-@i.Key" style="border-color: #dee2e6; border-left: none;">+</button>
+                                            <button class="btn" type="button" id="button-plus-@i.Key" style="border-color: #dee2e6; border-left: none; border-top-right-radius: 5px;
+                                             border-bottom-right-radius: 5px;">
+                                                +
+                                            </button>
 
                                             @foreach (var cp in c.CartItem)
                                             {
@@ -73,6 +76,39 @@
                                 }
 
                             }
+
+
+                            @* @{
+
+
+
+                                <div class="input-group mb-3 ms-2 border-left-0 col-3" style="height:38px; width:100px; border-left: none;" id="count-@c.ProductId">
+                                            <button class="btn" type="button" id="button-minus-@c.ProductId" style="border-color: #dee2e6; border-right: none;">-</button>
+                                    <input type="text" class="form-control border-left-0" value="" id="count-input-@c.ProductId" aria-label="Example text with button addon" aria-describedby="button-addon1" style="border-right: none; border-left: none; text-align: center; padding-right: 0px;
+                                                             padding-left: 0px;">
+                                    <button class="btn" type="button" id="button-plus-@c.ProductId" style="border-color: #dee2e6; border-left: none; border-radius: 5px;">+</button>
+
+                                            @foreach (var cp in c.CartItem)
+                                            {
+                                                <input type="hidden" value="@cp.Price" id="price-@c.ProductId">
+                                            }
+
+
+                                        </div>
+                                        <div class="col-1 text-center mt-2"> <i class="bi bi-trash3"></i>  </div>
+                                 
+
+                            }
+ *@
+
+
+                            
+
+
+
+
+
+
                             @{
 
                                 foreach (var p in ViewBag.totalPrice)
@@ -80,8 +116,8 @@
 
                                     if (c.ProductId == p.Key)
                                     {
-                                        <p class="card-text col-2 text-end mt-2" id="total-price-@p.Key">"@p.Value"</p>
 
+                                        <p class="card-text col-2 text-end mt-2" id="total-price-@c.ProductId">@p</p>
                                     }
 
 
@@ -118,17 +154,78 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script>
+<script>  
 
-    
 
 
     //合計
     const finallyTotalElement = document.getElementById('cartFinally');
-    let finallyTotal = 0
+    
+    
    
-                // 監聽所有的按鈕和輸入框
+    let finallyTotal = 0
+
+    // 用sessionStorage渲染所選商品數量
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     //數量
+    //     const dictionaryJson = '@Html.Raw(ViewBag.totalInputDictionary)';
+    //     //價錢
+    //     const totalPrice = '@Html.Raw(ViewBag.totalPrice)';
+    //     sessionStorage.setItem('myDictionary', dictionaryJson);
+    //     sessionStorage.setItem('totalPrice', totalPrice);
+    //     console.log(sessionStorage.getItem('myDictionary', dictionaryJson))
+
+    //     const savedDictionary = JSON.parse(sessionStorage.getItem('myDictionary'));
+    //     const savedPrice = JSON.parse(sessionStorage.getItem('totalPrice'));
+    //        console.log(savedDictionary)
+    //     if (savedDictionary && savedPrice) {
+
+    //         const containers = document.querySelectorAll('[id^=cartB]');
+
+
+    //             containers.forEach((container) => {
+    //             const id = container.id;
+    //             const productId = id.split('cartB-').pop()
+                
+
+    //             // 如果字典中有對應的 Key，則更新元素
+    //             if (savedDictionary[productId] && savedPrice[productId]) {
+    //                  const inputElement = container.querySelector('[id^=count-input]');
+    //                  const priceElement = container.querySelector('p[id^=total-price]');
+                     
+                    
+
+    //                  inputElement.value = savedDictionary[productId];
+    //                  priceElement.textContent = savedPrice[productId]                    
+    //                  finallyTotalElement.textContent = inputElement.value +priceElement.textContent
+                
+    //             }
+    //             else
+    //             {
+    //                 console.log(`字典中沒有找到商品 ID: ${productId}`);
+    //             }
+
+
+    //         });
+
+    //         }
+    //         else {
+    //             console.log('未找到保存的 Dictionary');
+    //         }
+
+
+
+    // });
+
+
+
+     
+
+   
+                //監聽所有的按鈕和輸入框
     document.querySelectorAll('[id^=cartB]').forEach(group => {
+       
+        
         const buttonMinus = group.querySelector('[id^=button-minus]');
         const buttonPlus = group.querySelector('[id^=button-plus]');
         const input = group.querySelector('[id^=count-input]');
@@ -136,7 +233,11 @@
         const totalPriceElement = group.querySelector('p[id^=total-price]');
         const unitPrice = parseFloat(priceInput.value)
         const productId = input.id
-        const id = group.dataset.id
+        const name =   group.querySelector('[id^=name]');
+        const mainImage =  group.querySelector('[id^=mainImage]');
+        const productID = productId.split('count-input-').pop()
+        const imageSrc = mainImage.src;
+        const nameText = name.textContent
 
         var quantity = parseInt(input.value) //數量
 
@@ -162,57 +263,183 @@
 
 
         // 處理減號按鈕點擊
-    function handleMinusClick() {
+      function handleMinusClick() {
         let currentValue = parseInt(input.value);
         if (!isNaN(currentValue) && currentValue > 1) {
             input.value = currentValue - 1;
             updateTotalPrice(); // 更新金額
         }
+      
 
-        // 發送 AJAX 請求
-        $.post('/Cart/Edit', {
-            productId: productId,
-            id: id,
-            quantity: quantity // 傳遞數量
+        //發送 AJAX 請求
+        $.post('/Cart/EditToAddCart', {
+            productId: productID,
+            
+            name: nameText,
+            price: unitPrice,
+            mainImage:imageSrc,
+            countInput: quantity
         }, function (response) {
-             const updatedItems = response.updatedItems; // 從後端獲取的最新商品數量
-           Object.keys(updatedItems).forEach(productID => {
-           const itemElement = document.querySelector(`[id^="cartB${productID}"]`);
-            if (itemElement) {
-                const quantityInput = itemElement.querySelector('[id^=count-input]');
-               
-            }
-        });
+             alert('已更新購物車！');
+          console.log(response)
 
         }).fail(function () {
              alert('更新購物車失敗！');
         });
-    }
+      }
 
           
 
 
         // 監聽加號按鈕事件
-        buttonPlus.addEventListener('click', function () {
+        function handlePlusClick() {
             let currentValue = parseInt(input.value);
             if (!isNaN(currentValue)) {
                 input.value = currentValue + 1; // 可以無限加
              updateTotalPrice()
             }
+             //發送 AJAX 請求
+        $.post('/Cart/EditToAddCart', {
+            productId: productID,
+
+            name: nameText,
+            price: unitPrice,
+            mainImage:imageSrc,
+            countInput: quantity
+        }, function (response) {
+             alert('已更新購物車！');
+          console.log(response)
+
+        }).fail(function () {
+             alert('更新購物車失敗！');
         });
 
+
+        }
+
         // 綁定事件，先移除再綁定，避免重複
-    buttonMinus.removeEventListener('click', handleMinusClick); // 確保移除
+    buttonMinus.removeEventListener('click', handleMinusClick); 
     buttonMinus.addEventListener('click', handleMinusClick);
+    buttonPlus.removeEventListener('click', handlePlusClick);
+    buttonPlus.addEventListener('click', handlePlusClick);
 
 
 
          updateTotalPrice()
+
+
+
+
+
+
+
+
+
     });
 
-    
+
+    //     document.addEventListener('DOMContentLoaded', function () {
+    //     // 取出 sessionStorage 的數據，確保存在初始值
+    //     const savedDictionary = JSON.parse(sessionStorage.getItem('myDictionary')) || {};
+    //     const savedTotalPrice = JSON.parse(sessionStorage.getItem('totalPrice')) || 0;
+       
+    //      console.log(savedDictionary)
+         
+    //     /*  finallyTotalElement.textContent = savedTotalPrice.toFixed(2); */ // 初始化合計金額
+
+    //     // 遍歷所有商品容器
+    //     document.querySelectorAll('[id^=cartB]').forEach(group => {
+    //         const buttonMinus = group.querySelector('[id^=button-minus]');
+    //         const buttonPlus = group.querySelector('[id^=button-plus]');
+    //         const input = group.querySelector('[id^=count-input]');
+    //         const priceInput = group.querySelector('input[type=hidden]'); // 隱藏的單價
+    //         const totalPriceElement = group.querySelector('p[id^=total-price]');
+    //         const unitPrice = parseFloat(priceInput.value);
+    //         const productId = input.id;
+    //         const productID = productId.split('count-input-').pop()
+
+    //         // 初始化數量和總價
+    //         let quantity = parseInt(input.value) || 1;
+    //         let totalPrice = unitPrice * quantity;
+
+    //         // 初始化畫面（從 sessionStorage 載入）
+    //         if (savedDictionary[productId]) {
+    //             quantity = savedDictionary[productId].quantity || quantity;
+    //             input.value = quantity; // 輸入框初始化數量
+    //             totalPrice = unitPrice * quantity; // 重新計算總價
+    //             totalPriceElement.textContent = totalPrice.toFixed(2); // 初始化總價顯示
+    //         }
+
+    //         // 更新 sessionStorage 的總金額
+    //         function updateSessionStorage() {
+    //             // 更新商品數量和總價到 sessionStorage
+    //             savedDictionary[productId] = {
+    //                 quantity: quantity,
+    //                 totalPrice: totalPrice
+    //             };
+    //             // sessionStorage.setItem('myDictionary', JSON.stringify(savedDictionary));
+    //               console.log( savedDictionary)
+    //             // 合計所有商品金額
+    //             let finallyTotal = 0;
+    //             document.querySelectorAll('[id^=cartB]').forEach(cart => {
+    //                 const totalPriceElement = cart.querySelector('p[id^=total-price]');
+    //                 if (totalPriceElement) {
+    //                     finallyTotal += parseFloat(totalPriceElement.textContent) || 0;
+    //                 }
+    //             });
+
+    //             // sessionStorage.setItem('totalPrice', finallyTotal); // 存回 sessionStorage
+    //             // finallyTotalElement.textContent = finallyTotal.toFixed(2); // 更新合計金額顯示
+               
+    //         }
+
+    //         // 更新金額
+    //         function updateTotalPrice() {
+    //             quantity = parseInt(input.value) || 1; // 確保數量為有效值
+    //             totalPrice = unitPrice * quantity; // 計算總價
+    //             totalPriceElement.textContent = totalPrice.toFixed(2); // 更新總價顯示
+
+    //             /* updateSessionStorage(); */ // 更新 sessionStorage 和合計金額
+    //         }
+
+    //         // 處理減號按鈕點擊
+    //         buttonMinus.addEventListener('click', function () {
+    //             const currentValue = parseInt(input.value);
+    //             if (!isNaN(currentValue) && currentValue > 1) {
+    //                 input.value = currentValue - 1;
+    //                 updateTotalPrice(); // 更新金額
+    //             }
+    //         });
 
 
+
+
+    //         // 監聽加號按鈕事件
+    //         buttonPlus.addEventListener('click', function () {
+    //             const currentValue = parseInt(input.value);
+    //             if (!isNaN(currentValue)) {
+    //                 const updatedValue = currentValue + 1;
+    //                 input.value = updatedValue ;
+
+    //                     Object.keys(savedDictionary).forEach(key => {
+    //                         if(key==productID){
+    //                         // console.log('savedDictionary[key]'+savedDictionary[key])                            
+    //                         // console.log('productID:'+productID)
+    //                         savedDictionary[key] = updatedValue
+    //                         sessionStorage.setItem('myDictionary', JSON.stringify(savedDictionary));
+    //                         console.log(sessionStorage.getItem('myDictionary', JSON.stringify(savedDictionary)));}
+    //                     });
+                                      
+                      
+                        
+    //                 updateTotalPrice(); // 更新金額
+    //             }
+    //         });
+
+    //         // 初始化總價顯示
+    //         updateTotalPrice();
+    //     });
+    // });
 
 
 
