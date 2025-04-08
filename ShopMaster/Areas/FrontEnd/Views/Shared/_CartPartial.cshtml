@@ -23,12 +23,12 @@
 </div>
 
 <div class="products-cart-subtotal">
-    <span>總計</span>
+    <span>金額試算(不包含折扣)</span>
     <span class="subtotal">$@Model.Sum(item => item.Product.Price * item.Quantity)</span>
 </div>
 
 <div class="products-cart-btn">
-    <a href="#" class="default-btn">結帳</a>
+    <a class="default-btn" asp-action="Checkout" asp-controller="Order" asp-area="FrontEnd">結帳</a>
 </div>
 
 

@@ -1,84 +1,38 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ShopMaster.Areas.BackEnd.Models;
+using ShopMaster.Areas.FrontEnd.ViewModels;
 
 namespace ShopMaster.Areas.FrontEnd.Controllers
 {
     [Area("FrontEnd")]
     public class OrderController : Controller
     {
-        // GET: OrderController
-        public ActionResult Index()
+        protected readonly shopmasterdbContext _db;
+
+        public OrderController(shopmasterdbContext db)
         {
-            return View();
+            _db = db;
         }
 
-        // GET: OrderController/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Checkout()
         {
-            return View();
-        }
+            string? memberId = HttpContext.Session.GetString("MemberId");
+            List<Cart> carts = _db.Carts.Where(x => x.MemberId.ToString() == memberId).ToList();
 
-        // GET: OrderController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: OrderController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
+            foreach(Cart cart in carts)
             {
-                return RedirectToAction(nameof(Index));
+                cart.Product = _db.Products.Where(x => x.Id == cart.ProductId).FirstOrDefault();
             }
-            catch
-            {
-                return View();
-            }
-        }
 
-        // GET: OrderController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+            Member member = _db.Members.FirstOrDefault(x => x.Id.ToString() == memberId);
+            member.MemberType = _db.MemberTypes.FirstOrDefault(x => x.Id == member.Id);
 
-        // POST: OrderController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+            CheckoutViewModel viewModel = new CheckoutViewModel();
+            viewModel.Carts = carts;
+            viewModel.Member = member;
 
-        // GET: OrderController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: OrderController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return View(viewModel);
         }
     }
 }
