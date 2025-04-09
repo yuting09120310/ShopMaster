@@ -124,7 +124,7 @@
                 <div class="row">              
             
                     <div class="col d-flex justify-content-end mt-2">
-                        <h5 class="fw-bold text-secondary me-5">合計  </h5>
+                        <h5 class="fw-bold text-secondary me-5" id="finallyText">合計  </h5>
                         <span class="me-4" id="cartFinally">
                             @((ViewBag.totalPrice.Values as IEnumerable<decimal>)?.Sum() ?? 0)
                         </span>
@@ -351,21 +351,29 @@
 
                    const cartBElements = document.querySelectorAll('[id^=cartB]');
 
-    if (cartBElements.length === 0) {
-        console.log("沒有 cartB 元素");
-        // 假設沒有購物車項目時，將最終金額歸零
-        $('#cartFinally').text('0.00');
-    } else {
-        cartBElements.forEach(cart => {
-            const deleteTotal = cart.querySelector('p[id^=total-price]');
-            if (deleteTotal) {
-                let itemTotal = parseFloat(deleteTotal.textContent) || 0;
-                finallyTotal += itemTotal;
-                console.log('找到一筆金額:', itemTotal);
-            }
-        });
-        $('#cartFinally').text(finallyTotal.toFixed(2));
-    }
+                if (cartBElements.length === 0) {
+
+
+                              $('#purchase').text('購物去').click(function() {
+                     window.location.href = '@Url.Action("Index", "Home", new { area = "FrontEnd" })';
+                 });
+
+
+                     $('#finallyText').text('您的購物車空了 !');
+                    
+                   $('#cartFinally').hide();
+
+                } else {
+                    cartBElements.forEach(cart => {
+                        const deleteTotal = cart.querySelector('p[id^=total-price]');
+                        if (deleteTotal) {
+                            let itemTotal = parseFloat(deleteTotal.textContent) || 0;
+                            finallyTotal += itemTotal;
+                           
+                        }
+                    });
+                    $('#cartFinally').text(finallyTotal.toFixed(2));
+                }
 
 
     //購物車數量
