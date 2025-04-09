@@ -182,7 +182,7 @@
             {
                 @* 商品明細 *@
                 <div class="col-12 col-md-6">
-                    <form method="post">
+                   
                         <input type="hidden" name="memberId" value="@d.Id" />
                         <h2 id="productName" style="color:black" class="mt-3" asp-for="Name">@d.Name</h2>
                         <p class="text-start mt-3  " style="color:black; font-size:17px; ">@d.Description</p>
@@ -214,7 +214,7 @@
                                 @d.Content
                             </p>
                         </div>
-                    </form>
+                   
                 </div>
                 i++;
             }
@@ -309,7 +309,7 @@
     });
 
     $(document).ready(function() {
-
+         
         // 當加入購物車的按鈕被點擊時觸發
         $('.add-to-cart').click(function() {
 
@@ -318,6 +318,7 @@
             var name = $(this).data('name');
             var price = $(this).data('price');
             var mainImage = $(this).data('mainimage');
+            
 
             $.post('/Cart/AddToCart', {
                 productId: productId,
@@ -326,14 +327,26 @@
                 mainImage: mainImage,
                 countInput: countInput
             }, function(response) {
-                if (response.success) {              
+                if (response.success) {
+               sessionStorage.setItem('cartItemCount', response.cartItemCount);
+                var cartItemCount = sessionStorage.getItem('cartItemCount');
+             if (cartItemCount)
+           {
+               $('#cartCount').html(cartItemCount);
+           }
+           else
+           {
+               $('#cartCount').html('0');
+           }
 
-                var cartItemCount = response.cartItemCount;
+                 
+                alert('商品已加入購物車 !');
+
                 
-                    alert('商品已加入購物車 !');
-                    sessionStorage.setItem('cartItemCount', cartItemCount);                   
+
+
                 }
-            });
+            })
 
         });
 

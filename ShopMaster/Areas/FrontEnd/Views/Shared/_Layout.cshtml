@@ -203,10 +203,14 @@
             $('#cartCount').html('0');  
         }
 
-        $('#openCartBtn').click(function() {
+                // sessionStorage.setItem('cartItemCount',cartItemCount);
+                    console.log('1'+sessionStorage.getItem('cartItemCount'))
+            $('#openCartBtn').click(function() {
             $.get('/Cart/GetCart', function(result) {
             $('#cartContent').html(result); // 顯示購物車內容
-                
+                   
+            
+
             });
         });
     });

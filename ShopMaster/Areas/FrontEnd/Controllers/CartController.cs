@@ -44,29 +44,34 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             var cart = _db.Carts.ToList();
             var member = _db.Members.ToList();
 
-            //先組暫時的購物車 
-            tempCart = cart.Join(product,
-                c => c.ProductId,
-                p => p.Id,
-                (c, p) => new { c, p })
-                .Join(member,
-                cp => cp.p.Id,
-                m => m.Id,
-                (cp, m)
-                => new ViewModelsF.Cart
-                {
-                    //Id = cp.c.Id,
-                    ProductId = cp.p.Id,
-                    MemberId = m.Id,
-                    Member = new List<Member>
+            tempCart = HttpContext.Session.Get<List<Cart>>("tempCart") ?? new List<Cart>();
+
+            if (tempCart == null)
+            {
+
+                //先組暫時的購物車 
+                tempCart = cart.Join(product,
+                    c => c.ProductId,
+                    p => p.Id,
+                    (c, p) => new { c, p })
+                    .Join(member,
+                    cp => cp.p.Id,
+                    m => m.Id,
+                    (cp, m)
+                    => new ViewModelsF.Cart
                     {
+                        //Id = cp.c.Id,
+                        ProductId = cp.p.Id,
+                        MemberId = m.Id,
+                        Member = new List<Member>
+                        {
                         new Member
                         {
                             Name = m.Name,
                         }
-                    },
-                    CartItem = new List<Products>
-                    {
+                        },
+                        CartItem = new List<Products>
+                        {
                         new Products
                         {
                             Name = cp.p.Name,
@@ -75,24 +80,26 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
 
                         }
-                    }
+                        }
 
 
-                }).ToList();
+                    }).ToList();
 
+                HttpContext.Session.Set("tempCart", tempCart);
 
-            tempCart = HttpContext.Session.Get<List<Cart>>("tempCart") ?? new List<Cart>();
+            }
+
+            //HttpContext.Session.Set("tempCart", tempCart);
+
+            //tempCart = HttpContext.Session.Get<List<Cart>>("tempCart") ?? new List<Cart>();
 
             var existingItem = tempCart.FirstOrDefault(c => c.ProductId == productId);
 
-
-            if (existingItem != null)
+            tempCart.Add(new Cart
             {
-                tempCart.Add(new Cart
-                {
-                    ProductId = productId,
+                ProductId = productId,
 
-                    CartItem = new List<Products>
+                CartItem = new List<Products>
                     {
                         new Products
                         {
@@ -104,38 +111,19 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
                     }
 
-                });
+            });
 
-            }
-            else
-            {
-                tempCart.Add(new Cart
-                {
-                    ProductId = productId,
 
-                    CartItem = new List<Products>
-                    {
-                        new Products
-                        {
-                            Name = name,
-                            Price = price,
-                            MainImage = mainImage
 
-                        }
-
-                    }
-
-                });
-
-            }
-           
 
             HttpContext.Session.Set("tempCart", tempCart);
+           
 
+            tempCart = HttpContext.Session.Get<List<Cart>>("tempCart") ?? new List<Cart>();
             var productsAll = new ProductsAll
-            {
-                ProductCart = tempCart
-            };
+                {
+                    ProductCart = tempCart
+                };
 
             //手動輸入數量
 
@@ -155,8 +143,9 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             HttpContext.Session.Set("totalInput", totalInput);
 
             countInputDy = HttpContext.Session.Get<Dictionary<long, long>>("totalInput") ?? new Dictionary<long, long>();
-
+            
             return Json(new { success = true, message = "商品已加入購物車", cartItemCount = countInputDy.Values.Sum() });
+            
         }
 
 
@@ -222,7 +211,11 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
             //先取 Product
 
-            if (tempCart.Any(m => m.MemberId.HasValue))
+            if (tempCart != null)
+            {
+
+
+                if (tempCart.Any(m => m.MemberId.HasValue))
                 {
 
                 }
@@ -266,7 +259,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                         //自行輸入商品數量
                         ViewBag.totalInputDictionary = countInputDy;
 
-                        HttpContext.Session.Set("countInputDy", countInputDy);
+                        HttpContext.Session.Set("totalInput", countInputDy);
 
                         var getCartTemp = tempCart.DistinctBy(p => p.ProductId).ToList();
                         // 商品金額
@@ -320,6 +313,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                     }
                 }
                 ;
+            }
            
 
 
@@ -347,31 +341,9 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         
         public ActionResult Edit(int id, string productId, int quantity)
         {
-            try
-            {
-                int productID = int.Parse( productId.Substring(productId.Length - 1));
-
-                countInputEdit = HttpContext.Session.Get<Dictionary<long, long>>("countInputDy") ?? new Dictionary<long, long>();
-
-                if (!countInputEdit.ContainsKey(productID))
-                {
-                    countInputEdit.Add(productID, quantity);
-                }
-                else
-                {
-                    countInputEdit[productID] = quantity;
-                }
-
-                HttpContext.Session.Set("countInputDy", countInputEdit);
-                priceEdit = HttpContext.Session.Get<Dictionary<long, long>>("priceDy") ?? new Dictionary<long, long>();
-
-
-                return Json(new { success = true, message = "已更新購物車", cartItemCount = countInputDy.Values.Sum(), updatedItems = countInputEdit });
-            }
-            catch
-            {
+           
                 return View();
-            }
+            
         }
 
         // GET: CartController/Delete/5
@@ -382,12 +354,36 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
         // POST: CartController/Delete/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+       
+        public ActionResult Delete(long deleteId, int deleteCount)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                tempCart = HttpContext.Session.Get<List<Cart>>("tempCart") ?? new List<Cart>();
+
+                countInputDy = HttpContext.Session.Get<Dictionary<long, long>>("totalInput") ?? new Dictionary<long, long>();
+
+
+                var item = tempCart.FirstOrDefault(c => c.ProductId == deleteId);
+
+                if (tempCart != null)
+                {
+                    tempCart.Remove(item); // 移除找到的項目
+                }
+
+                if (countInputDy.ContainsKey(deleteId))
+                {
+                    countInputDy.Remove(deleteId);
+                }
+
+
+                // 更新 Session
+                HttpContext.Session.Set("tempCart", tempCart);
+
+                HttpContext.Session.Set("totalInput", countInputDy);
+
+
+                return Json(new { success = true, message = "商品已刪除", id= deleteId, cartItemCount = countInputDy.Values.Sum() });
             }
             catch
             {
