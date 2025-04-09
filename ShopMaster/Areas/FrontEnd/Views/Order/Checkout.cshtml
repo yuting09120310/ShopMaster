@@ -22,105 +22,57 @@
             <div class="row justify-content-center">
                 <div class="col-lg-6 col-md-12">
                     <div class="billing-details">
-                        <h3 class="title">Billing Details</h3>
+                        <h3 class="title">訂購資訊</h3>
 
                         <div class="row justify-content-center">
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <label>會員名稱</label>
+                                    <input type="text" class="form-control" value="@Model.Member.Name" readonly>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <label>會員等級</label>
+                                    <input type="text" class="form-control" value="@Model.Member.MemberType.Name">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12 col-md-6">
+                                <div class="form-group">
+                                    <label>訂單地址</label>
+                                    <input type="text" class="form-control" value="@Model.Member.Address" readonly>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12 col-md-6">
+                                <div class="form-group">
+                                    <label>手機號碼</label>
+                                    <input type="text" class="form-control" value="@Model.Member.Phone" readonly>
+                                </div>
+                            </div>
+
                             <div class="col-lg-12 col-md-12">
                                 <div class="form-group">
-                                    <label>Country <span class="required">*</span></label>
+                                    <label>優惠券</label>
 
                                     <div class="select-box">
-                                        <select class="form-control" style="display: none;">
+                                        <select class="form-control">
                                             <option>United Arab Emirates</option>
                                             <option>China</option>
                                             <option>United Kingdom</option>
                                             <option>Germany</option>
                                             <option>France</option>
                                             <option>Japan</option>
-                                        </select><div class="nice-select form-control" tabindex="0"><span class="current">United Arab Emirates</span><ul class="list"><li data-value="United Arab Emirates" class="option selected">United Arab Emirates</li><li data-value="China" class="option">China</li><li data-value="United Kingdom" class="option">United Kingdom</li><li data-value="Germany" class="option">Germany</li><li data-value="France" class="option">France</li><li data-value="Japan" class="option">Japan</li></ul></div>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="col-lg-6 col-md-6">
-                                <div class="form-group">
-                                    <label>First Name <span class="required">*</span></label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6 col-md-6">
-                                <div class="form-group">
-                                    <label>Last Name <span class="required">*</span></label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-
                             <div class="col-lg-12 col-md-12">
                                 <div class="form-group">
-                                    <label>Company Name</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="col-lg-12 col-md-6">
-                                <div class="form-group">
-                                    <label>Address <span class="required">*</span></label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="col-lg-12 col-md-6">
-                                <div class="form-group">
-                                    <label>Town / City <span class="required">*</span></label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6 col-md-6">
-                                <div class="form-group">
-                                    <label>State / County <span class="required">*</span></label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6 col-md-6">
-                                <div class="form-group">
-                                    <label>Postcode / Zip <span class="required">*</span></label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6 col-md-6">
-                                <div class="form-group">
-                                    <label>Email Address <span class="required">*</span></label>
-                                    <input type="email" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6 col-md-6">
-                                <div class="form-group">
-                                    <label>Phone <span class="required">*</span></label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="col-lg-12 col-md-12">
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="create-an-account">
-                                    <label class="form-check-label" for="create-an-account">Create an account?</label>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-12 col-md-12">
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="ship-different-address">
-                                    <label class="form-check-label" for="ship-different-address">Ship to a different address?</label>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-12 col-md-12">
-                                <div class="form-group">
+                                    <label>訂單備註</label>
                                     <textarea name="notes" id="notes" cols="30" rows="5" placeholder="Order Notes" class="form-control"></textarea>
                                 </div>
                             </div>

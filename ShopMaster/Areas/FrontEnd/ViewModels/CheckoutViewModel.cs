@@ -7,5 +7,7 @@ namespace ShopMaster.Areas.FrontEnd.ViewModels
         public List<Cart> Carts { get; set; }
 
         public Member Member { get; set; }
+
+        public List<Ecoupon> Ecoupons { get; set; }
     }
 }

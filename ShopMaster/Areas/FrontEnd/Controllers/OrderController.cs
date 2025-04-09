@@ -28,9 +28,12 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             Member member = _db.Members.FirstOrDefault(x => x.Id.ToString() == memberId);
             member.MemberType = _db.MemberTypes.FirstOrDefault(x => x.Id == member.Id);
 
+            List<Ecoupon> ecoupons = _db.Ecoupons.Where(x => x.MemberId.ToString() == memberId).ToList();
+
             CheckoutViewModel viewModel = new CheckoutViewModel();
             viewModel.Carts = carts;
             viewModel.Member = member;
+            viewModel.Ecoupons = ecoupons;
 
             return View(viewModel);
         }
