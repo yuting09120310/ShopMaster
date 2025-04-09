@@ -35,7 +35,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         Dictionary<long, long> countInputDy = new Dictionary<long, long>();
         Dictionary<long, long> countInputEdit = new Dictionary<long, long>();
         Dictionary<long, long> priceEdit = new Dictionary<long, long>();
-        
+        Dictionary<long, decimal> priceDy = new Dictionary<long, decimal>();
+
 
         [HttpPost]
         public IActionResult AddToCart(int productId, string name, decimal price, string mainImage, int countInput)
@@ -264,7 +265,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                         var getCartTemp = tempCart.DistinctBy(p => p.ProductId).ToList();
                         // 商品金額
                         var price = getCartTemp.Select(c => c.CartItem.Select(p => new { c.ProductId, p.Price })).ToList();
-                        Dictionary<long, decimal> priceDy = new Dictionary<long, decimal>();
+                       
 
                         decimal totalPrice = 0;
 
@@ -360,8 +361,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             try
             {
                 tempCart = HttpContext.Session.Get<List<Cart>>("tempCart") ?? new List<Cart>();
-
                 countInputDy = HttpContext.Session.Get<Dictionary<long, long>>("totalInput") ?? new Dictionary<long, long>();
+               
 
 
                 var item = tempCart.FirstOrDefault(c => c.ProductId == deleteId);
@@ -376,14 +377,16 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                     countInputDy.Remove(deleteId);
                 }
 
+               
+
 
                 // 更新 Session
                 HttpContext.Session.Set("tempCart", tempCart);
-
                 HttpContext.Session.Set("totalInput", countInputDy);
+               
 
 
-                return Json(new { success = true, message = "商品已刪除", id= deleteId, cartItemCount = countInputDy.Values.Sum() });
+                return Json(new { success = true, message = "商品已刪除", id= deleteId, cartItemCount = countInputDy.Values.Sum()  });
             }
             catch
             {

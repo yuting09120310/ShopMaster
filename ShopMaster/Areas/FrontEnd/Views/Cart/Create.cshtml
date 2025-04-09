@@ -15,7 +15,7 @@
     <div class="row">
         <div class="">
 
-            <h3 class="text-start fw-bold text-secondary mt-4" id="ppppp">您的購物車</h3>
+            <h3 class="text-start fw-bold text-secondary mt-4" >您的購物車</h3>
         </div>
     </div>
 
@@ -117,11 +117,6 @@
 
                     
                 </div>
-
-
-
-
-
 
 
                
@@ -313,7 +308,9 @@
              alert('已更新購物車！');
             
              sessionStorage.setItem('cartItemCount', response.cartItemCount);
+            
              let cartItemCount = sessionStorage.getItem('cartItemCount');
+             
              
           if (response.cartItemCount)
         {
@@ -323,6 +320,10 @@
         {
             $('#cartCount').html('0');
         }
+
+
+
+
 
         }).fail(function () {
              alert('更新購物車失敗！');
@@ -340,11 +341,34 @@
              deleteCount: quantity
 
             }, function(response) {
-      sessionStorage.setItem('cartItemCount', response.cartItemCount);
+             sessionStorage.setItem('cartItemCount', response.cartItemCount);
+             
              let cartItemCount = sessionStorage.getItem('cartItemCount');
+             $("#cartB-" + deleteId).remove();
 
-       $("#cartB-" + deleteId).remove();
+             let finallyTotal = 0;
 
+
+                   const cartBElements = document.querySelectorAll('[id^=cartB]');
+
+    if (cartBElements.length === 0) {
+        console.log("沒有 cartB 元素");
+        // 假設沒有購物車項目時，將最終金額歸零
+        $('#cartFinally').text('0.00');
+    } else {
+        cartBElements.forEach(cart => {
+            const deleteTotal = cart.querySelector('p[id^=total-price]');
+            if (deleteTotal) {
+                let itemTotal = parseFloat(deleteTotal.textContent) || 0;
+                finallyTotal += itemTotal;
+                console.log('找到一筆金額:', itemTotal);
+            }
+        });
+        $('#cartFinally').text(finallyTotal.toFixed(2));
+    }
+
+
+    //購物車數量
           if (response.cartItemCount)
         {
             $('#cartCount').html(cartItemCount);
@@ -355,9 +379,9 @@
         }
        
        
-       console.log("刪除後，選取器結果：", $("#cartB-" + deleteId));
+       
 
-        alert('刪除成功')
+        alert('刪除成功' )
 
 
       }).fail(function(jqXHR, textStatus, errorThrown) {
