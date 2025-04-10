@@ -9,5 +9,7 @@ namespace ShopMaster.Areas.FrontEnd.ViewModels
         public Member Member { get; set; }
 
         public List<Ecoupon> Ecoupons { get; set; }
+
+        public Ecoupon SelectEcoupon { get; set; }
     }
 }

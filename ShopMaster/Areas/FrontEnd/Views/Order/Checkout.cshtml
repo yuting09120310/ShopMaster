@@ -58,13 +58,12 @@
                                     <label>優惠券</label>
 
                                     <div class="select-box">
-                                        <select class="form-control">
-                                            <option>United Arab Emirates</option>
-                                            <option>China</option>
-                                            <option>United Kingdom</option>
-                                            <option>Germany</option>
-                                            <option>France</option>
-                                            <option>Japan</option>
+                                        <select class="form-control" id="ecouponSelect" onchange="updateOrderDetails()">
+                                            <option value="">選擇優惠券</option>
+                                            @foreach (var ecoupon in Model.Ecoupons)
+                                            {
+                                                <option value="@ecoupon.Id">@ecoupon.EcouponEvent.Name</option>
+                                            }
                                         </select>
                                     </div>
                                 </div>
@@ -84,67 +83,9 @@
                     <div class="order-details">
                         <h3 class="title">產品</h3>
 
-                        <div class="order-table table-responsive">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">商品名稱</th>
-                                        <th scope="col">金額</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-
-                                    @foreach (var item in Model.Carts)
-                                    {
-                                        <tr>
-                                            <td class="product-name">
-                                                <a href="#">@item.Product.Name (@item.ProductSpec)</a>
-                                            </td>
-                                            <td class="product-total">
-                                                <span class="subtotal-amount">@item.Product.Price.ToString("C")</span>
-                                            </td>
-                                        </tr>
-                                    }
-
-                                    <tr>
-                                        <td class="order-subtotal">
-                                            <span>訂單金額</span>
-                                        </td>
-
-                                        <td class="order-subtotal-price">
-                                            <span class="order-subtotal-amount">$@Model.Carts.Sum(item => item.Product.Price * item.Quantity)</span>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td class="order-shipping">
-                                            <span>會員折扣</span>
-                                        </td>
-
-                                        <td class="shipping-price">
-                                            <span style="color:red">
-                                                $@{
-                                                    var totalAmount = Model.Carts.Sum(item => item.Product.Price * item.Quantity);
-                                                    var discountAmount = totalAmount * (1 - Model.Member.MemberType.Discount);
-                                                    @discountAmount.ToString("F2")
-                                                    ;
-                                                }
-                                            </span>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td class="total-price">
-                                            <span>Order Total</span>
-                                        </td>
-
-                                        <td class="product-subtotal">
-                                            <span class="subtotal-amount">$830.00</span>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="order-table table-responsive" id="orderDetails">
+                            @* 初始訂單詳情 *@
+                            @await Html.PartialAsync("_OrderDetails", Model)
                         </div>
 
                         <div class="payment-box">
@@ -172,3 +113,21 @@
         </form>
     </div>
 </section>
+
+<script>
+    function updateOrderDetails() {
+        var ecouponId = document.getElementById("ecouponSelect").value;
+        $.ajax({
+            url: '@Url.Action("UpdateOrderDetails", "Order", new { area = "FrontEnd" })',
+            type: 'GET',
+            data: { ecouponId: ecouponId },
+            success: function (data) {
+                $('#orderDetails').html(data);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error updating order details:', error);
+            }
+        });
+    }
+</script>
+

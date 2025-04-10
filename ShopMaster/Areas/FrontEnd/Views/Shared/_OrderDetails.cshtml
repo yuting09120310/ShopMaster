@@ -1,0 +1,80 @@
+﻿@using ShopMaster.Areas.FrontEnd.ViewModels
+@model CheckoutViewModel
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th scope="col">商品名稱</th>
+            <th scope="col">數量</th>
+            <th scope="col">單價</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model.Carts)
+        {
+            <tr>
+                <td class="product-name">
+                    <a href="#">@item.Product.Name (@item.ProductSpec)</a>
+                </td>
+                <td class="product-name">
+                    <a href="#">@item.Quantity</a>
+                </td>
+                <td class="product-total">
+                    <span class="subtotal-amount">@item.Product.Price.ToString("C")</span>
+                </td>
+            </tr>
+        }
+
+        <tr>
+            <td class="order-subtotal">
+                <span>訂單金額</span>
+            </td>
+
+            <td class="space">
+            </td>
+
+            <td class="order-subtotal-price">
+                <span class="order-subtotal-amount">$@Model.Carts.Sum(item => item.Product.Price * item.Quantity)</span>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="order-shipping">
+                <span>會員折扣</span>
+            </td>
+
+            <td class="space">
+            </td>
+
+            <td class="shipping-price">
+                <span style="color:red">
+                    -
+                    $@{
+                        var totalAmount = Model.Carts.Sum(item => item.Product.Price * item.Quantity);
+                        var discountAmount = totalAmount * (1 - Model.Member.MemberType.Discount);
+                        @discountAmount.ToString("F2")
+                        ;
+                    }
+                </span>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="total-price">
+                <span>優惠券折扣</span>
+            </td>
+
+            <td class="space">
+            </td>
+
+            <td class="product-subtotal">
+                <span class="subtotal-amount" style="color:red"> -
+                    $@(Model.SelectEcoupon?.EcouponEvent?.Discount.ToString("F2") ?? "0.00")
+                </span>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
