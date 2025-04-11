@@ -53,6 +53,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             // 假設你有一個方法來獲取當前用戶的 ID
             string? memberId = HttpContext.Session.GetString("MemberId");
             var member = _db.Members.Find(Convert.ToInt64(memberId));
+            
+
 
             if (member == null)
             {
