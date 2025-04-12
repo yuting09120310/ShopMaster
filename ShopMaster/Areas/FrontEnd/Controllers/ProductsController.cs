@@ -14,7 +14,6 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
     {
         private readonly shopmasterdbContext _db;
 
-
         public ProductsController(shopmasterdbContext db)
         {
             _db = db;
@@ -49,7 +48,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             var result = product.Join(productTyoe,
                                         p => p.TypeId,
                                         pt => pt.Id,
-                                        (p, pt) => new ViewModelsF.Products
+                                        (p, pt) => 
+                                        new ViewModelsF.Products
                                         {
                                             TypeId = pt.Id,
                                             Name = p.Name,
@@ -57,7 +57,6 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                                             MainImage = p.MainImage
 
                                         }).ToList();
-
             return View(result);
         }
 
@@ -82,18 +81,19 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                                             Price = p.Price,
                                             MainImage = p.MainImage
                                         }).ToList();
+           
             //B你點到的商品
             var productListLoveB = productListLoveA.Where(x => x.Id == id).ToList();
-
-
+           
             //C找同樣規格商品
             List<Products> productListLoveC = new List<Products>();
+
             if (productListLoveB != null)
             {
                  productListLoveC = productListLoveA
-                                                  .Where(x => productListLoveB
-                                                  .Select(y => y.TypeId)
-                                                  .Contains(x.TypeId)).ToList();
+                                    .Where(x => productListLoveB
+                                    .Select(y => y.TypeId)
+                                    .Contains(x.TypeId)).ToList();
             }
 
 
@@ -118,18 +118,18 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                                             Stock = pt.p.Stock,
                                             ProductImage = i.ImageUrl,
                                             ProductImages = new List<ProductImage>
-                                             {
-                                                new ProductImage { ImageUrl = i.ImageUrl, ProductId = pt.p.Id , Id = i.Id }
-                                             }
+                                            {
+                                               new ProductImage { ImageUrl = i.ImageUrl, ProductId = pt.p.Id , Id = i.Id }
+                                            }
                                         }).GroupBy(p => p.TypeId).SelectMany(group => group)
                                         .Where(p => p.Id == id)
                                         .ToList();
+
             var productsAll = new ProductsAll
             {
                 ProductDetails = productDetails,
                 ProductListLove = productListLoveC
             };
-
 
             return View(productsAll);
         }

@@ -21,8 +21,6 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
     public class HomeController : Controller
     {
         private readonly shopmasterdbContext _db;
-
-
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(shopmasterdbContext db, ILogger<HomeController> logger) 
@@ -50,7 +48,6 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                                             MainImage = p.MainImage,
                                             TypeName = pt.Name
 
-
                                         }).GroupBy(p => p.TypeId ?? 0)
                                           .ToList();
 
@@ -70,19 +67,16 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                                                 MainImage = p.MainImage,
                                                 TypeName = pt.Name
 
-
                                             }).Where(x => x.TypeId == id)
                                               .ToList();
 
             }
-
 
             var productsAll = new ProductsAll
             {
                 ProductList = productList,
                 ProductListLove = productListLove,               
             };
-
 
             ViewData["TypeID"] = id;  
 

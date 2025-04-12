@@ -1,38 +1,22 @@
 ﻿@model ShopMaster.Areas.FrontEnd.ViewModelsF.ProductsAll
 
-
 @{
-
-
-
     if (Model != null)
     {
-
-      
-
         if (Model.ProductCart.Count() != 0 )
         {
-            <form method="post" asp-action="Create" asp-controller="Cart" asp-area="FrontEnd">
-
-               
-
-
-
+            <form method="post" asp-action="Create" asp-controller="Cart" asp-area="FrontEnd">      
 
             @foreach (var i in Model.ProductCart)
-                {
-                    <input type="hidden" asp-for="ProductCart[0].ProductId" value="@i.ProductId" />
-                   
-
-                   
-
+            {                    
+                <input type="hidden" asp-for="ProductCart[0].ProductId" value="@i.ProductId"/>        
 
                 <div class="row d-flex mb-3 ">
                     <div class="col-3 ">
 
                         @foreach (var img in i.CartItem.Select(c => c.MainImage).ToList())
                         {
-                            <img src="@img" class="d-block fixed-size-img " alt="" style="width: 80px; height: 60px">
+                            <img src="@img" class="d-block fixed-size-img" alt="" style="width: 80px; height: 60px">
                         }
 
                     </div>
@@ -40,7 +24,6 @@
                         @foreach (var n in i.CartItem.Select(c => c.Name).ToList())
                         {
                             <p class="text-start">"@n"</p>
-
                         }
 
                     </div>
@@ -54,10 +37,6 @@
                     </div>
                 </div>
             }
-
-
-
-
                 <div class="d-grid gap-2 justify-content-center mt-4">
                     <button class="btn btn-warning fw-bold" type="submit" id="cart" style="color:white;" >前往購物車</button>
                 </div>
@@ -71,14 +50,7 @@
                 <button class="btn btn-warning fw-bold" type="submit" id="continue" style="color:white;" onclick="window.location.href='@Url.Action("Index", "Home", new { area = "FrontEnd" })' ">繼續購物</button>
             </div>
         }
-
-
     }
-
-
-
-
-
 }
 
 
@@ -86,8 +58,3 @@
 
 
 
-@* 
-             <div class="d-grid gap-2 justify-content-center mt-4">
-        <button class="btn btn-warning fw-bold" type="submit" id="cart" style="color:white;" onclick="window.location.href='@Url.Action("Create", "Cart", new { area = "FrontEnd" })' ">前往購物車</button>
-    
-</div> *@

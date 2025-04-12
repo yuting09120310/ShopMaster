@@ -172,7 +172,6 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         public IActionResult EditToAddCart(int productId, string name, decimal price, string mainImage, int countInput)
         {
             tempCart = HttpContext.Session.Get<List<Cart>>("tempCart") ?? new List<Cart>();
-
             Dictionary<long, long> totalInput = HttpContext.Session.Get<Dictionary<long, long>>("totalInput") ?? new Dictionary<long, long>();
 
             var existingItem = tempCart.FirstOrDefault(c => c.ProductId == productId);
@@ -183,7 +182,6 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             }
             
             HttpContext.Session.Set("totalInput", totalInput);
-
             countInputDy = HttpContext.Session.Get<Dictionary<long, long>>("totalInput") ?? new Dictionary<long, long>();
 
             return Json(new { success = true, message = "商品已加入購物車", cartItemCount = countInputDy.Values.Sum() });
@@ -193,7 +191,6 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         public IActionResult GetCart()
         {
             tempCart = HttpContext.Session.Get<List<Cart>>("tempCart") ?? new List<Cart>();
-
             var getCartTemp = tempCart.DistinctBy(p => p.ProductId).ToList();
 
             var productsAll = new ProductsAll
@@ -222,14 +219,11 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         public ActionResult Create(List<Cart> cart)
         {
             countInputDy = HttpContext.Session.Get<Dictionary<long, long>>("totalInput") ?? new Dictionary<long, long>();
-
             tempCart = HttpContext.Session.Get<List<Cart>>("tempCart") ?? new List<Cart>();
 
-
             //先取 Product
-
-            if (tempCart != null)            {
-
+            if (tempCart != null)       
+            {
 
                 if (tempCart.Any(m => m.MemberId.HasValue))
                 {
@@ -238,6 +232,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                         //新增購物車至資料庫
                         var existingIds = _db.Carts.Select(c => c.Id).ToList();
                         int newId = 1;
+
                         while (existingIds.Contains(newId))
                         {
                             newId++;
@@ -245,29 +240,25 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
                         var cartCreateDb = tempCart.Select((c, index) => new ShopMaster.Areas.BackEnd.Models.Cart
                         {
-
                             Id = newId++,
                             ProductId = c.ProductId,
                             MemberId = c.MemberId,
 
                         });
+
                         //自行輸入商品數量
                         ViewBag.totalInputDictionary = countInputDy;
-
                         HttpContext.Session.Set("totalInput", countInputDy);
-
                         var getCartTemp = tempCart.DistinctBy(p => p.ProductId).ToList();
+
                         // 商品金額
                         var price = getCartTemp.Select(c => c.CartItem.Select(p => new { c.ProductId, p.Price })).ToList();
-
-
                         decimal totalPrice = 0;
 
                         foreach (var c in countInputDy)
                         {
                             if (getCartTemp.Select(p => p.ProductId).ToList().Contains(c.Key))
                             {
-
                                 // 獲取該 ProductId 的所有價格
                                 var productPrices = getCartTemp
                                     .Where(p => p.ProductId == c.Key)  // 篩選出匹配的 ProductId
@@ -284,44 +275,31 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                                 {
                                     priceDy.Add(c.Key, totalPrice);
                                 }
-
-
                             }
 
                         }
 
                         ViewBag.totalPrice = priceDy;
-
                         HttpContext.Session.Set("priceDy", priceDy);
 
                         var productsAll = new ProductsAll
                         {
                             ProductCart = getCartTemp
-
                         };
 
-
-
                         return View(productsAll);
-
-
-
-
-
-
                     }
                     
-                    }
+                }
                 else
                 {
                     //不用登入加入購物車
-
                     if (ModelState.IsValid)
                     {
-
                         //新增購物車至資料庫
                         var existingIds = _db.Carts.Select(c => c.Id).ToList();
                         int newId = 1;
+
                         while (existingIds.Contains(newId))
                         {
                             newId++;
@@ -329,13 +307,11 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
                         var cartCreateDb = tempCart.Select((c, index) => new ShopMaster.Areas.BackEnd.Models.Cart
                         {
-
                             Id = newId++,
                             ProductId = c.ProductId,
                             MemberId = c.MemberId.HasValue ? c.MemberId.Value : 0
 
                         });
-
 
                         //商品數量
                         //var count = tempCart.GroupBy(x => x.ProductId)
@@ -351,21 +327,18 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
                         //自行輸入商品數量
                         ViewBag.totalInputDictionary = countInputDy;
-
                         HttpContext.Session.Set("totalInput", countInputDy);
 
                         var getCartTemp = tempCart.DistinctBy(p => p.ProductId).ToList();
+                       
                         // 商品金額
                         var price = getCartTemp.Select(c => c.CartItem.Select(p => new { c.ProductId, p.Price })).ToList();
-
-
                         decimal totalPrice = 0;
 
                         foreach (var c in countInputDy)
                         {
                             if (getCartTemp.Select(p => p.ProductId).ToList().Contains(c.Key))
                             {
-
                                 // 獲取該 ProductId 的所有價格
                                 var productPrices = getCartTemp
                                     .Where(p => p.ProductId == c.Key)  // 篩選出匹配的 ProductId
@@ -383,40 +356,25 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                                     priceDy.Add(c.Key, totalPrice);
                                 }
                             }
-
                         }
 
                         ViewBag.totalPrice = priceDy;
-
                         HttpContext.Session.Set("priceDy", priceDy);
 
                         var productsAll = new ProductsAll
                         {
                             ProductCart = getCartTemp
-
                         };
 
                         _db.Carts.AddRange(cartCreateDb);
                         _db.SaveChanges();
 
-
                         return View(productsAll);
                     }
                 
                 }
-            }
-           
+            }  
 
-
-
-                //try
-                //{
-                //    return RedirectToAction(nameof(Index));
-                //}
-                //catch
-                //{
-                //    return View();
-                //}
                 return View();
         }
 
@@ -433,7 +391,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         public ActionResult Edit(int id, string productId, int quantity)
         {
            
-                return View();
+             return View();
             
         }
 
@@ -453,8 +411,6 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 tempCart = HttpContext.Session.Get<List<Cart>>("tempCart") ?? new List<Cart>();
                 countInputDy = HttpContext.Session.Get<Dictionary<long, long>>("totalInput") ?? new Dictionary<long, long>();
                
-
-
                 var item = tempCart.FirstOrDefault(c => c.ProductId == deleteId);
 
                 if (tempCart != null)
@@ -467,15 +423,10 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                     countInputDy.Remove(deleteId);
                 }
 
-               
-
-
                 // 更新 Session
                 HttpContext.Session.Set("tempCart", tempCart);
                 HttpContext.Session.Set("totalInput", countInputDy);
                
-
-
                 return Json(new { success = true, message = "商品已刪除", id= deleteId, cartItemCount = countInputDy.Values.Sum()  });
             }
             catch
