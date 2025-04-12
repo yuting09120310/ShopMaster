@@ -104,7 +104,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                         {
                             Name = mamberLongin.Name,
                             Phone = mamberLongin.Phone,
-                            Email = mamberLongin.Email
+                            Email = mamberLongin.Email,
+                            Address = mamberLongin.Address
                         },
                         CartItem = new List<Products>
                         {
