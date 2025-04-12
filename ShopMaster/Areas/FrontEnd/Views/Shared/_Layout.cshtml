@@ -5,7 +5,7 @@
 
 @functions {
     
-    //取購物車 partialView 資料
+    // 取購物車 partialView 資料
     public ProductsAll GetCartModel()
     {            
         var tempCart = HttpContextAccessor.HttpContext.Session.Get<List<ShopMaster.Areas.FrontEnd.ViewModelsF.Cart>>("tempCart") ?? new List<ShopMaster.Areas.FrontEnd.ViewModelsF.Cart>();

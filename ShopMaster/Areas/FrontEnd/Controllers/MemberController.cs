@@ -27,17 +27,10 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 return RedirectToAction("Login", "Member", new { Area = "FrontEnd" });
             }
 
-            var member = _db.Members.FirstOrDefault(x => x.Id.ToString() == memberId);         
+            var member = _db.Members.FirstOrDefault(x => x.Id.ToString() == memberId);        
 
 
-
-            var productsAll = new ProductsAll
-            {
-                Member = member
-            };
-
-
-            return View(productsAll);
+            return View(member);
         }
 
 
@@ -59,15 +52,10 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             if (member == null)
             {
                 return NotFound();
-            }
-
-            var productsAll = new ProductsAll
-            {
-                Member = member
-            };
+            }          
 
 
-            return View(productsAll);
+            return View(member);
         }
 
         [HttpPost]
@@ -89,14 +77,9 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 _db.SaveChanges();
 
                 return RedirectToAction("Profile");
-            }
+            }            
 
-            var productsAll = new ProductsAll
-            {
-                Member = member
-            };
-
-            return View(productsAll);
+            return View(member);
         }
 
 
