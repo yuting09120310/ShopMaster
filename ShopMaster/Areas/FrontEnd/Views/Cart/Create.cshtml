@@ -13,39 +13,28 @@
 
 <div class="container" style="padding-top: 120px">
     <div class="row">
-        <div class="">
-
+        <div class="col">
             <h3 class="text-start fw-bold text-secondary mt-4" >您的購物車</h3>
         </div>
     </div>
 
-
     <form>
 
        @{
-
-
             if (Model != null )
             {
-                <div class="card my-3 " style="max-width: auto; " >
-
-
+                <div class="card my-3 " style="max-width: auto;">
 
                     @foreach (var c in Model.ProductCart)
                     {
-
-
-                        <div class="row g-0 justify-content-center " id="cartB-@c.ProductId" >
-
-
+                        <div class="row g-0 justify-content-center" id="cartB-@c.ProductId">
                             <div class="col-md-4 col-3" style="padding: 10px;">
-
-
 
                                 @foreach (var img in c.CartItem.Select(c => c.MainImage).ToList())
                                 {
                                     <img src="@img" class="img-fluid rounded-start d-block" alt="Responsive image" style="height:100px; width:120px" id="mainImage-@c.ProductId">
                                 }
+
                             </div>
                             <div class="col-md-8 col-9">
                                 <div class="card-body d-flex justify-content-around  " style="padding-bottom: 0px;">
@@ -55,10 +44,9 @@
                                         <p class="card-title col-4" id="name-@c.ProductId">"@name"</p>
                                     }
 
-                                    @* 數量 *@
-
+                                    @*數量*@
                                     @{
-
+                                       
                                         foreach (var i in ViewBag.totalInputDictionary)
                                         {
                                             if (c.ProductId == i.Key)
@@ -66,18 +54,15 @@
 
                                                 <div class="input-group mb-3 ms-2 border-left-0 col-3" style="height:38px; width:100px; border-left: none;" id="count-@i.Key">
                                                     <button class="btn" type="button" id="button-minus-@i.Key" style="border-color: #dee2e6; border-right: none;">-</button>
-                                                    <input type="text" class="form-control border-left-0" value="@i.Value" id="count-input-@i.Key" aria-label="Example text with button addon" aria-describedby="button-addon1" style="border-right: none; border-left: none; text-align: center; padding-right: 0px;
-                                                         padding-left: 0px;">
-                                                    <button class="btn" type="button" id="button-plus-@i.Key" style="border-color: #dee2e6; border-left: none; border-top-right-radius: 5px;
-                                             border-bottom-right-radius: 5px;">
-                                                        +
-                                                    </button>
+                                                    <input type="text" class="form-control border-left-0" value="@i.Value" id="count-input-@i.Key" aria-label="Example text with button addon" aria-describedby="button-addon1"
+                                                    style="border-right: none; border-left: none; text-align: center; padding-right: 0px; padding-left: 0px;">
+                                                    <button class="btn" type="button" id="button-plus-@i.Key" 
+                                                    style="border-color: #dee2e6; border-left: none; border-top-right-radius: 5px; border-bottom-right-radius: 5px;">+</button>
 
                                                     @foreach (var cp in c.CartItem)
                                                     {
                                                         <input type="hidden" value="@cp.Price" id="price-@c.ProductId">
                                                     }
-
 
                                                 </div>
                                                 <button class="col-1 text-center d-flex align-items-start justify-content-center  mb-5 btn" id="trash-@c.ProductId" type="button"> <i class="bi bi-trash3 fs-5"></i>  </button>
@@ -86,59 +71,45 @@
 
                                     }
 
-
-
-
                                     @{
-
                                         foreach (var p in ViewBag.totalPrice)
                                         {
-
                                             if (c.ProductId == p.Key)
                                             {
-
                                                 <p class="card-text col-2 text-end mt-2" id="total-price-@c.ProductId">@p</p>
                                             }
 
-
                                         }
                                     }
-
 
                                 </div>
                             </div>
                         </div>
                     }
-
-
-
                     
                 </div>
 
+                @*合計*@
+        <div class="row">               
+            <div class="col d-flex justify-content-end mt-2">
+                <h5 class="fw-bold text-secondary me-5" id="finallyText">合計</h5>
+                <span class="me-4" id="cartFinally">
+                    @((ViewBag.totalPrice.Values as IEnumerable<decimal>)?.Sum() ?? 0)
+                </span>
+            </div>
+        </div>
 
-               
-
-                <div class="row">              
-            
-                    <div class="col d-flex justify-content-end mt-2">
-                        <h5 class="fw-bold text-secondary me-5" id="finallyText">合計  </h5>
-                        <span class="me-4" id="cartFinally">
-                            @((ViewBag.totalPrice.Values as IEnumerable<decimal>)?.Sum() ?? 0)
-                        </span>
-                    </div>
-                </div>          
-            
-
+                @*結帳*@
         <div class="row">
             <div class="d-grid gap-2 justify-content-end mt-4 ">
-                <button class="btn btn-warning fw-bold add-to-cart" type="button" id="purchase" style="color:	white;" onclick="window.location.href='@Url.Action("Create", "Order", new { area = "FrontEnd" })'">結帳去</button>
+                <button class="btn btn-warning fw-bold add-to-cart" type="button" id="purchase" style="color:white;" onclick="window.location.href='@Url.Action("Create", "Order", new { area = "FrontEnd" })'">結帳去</button>
             </div>
         </div>
         }}
     </form>
 </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>  
 
 

@@ -4,21 +4,21 @@
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 @functions {
-    
+
     // 取購物車 partialView 資料
     public ProductsAll GetCartModel()
-    {            
+    {
         var tempCart = HttpContextAccessor.HttpContext.Session.Get<List<ShopMaster.Areas.FrontEnd.ViewModelsF.Cart>>("tempCart") ?? new List<ShopMaster.Areas.FrontEnd.ViewModelsF.Cart>();
         var cartList = tempCart.DistinctBy(p => p.ProductId).ToList();
         return new ProductsAll
-        {
-            ProductCart = cartList
-        };
+            {
+                ProductCart = cartList
+            };
     }
 }
 
 @{
-  var cartModel = GetCartModel();
+    var cartModel = GetCartModel();
 }
 
 
@@ -188,50 +188,34 @@
     <script>
 
         // 啟用tooltip
-         var tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-         tooltipTriggerList.forEach(function (tooltipTriggerEl) { new bootstrap.Tooltip(tooltipTriggerEl);
-         });
-
-         // 啟用Popovers
-         const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-         const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
-
-
-        $(document).ready(function() {
-         var cartItemCount = sessionStorage.getItem('cartItemCount');
-       
-
-        // 如果有購物車數量，更新頁面中的 #cartCount
-        if (cartItemCount) 
-        {
-            $('#cartCount').html(cartItemCount);
-        } 
-        else
-        {
-            $('#cartCount').html('0');  
-        }
-
-                    // 初始載入購物車內容
-        $("#cartContent").load('@Url.Action("GetCart", "Cart", new { area = "FrontEnd" })');
-
-
-            $('#openCartBtn').click(function() {
-            $.get('/Cart/GetCart', function(result) {
-            $('#cartContent').html(result); // 顯示購物車內容
-                   
-            
-
-            });
+        var tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) { new bootstrap.Tooltip(tooltipTriggerEl);
         });
-    });
 
-    
+        // 啟用Popovers
+        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
 
+
+           $(document).ready(function() {
+               var cartItemCount = sessionStorage.getItem('cartItemCount');
+
+               // 如果有購物車數量，更新頁面中的 #cartCount
+               if (cartItemCount)
+               {
+                   $('#cartCount').html(cartItemCount);
+               }
+               else
+               {
+                   $('#cartCount').html('0');
+               }
+
+               $('#openCartBtn').click(function() {
+                   $.get('/Cart/GetCart', function(result) {
+                   $('#cartContent').html(result); // 顯示購物車內容
+               });
+           });
+         });
     </script>
-
-
-
-
-
 </body>
 </html>
