@@ -14,6 +14,8 @@ builder.Services.AddDbContext<shopmasterdbContext>(options =>
 
 builder.Services.AddSession(); // 啟用 Session
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
+
 
 var app = builder.Build();
 

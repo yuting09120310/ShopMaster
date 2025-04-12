@@ -221,9 +221,10 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             var productsAll = new ProductsAll
             {
                 ProductCart = getCartTemp
-            };
+            };          
 
-           
+            
+
 
             return PartialView("_CartPartial", productsAll);
         }
