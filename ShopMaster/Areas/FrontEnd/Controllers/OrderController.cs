@@ -24,6 +24,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             foreach(Cart cart in carts)
             {
                 cart.Product = _db.Products.Where(x => x.Id == cart.ProductId).FirstOrDefault();
+                cart.Product.ProductSpecs = _db.ProductSpecs.Where(x => x.ProductId == Convert.ToInt64(cart.ProductId)).ToList();
             }
 
             Member member = _db.Members.FirstOrDefault(x => x.Id.ToString() == memberId);
@@ -63,6 +64,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             foreach (Cart cart in carts)
             {
                 cart.Product = _db.Products.Where(x => x.Id == cart.ProductId).FirstOrDefault();
+                cart.Product.ProductSpecs = _db.ProductSpecs.Where(x => x.ProductId == Convert.ToInt64(cart.ProductId)).ToList();
             }
 
             Member member = _db.Members.FirstOrDefault(x => x.Id.ToString() == memberId);

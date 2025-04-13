@@ -69,8 +69,6 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         }
 
 
-
-
         [HttpGet]
         public ActionResult GetCartPartial()
         {
@@ -83,9 +81,37 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 cartItem.Product = _db.Products
                     .Where(p => p.Id == cartItem.ProductId)
                     .FirstOrDefault();
+
+                cartItem.Product.ProductSpecs = _db.ProductSpecs.Where(x => x.ProductId == Convert.ToInt64(cartItem.ProductId)).ToList();
             }
 
             return PartialView("_CartPartial", cartItems);
         }
+
+
+        [HttpGet]
+        public ActionResult DelCartPartial(string itemNo)
+        {
+            // 刪除購物車項目
+            var cartItem = _db.Carts.FirstOrDefault(x => x.Id == Convert.ToInt64(itemNo));
+            if (cartItem != null)
+            {
+                _db.Carts.Remove(cartItem);
+                _db.SaveChanges();
+            }
+
+            // 重新獲取購物車項目
+            string? memberId = HttpContext.Session.GetString("MemberId");
+            var cartItems = _db.Carts.Where(c => c.MemberId == Convert.ToInt64(memberId)).ToList();
+
+            foreach (var item in cartItems)
+            {
+                item.Product = _db.Products.FirstOrDefault(p => p.Id == item.ProductId);
+                item.Product.ProductSpecs = _db.ProductSpecs.Where(x => x.ProductId == item.ProductId).ToList();
+            }
+
+            return PartialView("_CartPartial", cartItems);
+        }
+
     }
 }

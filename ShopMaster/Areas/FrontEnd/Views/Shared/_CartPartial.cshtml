@@ -9,14 +9,14 @@
             </div>
 
             <div class="products-content">
-                <h3><a href="#">Product @item.ProductId</a></h3>
-                <span>@item.ProductSpec</span>
+                <h3><a href="#">@item.Product.Name</a></h3>
+                <span>@item.Product.ProductSpecs.FirstOrDefault().SpecText</span>
                 <div class="products-price">
                     <span>@item.Quantity</span>
                     <span>x</span>
                     <span class="price">$@item.Product.Price</span>
                 </div>
-                <a href="#" class="remove-btn"><i class='bx bx-trash'></i></a>
+                <a href="#" class="remove-btn" onclick="removeCartItem('@item.Id')"><i class='bx bx-trash'></i></a>
             </div>
         </div>
     }
@@ -32,3 +32,18 @@
 </div>
 
 
+<script>
+    function removeCartItem(itemId) {
+        $.ajax({
+            url: '@Url.Action("DelCartPartial", "Cart", new { area = "FrontEnd" })',
+            type: 'GET',
+            data: { itemNo: itemId },
+            success: function (data) {
+                $('#cartItemsContainer').html(data);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error removing cart item:', error);
+            }
+        });
+    }
+</script>
