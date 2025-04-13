@@ -387,6 +387,7 @@ public partial class shopmasterdbContext : DbContext
                 .HasColumnType("timestamp");
             entity.Property(e => e.Description).HasColumnType("text");
             entity.Property(e => e.Name).HasMaxLength(50);
+            entity.Property(e => e.Publish).HasColumnType("bigint(20)");
         });
 
         modelBuilder.Entity<Product>(entity =>

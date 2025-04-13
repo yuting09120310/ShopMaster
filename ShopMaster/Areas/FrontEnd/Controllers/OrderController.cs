@@ -50,6 +50,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             viewModel.Member = member;
             viewModel.Ecoupons = validEcoupons;
             viewModel.SelectEcoupon = new Ecoupon();
+            viewModel.Payinfo = _db.PayInfos.Where(x => x.Publish == 1).ToList();
 
             return View(viewModel);
         }
@@ -89,6 +90,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             viewModel.Member = member;
             viewModel.Ecoupons = validEcoupons;
             viewModel.SelectEcoupon = _db.Ecoupons.Where(x => x.Id == ecouponId).FirstOrDefault();
+            viewModel.Payinfo = _db.PayInfos.Where(x => x.Publish == 1).ToList();
 
             return PartialView("_OrderDetails", viewModel);
         }

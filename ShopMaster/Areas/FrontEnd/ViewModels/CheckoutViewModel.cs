@@ -10,6 +10,9 @@ namespace ShopMaster.Areas.FrontEnd.ViewModels
 
         public List<Ecoupon> Ecoupons { get; set; }
 
+        public List<PayInfo> Payinfo { get; set; }
+
         public Ecoupon SelectEcoupon { get; set; }
+
     }
 }

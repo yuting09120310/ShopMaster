@@ -90,22 +90,16 @@
 
                         <div class="payment-box">
                             <div class="payment-method">
-                                <p>
-                                    <input type="radio" id="direct-bank-transfer" name="radio-group" checked="">
-                                    <label for="direct-bank-transfer">Direct Bank Transfer</label>
-                                    Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.
-                                </p>
-                                <p>
-                                    <input type="radio" id="paypal" name="radio-group">
-                                    <label for="paypal">PayPal</label>
-                                </p>
-                                <p>
-                                    <input type="radio" id="cash-on-delivery" name="radio-group">
-                                    <label for="cash-on-delivery">Cash on Delivery</label>
-                                </p>
+                                @foreach (var pay in Model.Payinfo)
+                                {
+                                    <p>
+                                        <input type="radio" id="@pay.Id" name="radio-group">
+                                        <label for="@pay.Id">@pay.Name</label>
+                                    </p>
+                                }
                             </div>
 
-                            <a href="#" class="default-btn">Place Order</a>
+                            <a href="#" class="default-btn">下單</a>
                         </div>
                     </div>
                 </div>
