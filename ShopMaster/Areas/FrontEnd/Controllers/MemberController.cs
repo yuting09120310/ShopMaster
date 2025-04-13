@@ -3,6 +3,7 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using ShopMaster.Areas.BackEnd.Models;
 using ShopMaster.Areas.FrontEnd.ViewModelsF;
+using ShopMaster.Areas.FrontEnd.Utility;
 
 
 
@@ -104,8 +105,21 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 return View();
             }
 
+            // 購物車
+            var tempCart = HttpContext.Session.Get<List<Areas.FrontEnd.ViewModelsF.Cart>>("tempCart") ?? new List<Areas.FrontEnd.ViewModelsF.Cart>();
+            foreach (var i in tempCart)
+            {
+                i.Member.Name = member.Name;
+                i.Member.Address = member.Address;
+                i.Member.Phone = member.Phone;
+                i.Member.Email = member.Email;
+                i.Member.Id = member.Id;
+            }
+            
+            HttpContext.Session.Set("tempCart", tempCart);
+            
             // 設定登入 Session
-            HttpContext.Session.SetString("MemberId", member.Id.ToString());
+            HttpContext.Session.SetString("MemberId", member.Id.ToString());                   
             return RedirectToAction("Index", "Home", new { Area = "FrontEnd" });
         }
 
@@ -126,7 +140,22 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
         public IActionResult Logout()
         {
+            // 如果有購物車 清除基本資料            
+            var tempCart = HttpContext.Session.Get<List<Areas.FrontEnd.ViewModelsF.Cart>>("tempCart") ?? new List<Areas.FrontEnd.ViewModelsF.Cart>();
+            
+            foreach(var i in tempCart)
+            {
+                i.Member.Name = "";
+                i.Member.Address = "";
+                i.Member.Phone = "";
+                i.Member.Email = "";
+                i.Member.Id = 0;
+            }
+            
+            HttpContext.Session.Set("tempCart", tempCart);
+           
             HttpContext.Session.Remove("MemberId");
+
             return RedirectToAction("Index", "Home", new { Area = "FrontEnd" });
         }
     }

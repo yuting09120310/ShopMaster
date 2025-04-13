@@ -87,11 +87,12 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             
             var existingItem = tempCart.FirstOrDefault(c => c.ProductId == productId);
             string? memberId = HttpContext.Session.GetString("MemberId");
-            long memberIdLong;            
+            long memberIdLong;          
 
-            if (!string.IsNullOrEmpty(memberId))
+            if (memberId != null)
             {
                 memberIdLong = long.Parse(memberId);
+
                 var mamberLongin = member.FirstOrDefault(m => m.Id == memberIdLong);
 
                 if (mamberLongin != null)
@@ -115,17 +116,23 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                                 Price = price,
                                 MainImage = mainImage
                             }
-
                         }
-
                     });
                 }
             }
             else
             {
+                memberId = "0";
+                memberIdLong = long.Parse(memberId);
+
                 tempCart.Add(new Cart
                 {
-                    ProductId = productId,                   
+                    ProductId = productId,
+                    MemberId = memberIdLong,
+                    Member = new Member
+                    {
+                       Id = memberIdLong
+                    },
                     CartItem = new List<Products>
                     {
                         new Products
@@ -134,12 +141,10 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                             Price = price,
                             MainImage = mainImage
                         }
-
                     }
-
                 });
-            }
-
+            }            
+            
             HttpContext.Session.Set("tempCart", tempCart);
             tempCart = HttpContext.Session.Get<List<Cart>>("tempCart") ?? new List<Cart>();
             
