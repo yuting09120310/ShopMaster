@@ -431,11 +431,12 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 tempCart = HttpContext.Session.Get<List<Cart>>("tempCart") ?? new List<Cart>();
                 countInputDy = HttpContext.Session.Get<Dictionary<long, long>>("totalInput") ?? new Dictionary<long, long>();
                
-                var item = tempCart.FirstOrDefault(c => c.ProductId == deleteId);
 
                 if (tempCart != null)
                 {
-                    tempCart.Remove(item); // 移除找到的項目
+                   
+                     tempCart.RemoveAll(c => c.ProductId == deleteId); 
+                                        
                 }
 
                 if (countInputDy.ContainsKey(deleteId))
