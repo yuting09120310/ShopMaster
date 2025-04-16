@@ -94,6 +94,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 memberIdLong = long.Parse(memberId);
 
                 var mamberLongin = member.FirstOrDefault(m => m.Id == memberIdLong);
+                var ecoupon = _db.Ecoupons.Where(x => x.MemberId == memberIdLong).ToList();
 
                 if (mamberLongin != null)
                 {
@@ -101,6 +102,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                     {
                         ProductId = productId,
                         MemberId = memberIdLong,
+                        Code = ecoupon.Select(x => x.Code).ToList(),
+
                         Member = new Member
                         {
                             Name = mamberLongin.Name,
@@ -163,7 +166,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             else
             {
                 totalInput[productId] += countInput;
-            }            
+            }         
+            
 
             HttpContext.Session.Set("totalInput", totalInput);
             countInputDy = HttpContext.Session.Get<Dictionary<long, long>>("totalInput") ?? new Dictionary<long, long>();

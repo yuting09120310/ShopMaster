@@ -32,75 +32,75 @@
             @foreach (var p in Model.cartList)
             {             
 
-                    <div class="col-lg-7 mb-4 order-2 order-lg-1 ">
-                        <h5 class="text-start fw-bold text-secondary mb-3"></h5>
+                <div class="col-lg-7 mb-4 order-2 order-lg-1 ">
+                    <h5 class="text-start fw-bold text-secondary mb-3"></h5>
 
-                        <div class="card mb-4">
-                            <div class="card-header fw-bold text-secondary" style="background-color:transparent">
-                                <i class="fas fa-user-edit"></i> 聯絡資訊
-                            </div>
-                            <div class="card-body ">
-
-                                <div class="form-group mb-2">
-                                    <label for="Name">姓名</label>
-                                    <input type="text" class="form-control my-2" id="Name" name="Name" value="@p.Member.Name" required />
-                                </div>
-                                <div class="form-group mb-2">
-                                    <label for="Email">Email</label>
-                                    <input type="email" class="form-control my-2" id="Email" name="Email" value="@p.Member.Email" required />
-                                </div>
-                                <div class="form-group ">
-                                    <label for="Phone">電話</label>
-                                    <input type="text" class="form-control mt-2 " id="Phone" name="Phone" value="@p.Member.Phone" />
-                                </div>
-
-                            </div>
+                    <div class="card mb-4">
+                        <div class="card-header fw-bold text-secondary" style="background-color:transparent">
+                            <i class="fas fa-user-edit"></i> 聯絡資訊
                         </div>
+                        <div class="card-body ">
 
-                        <div class="card mb-4">
-                            <div class="card-header fw-bold text-secondary" style="background-color:transparent">
-                                <i class="fas fa-user-edit"></i> 運送
+                            <div class="form-group mb-2">
+                                <label for="Name">姓名</label>
+                                <input type="text" class="form-control my-2" id="Name" name="Name" value="@p.Member.Name" required />
                             </div>
-                            @* 運送*@
-                            <div class="card-body">
-                                @* 輸入取件資訊 *@
-                                <div class="form-group mb-2">
-                                    <label for="Address">地址 / 取貨門市</label>
-                                    <input type="text" class="form-control my-2" id="Address" name="Address" value="@p.Member.Address" />
-                                </div>
-                                @* 運送方式 *@
-                                <div class="form-group mb-2">
-                                    <label for="Address">運送方式</label>
-                                    <select class="form-select mt-2" aria-label="Default select example">
-                                        <option selected>請選擇運送方式</option>
-                                        <option value="1">郵寄掛號</option>
-                                        <option value="2">宅配</option>
-                                        <option value="3">小七貨到付款</option>
-                                        <option value="3">小七貨到不付款</option>
-                                        <option value="3">全家貨到付款</option>
-                                        <option value="3">全家貨到不付款</option>
-                                    </select>
-                                </div>
+                            <div class="form-group mb-2">
+                                <label for="Email">Email</label>
+                                <input type="email" class="form-control my-2" id="Email" name="Email" value="@p.Member.Email" required />
                             </div>
-                        </div>
+                            <div class="form-group ">
+                                <label for="Phone">電話</label>
+                                <input type="text" class="form-control mt-2 " id="Phone" name="Phone" value="@p.Member.Phone" />
+                            </div>
 
-                        @* 付款 *@
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="form-group mb-2">
-                                    <label asp-for="@Model.payInfo.SelectedPaymentMethod">付款方式</label>
-                                    <select asp-for="@Model.payInfo.SelectedPaymentMethod" asp-items="@Model.payInfo.PaymentMethodList" class="form-select mt-2"></select>
-                                </div>
-                            </div>
-                        </div>
-
-                        @* 結帳 *@
-                        <div class="d-grid gap-2 justify-content-center mt-5">
-                            <button class="btn btn-warning fw-bold" type="submit" id="pay" style="color:white;" data-bs-toggle="modal" data-bs-target="#finish">結帳 !</button>
                         </div>
                     </div>
 
-               
+                    <div class="card mb-4">
+                        <div class="card-header fw-bold text-secondary" style="background-color:transparent">
+                            <i class="fas fa-user-edit"></i> 運送
+                        </div>
+                        @* 運送*@
+                        <div class="card-body">
+                            @* 輸入取件資訊 *@
+                            <div class="form-group mb-2">
+                                <label for="Address">地址 / 取貨門市</label>
+                                <input type="text" class="form-control my-2" id="Address" name="Address" value="@p.Member.Address" />
+                            </div>
+                            @* 運送方式 *@
+                            <div class="form-group mb-2">
+                                <label for="Address">運送方式</label>
+                                <select class="form-select mt-2" aria-label="Default select example">
+                                    <option selected>請選擇運送方式</option>
+                                    <option value="1">郵寄掛號</option>
+                                    <option value="2">宅配</option>
+                                    <option value="3">小七貨到付款</option>
+                                    <option value="3">小七貨到不付款</option>
+                                    <option value="3">全家貨到付款</option>
+                                    <option value="3">全家貨到不付款</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    @* 付款 *@
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group mb-2">
+                                <label asp-for="@Model.payInfo.SelectedPaymentMethod">付款方式</label>
+                                <select asp-for="@Model.payInfo.SelectedPaymentMethod" asp-items="@Model.payInfo.PaymentMethodList" class="form-select mt-2"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    @* 結帳 *@
+                    <div class="d-grid gap-2 justify-content-center mt-5">
+                        <button class="btn btn-warning fw-bold" type="submit" id="pay" style="color:white;" data-bs-toggle="modal" data-bs-target="#finish">結帳 !</button>
+                    </div>
+                </div>
+
+
 
             }
 
@@ -115,61 +115,64 @@
 
 
 
-        @* 商品資料 *@
-        <div class="col-lg-5 mb-4 order-1 order-lg-2 ">
-            <h5 class="text-start fw-bold text-secondary  mb-3 d-none d-lg-block  "></h5>
+            @* 商品資料 *@
+            <div class="col-lg-5 mb-4 order-1 order-lg-2 ">
+                <h5 class="text-start fw-bold text-secondary  mb-3 d-none d-lg-block  "></h5>
 
 
 
-            <button class="btn btn-light d-lg-none  w-100 fw-bold text-secondary fs-5" type="button" data-bs-toggle="collapse" data-bs-target="#responsiveCollapse" aria-expanded="false" aria-controls="responsiveCollapse">
-                商品明細
-            </button>
+                <button class="btn btn-light d-lg-none  w-100 fw-bold text-secondary fs-5" type="button" data-bs-toggle="collapse" data-bs-target="#responsiveCollapse" aria-expanded="false" aria-controls="responsiveCollapse">
+                    商品明細
+                </button>
 
-            <!-- Collapse 元素 -->
-            <div id="responsiveCollapse" class="collapse  d-lg-block ">
-                <div class="card card-body mt-3 ">
-                    <div class="row d-flex">
-                        <div class="col-3">
-                            <img src="/upload/product/2/main.jpg" class="d-block fixed-size-img " alt="" style="width: 80px; height: 60px">
-
-
-                        </div>
-                        <div class="col-5 d-flex " style="overflow-wrap: break-word; word-break: break-word;">
-
-                            <p class="text-start">筆電筆電筆電</p>
-                            <p class="text-center ms-2">2</p>
+                <!-- Collapse 元素 -->
+                <div id="responsiveCollapse" class="collapse  d-lg-block ">
+                    <div class="card card-body mt-3 ">
+                        <div class="row d-flex">
+                            <div class="col-3">
+                                <img src="/upload/product/2/main.jpg" class="d-block fixed-size-img " alt="" style="width: 80px; height: 60px">
 
 
+                            </div>
+                            <div class="col-5 d-flex " style="overflow-wrap: break-word; word-break: break-word;">
 
-                        </div>
-                        <div class="col-4 ">
+                                <p class="text-start">筆電筆電筆電</p>
+                                <p class="text-center ms-2">2</p>
 
 
 
-                            <span class=" d-block text-end">NT900</span>
+                            </div>
+                            <div class="col-4 ">
 
 
-                        </div>
-                    </div>
-                </div>
 
-                @* 折扣碼 *@
-                <div class="card mt-3 bg-light">
+                                <span class=" d-block text-end">NT900</span>
 
-                    <div class="card-body">
 
-                        <div class="form-group mb-2">
-                            <label for="" class="text-secondary fw-bold">有優惠券嗎 ?</label>
-                            <select class="form-select mt-2" aria-label="Default select example">
-                                <option selected>請選擇優惠券</option>
-                                <option value="1">aaaaa</option>
-                                <option value="2">vvvvvv</option>
-                                <option value="3">vvvvvv</option>
-
-                            </select>
+                            </div>
                         </div>
                     </div>
-                </div>
+
+                    @* 折扣碼 *@
+
+                    @foreach (var i in Model.cartList)
+                    {
+                        <div class="card mt-3 bg-light">
+                            <div class="card-body">
+                                <div class="form-group mb-2">
+                                    <label for="" class="text-secondary fw-bold">有優惠券嗎 ?</label>
+                                    <select class="form-select mt-2" aria-label="Default select example">
+                                        <option selected>請選擇優惠券</option>
+                                        @foreach(var c in i.Code)
+                                        {
+                                            <option value="@c">@c</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                
 
 
 

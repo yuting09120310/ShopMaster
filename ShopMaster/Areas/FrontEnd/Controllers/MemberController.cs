@@ -107,6 +107,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
             // 購物車
             var tempCart = HttpContext.Session.Get<List<Areas.FrontEnd.ViewModelsF.Cart>>("tempCart") ?? new List<Areas.FrontEnd.ViewModelsF.Cart>();
+            var ecoupon = _db.Ecoupons.Where(x => x.MemberId == member.Id).ToList();
+            
             foreach (var i in tempCart)
             {
                 i.Member.Name = member.Name;
@@ -114,6 +116,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 i.Member.Phone = member.Phone;
                 i.Member.Email = member.Email;
                 i.Member.Id = member.Id;
+                i.Code = ecoupon.Select(x => x.Code).ToList();
             }
             
             HttpContext.Session.Set("tempCart", tempCart);
@@ -149,6 +152,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 i.Member.Address = "";
                 i.Member.Phone = "";
                 i.Member.Email = "";
+                i.Code = new List<string>();
                 i.Member.Id = 0;
             }
             

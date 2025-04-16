@@ -254,7 +254,9 @@
         let currentValue = parseInt(input.value);
         if (!isNaN(currentValue) && currentValue > 1) {  // 保證數字不小於 1
             input.value = currentValue - 1;
+           
         }
+         console.log(input.value)
     });
 
     // 監聽加號按鈕事件
@@ -263,6 +265,7 @@
         if (!isNaN(currentValue)) {
             input.value = currentValue + 1;  // 可以無限加
         }
+        console.log(input.value)
     });
 
     $(document).ready(function() {
