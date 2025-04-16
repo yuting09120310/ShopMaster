@@ -129,12 +129,13 @@
 
                     <!-- Collapse 元素 -->
                     <div id="responsiveCollapse" class="collapse  d-lg-block ">
-                        @foreach (var i in Model.cartList)
-                        {
-                            @foreach(var c in i.CartItem)
-                            {
 
-                                <div class="card card-body mt-3 ">
+
+                        <div class="card card-body mt-3 ">
+                            @foreach (var i in Model.cartList)
+                            {
+                                @foreach (var c in i.CartItem)
+                                {
                                     <div class="row d-flex">
                                         <div class="col-3">
                                             <img src="@c.MainImage" class="d-block fixed-size-img " alt="" style="width: 80px; height: 60px">
@@ -149,12 +150,11 @@
 
                                             <span class=" d-block text-end">NT900</span>
 
-
                                         </div>
-                                    </div>
+                                    </div>}}
                                 </div>
-                            }
-                        }
+                            
+                        
 
                         @* 折扣碼 *@
 
@@ -166,10 +166,9 @@
                                     <select class="form-select mt-2" aria-label="Default select example">
                                         <option selected>請選擇優惠券</option>    
                                         @foreach(var c in code)
-                                        {
-                                            
+                                        {                                      
                                         
-                                        <option value="@c">@c</option>
+                                          <option value="@c">@c</option>
                                         }                                 
                                     </select>
                                 </div>
