@@ -68,10 +68,16 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
             // 取購物車
             tempCart = HttpContext.Session.Get<List<Areas.FrontEnd.ViewModelsF.Cart>>("tempCart") ?? new List<Areas.FrontEnd.ViewModelsF.Cart>();
+            Dictionary<long, long> totalInput = HttpContext.Session.Get<Dictionary<long, long>>("totalInput") ?? new Dictionary<long, long>();
+            Dictionary<long, decimal> price = HttpContext.Session.Get<Dictionary<long, decimal>>("priceDy") ?? new Dictionary<long, decimal>();
+
+            var getCartTemp = tempCart.DistinctBy(p => p.ProductId).ToList();
 
             var orderViewModel = new OrderViewModel
             {
-                cartList = tempCart,
+                cartList = getCartTemp,
+                total = totalInput,
+                price = price,
                 payInfo = model
             };
 

@@ -181,15 +181,26 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         public IActionResult EditToAddCart(int productId, string name, decimal price, string mainImage, int countInput)
         {
             tempCart = HttpContext.Session.Get<List<Cart>>("tempCart") ?? new List<Cart>();
-            Dictionary<long, long> totalInput = HttpContext.Session.Get<Dictionary<long, long>>("totalInput") ?? new Dictionary<long, long>();
+            var totalPrice = price * countInput;
 
+            Dictionary<long, long> totalInput = HttpContext.Session.Get<Dictionary<long, long>>("totalInput") ?? new Dictionary<long, long>();
+            Dictionary<long, decimal> priceDy = HttpContext.Session.Get<Dictionary<long, decimal>>("priceDy") ?? new Dictionary<long, decimal>();
+            
             var existingItem = tempCart.FirstOrDefault(c => c.ProductId == productId);
 
             if (totalInput.ContainsKey(productId))
             {
                 totalInput[productId] = countInput;
             }
-            
+
+
+            if (priceDy.ContainsKey(productId))
+            {
+                priceDy[productId] = totalPrice;  
+            }
+
+
+            HttpContext.Session.Set("priceDy", priceDy);
             HttpContext.Session.Set("totalInput", totalInput);
             countInputDy = HttpContext.Session.Get<Dictionary<long, long>>("totalInput") ?? new Dictionary<long, long>();
 
