@@ -131,7 +131,7 @@
                     <div id="responsiveCollapse" class="collapse  d-lg-block ">
 
 
-                        <div class="card card-body mt-3 ">
+                        <div class="card card-body mt-3" id="cartC">
                             @foreach (var i in Model.cartList)
                             {
                                 @foreach (var c in i.CartItem)
@@ -159,7 +159,7 @@
                                             {
                                                 if (i.ProductId == key)
                                                 {
-                                                    <span class=" d-block text-end">@Model.price[key]</span>
+                                                    <p class=" d-block text-end" id="total-price-@key">@Model.price[key]</p>
                                                 }
                                             }
 
@@ -194,7 +194,7 @@
 
                 <div class="d-flex justify-content-between   mt-3 mx-1">
                     <p class="">合計</p>
-                    <p class="">99</p>
+                            <p class="" id="orderFinally">99</p>
                 </div>
 
                 <div class="d-flex justify-content-between  mx-1" style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">
@@ -202,9 +202,9 @@
                     <p>60</p>
                 </div>
 
-                <div class="d-flex justify-content-between mt-5 mx-1">
+                        <div class="d-flex justify-content-between mt-5 mx-1" >
                     <p>總金額</p>
-                    <h4 class="fw-bold">60</h4>
+                            <h4 class="fw-bold" id="all" >60</h4>
                 </div>
             </div>
 
@@ -243,3 +243,26 @@
         </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+
+    let finallyTotal = 0
+    let shipping = 60
+   
+     const orderFinallyElement = document.getElementById('orderFinally');
+     let all = document.getElementById('all');
+
+    document.querySelectorAll('p[id^=total-price-]').forEach(cart => {
+            
+                 finallyTotal += parseFloat(cart.textContent) || 0; 
+            
+        });
+        orderFinallyElement.textContent = finallyTotal.toFixed(2);
+        
+        all.textContent = finallyTotal +  shipping
+
+
+
+</script>
