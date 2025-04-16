@@ -94,5 +94,37 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
             return PartialView("_OrderDetails", viewModel);
         }
+
+
+        [HttpPost]
+        public ActionResult Checkout(CheckoutViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                // 計算金額
+                var totalAmount = CalculateOrderAmount(viewModel);
+
+                // 儲存訂單到資料庫
+                SaveOrderToDatabase(viewModel, totalAmount);
+
+                // 重導到成功頁面
+                return RedirectToAction("OrderSuccess");
+            }
+
+            // 如果驗證失敗，返回原頁面
+            return View(viewModel);
+        }
+
+        private decimal CalculateOrderAmount(CheckoutViewModel viewModel)
+        {
+            // 計算邏輯
+            return 0; // 替換為實際邏輯
+        }
+
+        private void SaveOrderToDatabase(CheckoutViewModel viewModel, decimal totalAmount)
+        {
+            // 儲存邏輯
+        }
+
     }
 }

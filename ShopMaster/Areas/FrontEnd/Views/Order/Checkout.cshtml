@@ -18,7 +18,7 @@
 
 <section class="checkout-area ptb-100">
     <div class="container">
-        <form>
+        <form asp-action="Checkout" asp-controller="Order" method="post" asp-area="FrontEnd">
             <div class="row justify-content-center">
                 <div class="col-lg-6 col-md-12">
                     <div class="billing-details">
@@ -28,37 +28,36 @@
                             <div class="col-lg-6 col-md-6">
                                 <div class="form-group">
                                     <label>會員名稱</label>
-                                    <input type="text" class="form-control" value="@Model.Member.Name" readonly>
+                                    <input type="text" class="form-control" name="Member.Name" value="@Model.Member.Name" readonly>
                                 </div>
                             </div>
 
                             <div class="col-lg-6 col-md-6">
                                 <div class="form-group">
                                     <label>會員等級</label>
-                                    <input type="text" class="form-control" value="@Model.Member.MemberType.Name">
+                                    <input type="text" class="form-control" name="Member.MemberType.Name" value="@Model.Member.MemberType.Name">
                                 </div>
                             </div>
 
                             <div class="col-lg-12 col-md-6">
                                 <div class="form-group">
                                     <label>訂單地址</label>
-                                    <input type="text" class="form-control" value="@Model.Member.Address" readonly>
+                                    <input type="text" class="form-control" name="Member.Address" value="@Model.Member.Address" readonly>
                                 </div>
                             </div>
 
                             <div class="col-lg-12 col-md-6">
                                 <div class="form-group">
                                     <label>手機號碼</label>
-                                    <input type="text" class="form-control" value="@Model.Member.Phone" readonly>
+                                    <input type="text" class="form-control" name="Member.Phone" value="@Model.Member.Phone" readonly>
                                 </div>
                             </div>
 
                             <div class="col-lg-12 col-md-12">
                                 <div class="form-group">
                                     <label>優惠券</label>
-
                                     <div class="select-box">
-                                        <select class="form-control" id="ecouponSelect" onchange="updateOrderDetails()">
+                                        <select class="form-control" name="SelectedEcouponId" id="ecouponSelect" onchange="updateOrderDetails()">
                                             <option value="">選擇優惠券</option>
                                             @foreach (var ecoupon in Model.Ecoupons)
                                             {
@@ -72,7 +71,7 @@
                             <div class="col-lg-12 col-md-12">
                                 <div class="form-group">
                                     <label>訂單備註</label>
-                                    <textarea name="notes" id="notes" cols="30" rows="5" placeholder="Order Notes" class="form-control"></textarea>
+                                    <textarea name="Notes" id="notes" cols="30" rows="5" placeholder="Order Notes" class="form-control"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -84,7 +83,6 @@
                         <h3 class="title">產品</h3>
 
                         <div class="order-table table-responsive" id="orderDetails">
-                            @* 初始訂單詳情 *@
                             @await Html.PartialAsync("_OrderDetails", Model)
                         </div>
 
@@ -93,13 +91,13 @@
                                 @foreach (var pay in Model.Payinfo)
                                 {
                                     <p>
-                                        <input type="radio" id="@pay.Id" name="radio-group">
+                                        <input type="radio" id="@pay.Id" name="SelectedPaymentMethodId" value="@pay.Id">
                                         <label for="@pay.Id">@pay.Name</label>
                                     </p>
                                 }
                             </div>
 
-                            <a href="#" class="default-btn">下單</a>
+                            <button type="submit" class="default-btn">下單</button>
                         </div>
                     </div>
                 </div>
