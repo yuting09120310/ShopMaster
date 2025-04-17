@@ -93,11 +93,11 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         // POST: OrderController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(OrderViewModel model)
         {
             try
             {
-
+                var tt = model.cartList.Select(x => x.Member.Name);
 
 
 

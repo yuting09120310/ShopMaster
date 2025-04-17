@@ -26,7 +26,7 @@
             <h3 class="text-start fw-bold text-warning  mt-4 mb-3">結帳</h3>
         </div>
     </div>
-    <form asp-action="Pavement" method="post">
+    <form  method="post">
         <div class="row ">
             @* 收件資料 *@
             @if(Model.cartList.Any())
@@ -45,15 +45,15 @@
 
                             <div class="form-group mb-2">
                                 <label for="Name">姓名</label>
-                                <input type="text" class="form-control my-2" id="Name" name="Name" value="@member.Name" required />
+                                <input type="text" class="form-control my-2" id="@member.Name" asp-for="cartList[0].Member.Name"  required />
                             </div>
                             <div class="form-group mb-2">
                                 <label for="Email">Email</label>
-                                <input type="email" class="form-control my-2" id="Email" name="Email" value="@member.Email" required />
+                                <input type="email" class="form-control my-2" id="@member.Email" asp-for="cartList[0].Member.Email" required />
                             </div>
                             <div class="form-group ">
                                 <label for="Phone">電話</label>
-                                <input type="text" class="form-control mt-2 " id="Phone" name="Phone" value="@member.Phone" />
+                                <input type="text" class="form-control mt-2 " id="Phone" asp-for="cartList[0].Member.Phone" />
                             </div>
 
                         </div>
@@ -68,7 +68,7 @@
                             @* 輸入取件資訊 *@
                             <div class="form-group mb-2">
                                 <label for="Address">地址 / 取貨門市</label>
-                                <input type="text" class="form-control my-2" id="Address" name="Address" value="@member.Address" />
+                                <input type="text" class="form-control my-2" id="Address" asp-for="cartList[0].Member.Address" />
                             </div>
                             @* 運送方式 *@
                             <div class="form-group mb-2">
@@ -141,25 +141,27 @@
                                             <img src="@c.MainImage" class="d-block fixed-size-img " alt="" style="width: 80px; height: 60px">
                                         </div>
                                         <div class="col-5 d-flex " style="overflow-wrap: break-word; word-break: break-word;">
-                                            <p class="text-start">@c.Name</p>
+                                            <p class="text-start  col-9">@c.Name</p>
 
                                             @* 數量 *@
                                             @foreach(var key in Model.total.Keys)
                                             {
                                                 if (i.ProductId == key)
                                                 {
-                                                    <p class="text-center ms-2">@Model.total[key]</p>
+                                                    <input type="text" class="text-end ms-2 mb-5  form-control border-0" asp-for="@Model.total[key]" value="@Model.total[key]" readonly />
                                                 }
                                             }                                           
 
 
                                         </div>
-                                        <div class="col-4 ">
+                                        <div class="col-4  ">
                                             @foreach (var key in Model.price.Keys)
                                             {
                                                 if (i.ProductId == key)
                                                 {
-                                                    <p class=" d-block text-end" id="total-price-@key">@Model.price[key]</p>
+                                                    <input type="text" class=" d-block text-end  form-control border-0 " id="total-price-@key" asp-for="@Model.price[key]" value="@Model.price[key]" readonly />
+
+
                                                 }
                                             }
 
@@ -176,10 +178,10 @@
                             <div class="card-body">
                                 <div class="form-group mb-2">
                                     <label for="" class="text-secondary fw-bold">有優惠券嗎 ?</label>
-                                    <select class="form-select mt-2" aria-label="Default select example">
+                                    <select class="form-select mt-2" aria-label="Default select example" id="discountSelect">
                                         <option selected>請選擇優惠券</option>    
                                         @foreach(var c in code)
-                                        {                                      
+                                        {                           
                                         
                                           <option value="@c">@c</option>
                                         }                                 
@@ -194,18 +196,20 @@
 
                 <div class="d-flex justify-content-between   mt-3 mx-1">
                     <p class="">合計</p>
-                            <p class="" id="orderFinally">99</p>
+                            <p class="" id="orderFinally"></p>
                 </div>
 
                 <div class="d-flex justify-content-between  mx-1" style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">
                     <p>運費</p>
-                    <p>60</p>
+                    <p id="shippingFee">60</p>
                 </div>
 
                         <div class="d-flex justify-content-between mt-5 mx-1" >
-                    <p>總金額</p>
-                            <h4 class="fw-bold" id="all" >60</h4>
+                    <p style="width:80px" class="my-2">總金額</p>
+                            <input type="text" class="fw-bold form-control text-end border-0 mb-3 " id="all" readonly />
                 </div>
+
+                        <input type="hidden" id="orderFinallyOriginal" />
             </div>
 
 
@@ -248,20 +252,71 @@
 
 <script>
 
-    let finallyTotal = 0
-    let shipping = 60
    
-     const orderFinallyElement = document.getElementById('orderFinally');
-     let all = document.getElementById('all');
+    let finallyTotal = 0    
+    let shipping = 60
 
-    document.querySelectorAll('p[id^=total-price-]').forEach(cart => {
-            
-                 finallyTotal += parseFloat(cart.textContent) || 0; 
-            
-        });
-        orderFinallyElement.textContent = finallyTotal.toFixed(2);
+    const orderFinallyElement = document.getElementById('orderFinally');
+    let all = document.getElementById('all');
+    @*  let shippingFee = document.getElementById('shippingFee'); *@
+
+    @*  顯示總金額 *@
+     document.querySelectorAll('input[id^=total-price-]').forEach(cart => {
+                 finallyTotal += parseFloat(cart.value) || 0;
+
+    });
+    orderFinallyElement.textContent = finallyTotal.toFixed(2);
+    all.value = finallyTotal + shipping
+
+    @* 原始總金額隱藏 避免重複減 *@
+    document.getElementById("orderFinallyOriginal").value = finallyTotal.toFixed(2);
+    const originalTotal = parseFloat(document.getElementById("orderFinallyOriginal").value) || 0;
+
+    @* 折扣價更新價錢 *@
+    const discountSelect = document.getElementById("discountSelect");
+    const totalDisplay = document.getElementById("orderFinally");
+    
+    discountSelect.addEventListener("change", function () {
+    const discount = this.value;
+    let discountAmount = 0;
+    let shipping = 60
+
+        switch (true) {
+
+        case discount.startsWith("FREESHIP"):
+                shipping = 0
+                alert("免運優惠 !");
+                break;    
+        case discount.startsWith("WELCOME100"):
+                discountAmount = 100;
+                alert("會員見面禮 !");
+                break;
+        case discount.startsWith("ANNIV"):
+                discountAmount = 500;
+                alert("週年慶500元折扣 !");
+                break;
+        case discount.startsWith("DOUBLE11"):
+                discountAmount = 200;
+                alert("雙11狂歡折扣 !");
+                break;
+        default:
+                discountAmount = 0;
+                shipping = 60;
+                break;    
+         }  
+         
+        const total = parseFloat(totalDisplay.textContent) || 0;
+        const discountedTotal = Math.max(originalTotal - discountAmount, 0);
+        totalDisplay.textContent = discountedTotal.toFixed(2);
+
+        // 更新運費與總金額
+        shippingFee.textContent = shipping.toFixed(0);
+        all.value = (discountedTotal + shipping).toFixed(2);
+
+    });
+
+    
         
-        all.textContent = finallyTotal +  shipping
 
 
 

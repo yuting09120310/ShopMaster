@@ -433,10 +433,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                
 
                 if (tempCart != null)
-                {
-                   
-                     tempCart.RemoveAll(c => c.ProductId == deleteId); 
-                                        
+                {                   
+                     tempCart.RemoveAll(c => c.ProductId == deleteId);                                         
                 }
 
                 if (countInputDy.ContainsKey(deleteId))

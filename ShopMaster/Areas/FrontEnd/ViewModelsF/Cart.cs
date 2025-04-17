@@ -15,7 +15,26 @@ namespace ShopMaster.Areas.FrontEnd.ViewModelsF
 
         //public virtual ICollection<Member> Member { get; set; } = new List<Member>();
 
-        public Member Member = null!;
+        private Member _member = new Member();
+        public Member Member
+        {
+            get => _member;
 
+            set
+            {
+                if (value == null || string.IsNullOrWhiteSpace(value.Name))
+                {
+                    _member = new Member
+                    {
+                        Name = "非會員",
+                        Id = 0
+                    };                   
+                }
+                else
+                {
+                    _member = value;
+                }
+            }
+        }
     }
 }
