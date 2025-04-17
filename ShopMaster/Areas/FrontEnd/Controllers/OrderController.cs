@@ -36,9 +36,15 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         {
             // 取付款方式下拉選單資料
             var payInfo = _db.PayInfos.ToList();
-            
+
+            // 判斷會員是否登入
+            string? memberId = HttpContext.Session.GetString("MemberId");
+            var member = _db.Members.Find(Convert.ToInt64(memberId));
+            bool isMember = member != null; 
+
             var paymentMethodList = Enum.GetValues(typeof(Pay))
                            .Cast<Pay>()
+                           .Where(x=>isMember || x != Pay.貨到付款)
                            .Select(x => new SelectListItem
                            {
                                Value = ((int)x).ToString(),
