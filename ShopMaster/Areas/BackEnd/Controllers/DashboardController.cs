@@ -22,7 +22,7 @@ namespace ShopMaster.Areas.BackEnd.Controllers
             var currentYear = DateTime.Now.Year;
 
             var monthOrders = _db.Orders
-                .Where(x => x.CreatedAt.HasValue && x.CreatedAt.Value.Year == currentYear && x.CreatedAt.Value.Month == 2)
+                .Where(x => x.CreatedAt.HasValue && x.CreatedAt.Value.Year == currentYear && x.CreatedAt.Value.Month == currentMonth)
                 .ToList();
             var monthOrderCount = monthOrders.Count;
             var monthTotalAmount = monthOrders.Sum(x => x.TotalAmount);

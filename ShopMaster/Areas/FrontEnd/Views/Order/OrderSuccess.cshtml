@@ -1,0 +1,69 @@
+﻿@model ShopMaster.Areas.FrontEnd.ViewModels.OrderSuccessViewModel
+
+@{
+    ViewData["Title"] = "訂單成功";
+}
+
+<div class="order-success-page">
+    <div class="container">
+        <div class="success-message">
+            <h1>訂單已成功建立！</h1>
+            <p>感謝您的購買，我們已收到您的訂單。</p>
+        </div>
+
+        <div class="order-details">
+            <h2>訂單資訊</h2>
+            <ul>
+                <li><strong>訂單編號：</strong> @Model.OrderId</li>
+                <li><strong>訂單日期：</strong> @Model.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</li>
+                <li><strong>總金額：</strong> @Model.TotalAmount.ToString("C")</li>
+                <li><strong>付款方式：</strong> @Model.PaymentMethod</li>
+            </ul>
+        </div>
+
+        <div class="next-steps">
+            <h3>下一步</h3>
+            <p>您可以前往 <a href="/FrontEnd/Order/History">訂單歷史</a> 查看您的訂單，或繼續 <a href="/Home">購物</a>。</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .order-success-page {
+        text-align: center;
+        padding: 50px 20px;
+    }
+
+    .success-message h1 {
+        color: #28a745;
+        font-size: 2.5rem;
+    }
+
+    .order-details {
+        margin-top: 30px;
+        text-align: left;
+    }
+
+        .order-details ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .order-details li {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+    .next-steps {
+        margin-top: 30px;
+    }
+
+        .next-steps a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+            .next-steps a:hover {
+                text-decoration: underline;
+            }
+</style>

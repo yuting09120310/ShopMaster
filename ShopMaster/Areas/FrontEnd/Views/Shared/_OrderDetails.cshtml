@@ -1,5 +1,4 @@
-﻿@using ShopMaster.Areas.FrontEnd.ViewModels
-@model CheckoutViewModel
+﻿@model ShopMaster.Areas.FrontEnd.ViewModels.CheckoutPageViewModel
 
 <table class="table table-bordered">
     <thead>
@@ -70,7 +69,7 @@
 
             <td class="product-subtotal">
                 <span class="subtotal-amount" style="color:red"> -
-                    $@(Model.SelectEcoupon?.EcouponEvent?.Discount.ToString("F2") ?? "0.00")
+                    $@(Model.SelectedEcoupon?.EcouponEvent?.Discount.ToString("F2") ?? "0.00")
                 </span>
             </td>
         </tr>
