@@ -108,18 +108,45 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             var tempCart = HttpContext.Session.Get<List<Areas.FrontEnd.ViewModelsF.Cart>>("tempCart") ?? new List<Areas.FrontEnd.ViewModelsF.Cart>();
             var ecoupon = _db.Ecoupons.Where(x => x.MemberId == member.Id).ToList();
             
-            foreach (var i in tempCart)
+            if(tempCart.Count > 0)
             {
-                i.Member.Name = member.Name;
-                i.Member.Address = member.Address;
-                i.Member.Phone = member.Phone;
-                i.Member.Email = member.Email;
-                i.Member.Id = member.Id;
-                i.Code = ecoupon.Select(x => x.Code).ToList();
+                foreach (var i in tempCart)
+                {
+                    if (i.Member == null)
+                        i.Member = new Areas.FrontEnd.ViewModelsF.Member();
+
+                    i.Member.Name = member.Name;
+                    i.Member.Address = member.Address;
+                    i.Member.Phone = member.Phone;
+                    i.Member.Email = member.Email;
+                    i.MemberId = member.Id;
+                    i.Member.MemberTypeId = member.MemberTypeId;
+                    i.Code = ecoupon.Select(x => x.Code).ToList();
+                }
             }
-            
+            else
+            {
+                // 假如先登入 先加入會員資料至購物車
+                var newCart = new Areas.FrontEnd.ViewModelsF.Cart
+                {
+                    Member = new Areas.FrontEnd.ViewModelsF.Member
+                    {
+                        Name = member.Name,
+                        Address = member.Address,
+                        Phone = member.Phone,
+                        Email = member.Email,
+                        MemberTypeId = member.MemberTypeId
+                    },
+                    MemberId = member.Id,
+                    Code = ecoupon.Select(x => x.Code).ToList()
+                };
+
+                tempCart.Add(newCart);
+            }
+
             HttpContext.Session.Set("tempCart", tempCart);
-            
+            var tt = HttpContext.Session.Get<List<Areas.FrontEnd.ViewModelsF.Cart>>("tempCart") ?? new List<Areas.FrontEnd.ViewModelsF.Cart>();
+
             // 設定登入 Session
             HttpContext.Session.SetString("MemberId", member.Id.ToString());                   
             return RedirectToAction("Index", "Home", new { Area = "FrontEnd" });

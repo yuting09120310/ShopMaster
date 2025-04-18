@@ -26,8 +26,7 @@ namespace ShopMaster.Areas.FrontEnd.ViewModelsF
                 {
                     _member = new Member
                     {
-                        Name = "非會員",
-                        Id = 0
+                        Name = "非會員",                        
                     };                   
                 }
                 else

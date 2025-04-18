@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ShopMaster.Areas.BackEnd.Models;
 
+
 public partial class Order
 {
+    
     public long Id { get; set; }
 
     public long MemberId { get; set; }

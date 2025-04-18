@@ -386,8 +386,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                             ProductCart = getCartTemp
                         };
 
-                        _db.Carts.AddRange(cartCreateDb);
-                        _db.SaveChanges();
+                        //_db.Carts.AddRange(cartCreateDb);
+                        //_db.SaveChanges();
 
                         return View(productsAll);
                     }

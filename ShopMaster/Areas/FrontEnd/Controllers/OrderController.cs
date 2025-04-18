@@ -5,6 +5,8 @@ using ShopMaster.Areas.BackEnd.Models;
 using ShopMaster.Areas.FrontEnd.ViewModelsF;
 using ShopMaster.Areas.FrontEnd.Utility;
 using static ShopMaster.Areas.FrontEnd.EnumUtility.PaymentEnum;
+using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace ShopMaster.Areas.FrontEnd.Controllers
 {
@@ -73,14 +75,14 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             };
 
             // 取購物車
-            tempCart = HttpContext.Session.Get<List<Areas.FrontEnd.ViewModelsF.Cart>>("tempCart") ?? new List<Areas.FrontEnd.ViewModelsF.Cart>();
+            var tempCart = HttpContext.Session.Get<List<Areas.FrontEnd.ViewModelsF.Cart>>("tempCart") ?? new List<Areas.FrontEnd.ViewModelsF.Cart>();
             Dictionary<long, long> totalInput = HttpContext.Session.Get<Dictionary<long, long>>("totalInput") ?? new Dictionary<long, long>();
             Dictionary<long, decimal> price = HttpContext.Session.Get<Dictionary<long, decimal>>("priceDy") ?? new Dictionary<long, decimal>();
 
             var getCartTemp = tempCart.DistinctBy(p => p.ProductId).ToList();
 
             var orderViewModel = new OrderViewModel
-            {
+            {                
                 cartList = getCartTemp,
                 total = totalInput,
                 price = price,
@@ -93,19 +95,87 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         // POST: OrderController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(OrderViewModel model)
-        {
+        public async Task<IActionResult> Create(OrderViewModel model)
+        {            
+            using var transaction = await _db.Database.BeginTransactionAsync();
             try
             {
-                var tt = model.cartList.Select(x => x.Member.Name);
+                var member = model.cartList.First().Member;
+                var product = model.cartList.ToList();
+                var quanity = model.total.ToList();                
 
+                //訂單
+                var order = new Areas.BackEnd.Models.Order
+                {
+                    MemberId = model.cartList.Select(x => x.MemberId).FirstOrDefault() ?? 0,
+                    MemberTypeId = member.MemberTypeId,
+                    Status = 1,
+                    PaymentType = 2,
+                    TotalAmount = 0
+                };
 
+                _db.Orders.Add(order);
+                await _db.SaveChangesAsync();               
+                
+                // 訂單明細
+                List<OrderDetail> orderDetails = new List<OrderDetail>();                
 
+                foreach (var c in product)
+                {
+                    var productId = c.ProductId ?? 0;
+                    var code = string.Join("",c.Code.ToList());
+                    decimal shipping = 60;
+                    
+                    // 折扣金額
+                    var discountRole = new List<(string rule, decimal discountAmount)>()
+                    {
+                        ("FREESHIP", 0),
+                        ("WELCOME100", 100),
+                        ("ANNIV", 500),
+                        ("DOUBLE11", 200),
+                        ("請選擇優惠券", 0),
+                    };
 
+                    decimal discountAmount = discountRole.
+                                             Where(r => code.StartsWith(r.rule))
+                                             .Select(r => r.discountAmount)
+                                             .FirstOrDefault();     
+                   if(discountAmount == 0m)
+                   {
+                        shipping = 0;
+                   }
+                   else
+                   {
+                        shipping = 60;
+                   }                                             
+                            
+                    model.total.TryGetValue(productId, out var quantity);
+                    model.price.TryGetValue(productId, out var amount);
 
+                    orderDetails.Add(new Areas.BackEnd.Models.OrderDetail
+                    {
+                        OrderId = order.Id,
+                        ProductId = productId,
+                        Quantity = Convert.ToInt32(quantity),
+                        OriginalPrice = 0,
+                        FinalPrice = amount,
+                        SubTotal = amount - discountAmount + shipping
 
+                    });                    
+                }
 
-                return RedirectToAction(nameof(Index));
+                decimal totalAmount = orderDetails.Sum(x => x.SubTotal);
+
+                // 更新訂單金額
+                order.TotalAmount = totalAmount;
+
+                _db.OrderDetails.AddRange(orderDetails);
+                _db.Orders.Update(order);
+
+                await _db.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return RedirectToAction("Index","Home", new {Area="FrontEnd"});
             }
             catch
             {

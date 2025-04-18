@@ -34,6 +34,14 @@
                 var member = Model.cartList.First().Member;
                 var code = Model.cartList.First().Code;
 
+                @for (int i = 0; i < Model.cartList.Count; i++)
+                {
+                    <input type="hidden" asp-for="cartList[i].ProductId" />
+                }
+
+                <input type="hidden" asp-for="cartList[0].MemberId" />
+                <input type="hidden" asp-for="cartList[0].Member.MemberTypeId" />
+
                 <div class="col-lg-7 mb-4 order-2 order-lg-1 ">
                     <h5 class="text-start fw-bold text-secondary mb-3"></h5>
 
@@ -45,11 +53,11 @@
 
                             <div class="form-group mb-2">
                                 <label for="Name">姓名</label>
-                                <input type="text" class="form-control my-2" id="@member.Name" asp-for="cartList[0].Member.Name"  required />
+                                <input type="text" class="form-control my-2" id="Name" asp-for="cartList[0].Member.Name"  required />
                             </div>
                             <div class="form-group mb-2">
                                 <label for="Email">Email</label>
-                                <input type="email" class="form-control my-2" id="@member.Email" asp-for="cartList[0].Member.Email" required />
+                                <input type="email" class="form-control my-2" id="Email" asp-for="cartList[0].Member.Email" required />
                             </div>
                             <div class="form-group ">
                                 <label for="Phone">電話</label>
@@ -98,21 +106,10 @@
 
                     @* 結帳 *@
                     <div class="d-grid gap-2 justify-content-center mt-5">
-                        <button class="btn btn-warning fw-bold" type="submit" id="pay" style="color:white;" data-bs-toggle="modal" data-bs-target="#finish">結帳 !</button>
+                       @*  <button class="btn btn-warning fw-bold" type="submit" id="pay" style="color:white;" data-bs-toggle="modal" data-bs-target="#finish">結帳 !</button> *@
+                        <button class="btn btn-warning fw-bold" type="submit" id="pay" style="color:white;" >結帳 !</button>
                     </div>
                 </div>
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -148,7 +145,7 @@
                                             {
                                                 if (i.ProductId == key)
                                                 {
-                                                    <input type="text" class="text-end ms-2 mb-5  form-control border-0" asp-for="@Model.total[key]" value="@Model.total[key]" readonly />
+                                                    <input type="text" class="text-end ms-2 mb-5  form-control border-0" asp-for="total[key]" value="@Model.total[key]" readonly />
                                                 }
                                             }                                           
 
@@ -159,7 +156,7 @@
                                             {
                                                 if (i.ProductId == key)
                                                 {
-                                                    <input type="text" class=" d-block text-end  form-control border-0 " id="total-price-@key" asp-for="@Model.price[key]" value="@Model.price[key]" readonly />
+                                                    <input type="text" class=" d-block text-end  form-control border-0 " id="total-price-@key" asp-for="price[key]" value="@Model.price[key]" readonly />
 
 
                                                 }
@@ -177,8 +174,8 @@
                         <div class="card mt-3 bg-light">
                             <div class="card-body">
                                 <div class="form-group mb-2">
-                                    <label for="" class="text-secondary fw-bold">有優惠券嗎 ?</label>
-                                    <select class="form-select mt-2" aria-label="Default select example" id="discountSelect">
+                                    <label for="" class="text-secondary fw-bold" >有優惠券嗎 ?</label>
+                                    <select class="form-select mt-2" aria-label="Default select example" id="discountSelect" name="cartList[0].Code">
                                         <option selected>請選擇優惠券</option>    
                                         @foreach(var c in code)
                                         {                           
@@ -201,7 +198,7 @@
 
                 <div class="d-flex justify-content-between  mx-1" style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">
                     <p>運費</p>
-                    <p id="shippingFee">60</p>
+                    <p id="shippingFee">60.00</p>
                 </div>
 
                         <div class="d-flex justify-content-between mt-5 mx-1" >
@@ -254,7 +251,7 @@
 
    
     let finallyTotal = 0    
-    let shipping = 60
+    let shipping = 60.00
 
     const orderFinallyElement = document.getElementById('orderFinally');
     let all = document.getElementById('all');
@@ -266,7 +263,7 @@
 
     });
     orderFinallyElement.textContent = finallyTotal.toFixed(2);
-    all.value = finallyTotal + shipping
+    all.value = (finallyTotal + shipping).toFixed(2)
 
     @* 原始總金額隱藏 避免重複減 *@
     document.getElementById("orderFinallyOriginal").value = finallyTotal.toFixed(2);
@@ -279,7 +276,7 @@
     discountSelect.addEventListener("change", function () {
     const discount = this.value;
     let discountAmount = 0;
-    let shipping = 60
+    let shipping = 60.00
 
         switch (true) {
 
@@ -310,7 +307,7 @@
         totalDisplay.textContent = discountedTotal.toFixed(2);
 
         // 更新運費與總金額
-        shippingFee.textContent = shipping.toFixed(0);
+        shippingFee.textContent = shipping.toFixed(2);
         all.value = (discountedTotal + shipping).toFixed(2);
 
     });

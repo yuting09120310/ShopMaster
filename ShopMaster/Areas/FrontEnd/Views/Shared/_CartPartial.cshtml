@@ -23,7 +23,7 @@
                     <div class="col-6 " style="overflow-wrap: break-word; word-break: break-word;">
                         @foreach (var n in i.CartItem.Select(c => c.Name).ToList())
                         {
-                            <p class="text-start">"@n"</p>
+                            <p class="text-start">@n</p>
                         }
 
                     </div>
@@ -31,7 +31,7 @@
 
                         @foreach (var p in i.CartItem.Select(c => c.Price).ToList())
                         {
-                            <span class=" d-block text-start">"@p"</span>
+                            <span class=" d-block text-start">@p</span>
                         }
 
                     </div>
