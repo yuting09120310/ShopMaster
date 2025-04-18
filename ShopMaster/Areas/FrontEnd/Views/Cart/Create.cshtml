@@ -27,6 +27,11 @@
 
                     @foreach (var c in Model.ProductCart)
                     {
+                        if (c.ProductId == null)
+                        {                           
+                            continue;
+                        }
+
                         <div class="row g-0 justify-content-center" id="cartB-@c.ProductId">
                             <div class="col-md-4 col-3" style="padding: 10px;">
 
@@ -188,6 +193,7 @@
         const totalPriceElement = group.querySelector('p[id^=total-price]');
         const deleteIcon = group.querySelector('[id^=trash]');
         const deleteId = deleteIcon.id.split('trash-').pop();
+        console.log('deleteId'+deleteId)
        
         const unitPrice = parseFloat(priceInput.value)
         const productId = input.id

@@ -11,7 +11,7 @@
             {                    
                 <input type="hidden" asp-for="ProductCart[0].ProductId" value="@i.ProductId"/>        
 
-                <div class="row d-flex mb-3 ">
+                <div class="row d-flex mb-3  ">
                     <div class="col-3 ">
 
                         @foreach (var img in i.CartItem.Select(c => c.MainImage).ToList())
@@ -35,6 +35,8 @@
                         }
 
                     </div>
+
+
                 </div>
             }
                 <div class="d-grid gap-2 justify-content-center mt-4">
