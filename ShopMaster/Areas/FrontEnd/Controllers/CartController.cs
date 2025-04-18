@@ -125,7 +125,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             }
             else
             {
-                memberId = "0";
+                memberId = "100000";
                 memberIdLong = long.Parse(memberId);
 
                 tempCart.Add(new Cart
@@ -329,7 +329,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                         {
                             Id = newId++,
                             ProductId = c.ProductId,
-                            MemberId = c.MemberId.HasValue ? c.MemberId.Value : 0
+                            MemberId = c.MemberId.HasValue ? c.MemberId.Value : 100000
 
                         });
 

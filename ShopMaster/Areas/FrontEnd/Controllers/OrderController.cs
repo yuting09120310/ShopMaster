@@ -107,7 +107,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 //訂單
                 var order = new Areas.BackEnd.Models.Order
                 {
-                    MemberId = model.cartList.Select(x => x.MemberId).FirstOrDefault() ?? 0,
+                    MemberId = model.cartList.Select(x => x.MemberId).FirstOrDefault() ?? 100000,
                     MemberTypeId = member.MemberTypeId,
                     Status = 1,
                     PaymentType = 2,
@@ -124,10 +124,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 {
                     var productId = c.ProductId ?? 0;
                     var code = string.Join("",c.Code.ToList());
-                    decimal shipping = 60;                   
+                    decimal shipping = 60;              
 
-
-                    
                     // 折扣金額
                     var discountRole = new List<(string rule, decimal discountAmount)>()
                     {
@@ -169,8 +167,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                     {
                         OrderId = order.Id,
                         ProductId = productId,
-                        Quantity = Convert.ToInt32(quantity),
-                        //OriginalPrice = amount/ Convert.ToDecimal(quantity),
+                        Quantity = Convert.ToInt32(quantity),                        
                         OriginalPrice = originalPrice,
                         FinalPrice = amount,
                         SubTotal = amount - discountAmount + shipping
