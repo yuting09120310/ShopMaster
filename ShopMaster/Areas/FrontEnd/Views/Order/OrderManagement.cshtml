@@ -1,0 +1,120 @@
+﻿@model ShopMaster.Areas.FrontEnd.ViewModels.OrderManagementViewModel
+
+@{
+    ViewData["Title"] = "訂單管理";
+}
+
+<main class="order-management">
+    <div class="container">
+        <h1>訂單管理</h1>
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs" id="orderTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="in-progress-tab" data-bs-toggle="tab" data-bs-target="#in-progress" type="button" role="tab" aria-controls="in-progress" aria-selected="true">
+                    進行中訂單
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="completed-tab" data-bs-toggle="tab" data-bs-target="#completed" type="button" role="tab" aria-controls="completed" aria-selected="false">
+                    已完成訂單
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="orderTabsContent">
+            <!-- In Progress Orders -->
+            <div class="tab-pane fade show active" id="in-progress" role="tabpanel" aria-labelledby="in-progress-tab">
+                @if (Model.InProgressOrders.Any())
+                {
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>訂單編號</th>
+                                <th>訂單日期</th>
+                                <th>總金額</th>
+                                <th>狀態</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model.InProgressOrders)
+                            {
+                                <tr>
+                                    <td>@order.OrderId</td>
+                                    <td>@order.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                    <td>@order.TotalAmount.ToString("C")</td>
+                                    <td>進行中</td>
+                                    <td>
+                                        <a href="@Url.Action("OrderDetails", "Order", new { area = "FrontEnd", orderId = order.OrderId })" class="btn btn-primary btn-sm">查看</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p>目前沒有進行中的訂單。</p>
+                }
+            </div>
+
+            <!-- Completed Orders -->
+            <div class="tab-pane fade" id="completed" role="tabpanel" aria-labelledby="completed-tab">
+                @if (Model.CompletedOrders.Any())
+                {
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>訂單編號</th>
+                                <th>訂單日期</th>
+                                <th>總金額</th>
+                                <th>狀態</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model.CompletedOrders)
+                            {
+                                <tr>
+                                    <td>@order.OrderId</td>
+                                    <td>@order.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                    <td>@order.TotalAmount.ToString("C")</td>
+                                    <td>已完成</td>
+                                    <td>
+                                        <a href="@Url.Action("OrderDetails", "Order", new { area = "FrontEnd", orderId = order.OrderId })" class="btn btn-primary btn-sm">查看</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p>目前沒有已完成的訂單。</p>
+                }
+            </div>
+        </div>
+    </div>
+</main>
+
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    main {
+        flex: 1; /* 主內容區域填滿剩餘空間 */
+    }
+
+    footer {
+        background-color: #f8f9fa;
+        text-align: center;
+        padding: 10px 0;
+        border-top: 1px solid #ddd;
+    }
+</style>

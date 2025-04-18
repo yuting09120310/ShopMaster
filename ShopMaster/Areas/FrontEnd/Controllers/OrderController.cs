@@ -215,5 +215,43 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             return View(viewModel);
         }
 
+
+        public IActionResult OrderManagement()
+        {
+            string? memberId = HttpContext.Session.GetString("MemberId");
+            if (string.IsNullOrEmpty(memberId))
+            {
+                return BadRequest("會員未登入");
+            }
+
+            var inProgressOrders = _db.Orders
+                .Where(o => o.MemberId.ToString() == memberId && o.Status == 1) // 假設 1 表示進行中
+                .Select(o => new OrderViewModel
+                {
+                    OrderId = o.Id,
+                    CreatedAt = o.CreatedAt ?? DateTime.Now,
+                    TotalAmount = o.TotalAmount
+                })
+                .ToList();
+
+            var completedOrders = _db.Orders
+                .Where(o => o.MemberId.ToString() == memberId && o.Status == 2) // 假設 2 表示已完成
+                .Select(o => new OrderViewModel
+                {
+                    OrderId = o.Id,
+                    CreatedAt = o.CreatedAt ?? DateTime.Now,
+                    TotalAmount = o.TotalAmount
+                })
+                .ToList();
+
+            var viewModel = new OrderManagementViewModel
+            {
+                InProgressOrders = inProgressOrders,
+                CompletedOrders = completedOrders
+            };
+
+            return View(viewModel);
+        }
+
     }
 }
