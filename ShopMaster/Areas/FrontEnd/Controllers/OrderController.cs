@@ -124,7 +124,9 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 {
                     var productId = c.ProductId ?? 0;
                     var code = string.Join("",c.Code.ToList());
-                    decimal shipping = 60;
+                    decimal shipping = 60;                   
+
+
                     
                     // 折扣金額
                     var discountRole = new List<(string rule, decimal discountAmount)>()
@@ -147,17 +149,29 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                    else
                    {
                         shipping = 60;
-                   }                                             
-                            
-                    model.total.TryGetValue(productId, out var quantity);
+                   }
+
+                   
                     model.price.TryGetValue(productId, out var amount);
+                    decimal originalPrice = 0;
+
+                    // 單價
+                    if (model.total.TryGetValue(productId, out var quantity))
+                    {
+                        originalPrice = amount / (decimal)quantity;
+                    }
+                    else
+                    {
+                        originalPrice = 0;
+                    }
 
                     orderDetails.Add(new Areas.BackEnd.Models.OrderDetail
                     {
                         OrderId = order.Id,
                         ProductId = productId,
                         Quantity = Convert.ToInt32(quantity),
-                        OriginalPrice = 0,
+                        //OriginalPrice = amount/ Convert.ToDecimal(quantity),
+                        OriginalPrice = originalPrice,
                         FinalPrice = amount,
                         SubTotal = amount - discountAmount + shipping
 

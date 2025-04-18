@@ -37,6 +37,10 @@
                 @for (int i = 0; i < Model.cartList.Count; i++)
                 {
                     <input type="hidden" asp-for="cartList[i].ProductId" />
+                    @for (int j = 0; j < Model.cartList[i].CartItem.Count; j++)
+                    {
+                        <input type="hidden" asp-for="cartList[i].CartItem[j].Price"/>                        
+                    }                    
                 }
 
                 <input type="hidden" asp-for="cartList[0].MemberId" />
@@ -133,6 +137,8 @@
                             {
                                 @foreach (var c in i.CartItem)
                                 {
+                                    
+
                                     <div class="row d-flex" id="@i.ProductId">
                                         <div class="col-3">
                                             <img src="@c.MainImage" class="d-block fixed-size-img " alt="" style="width: 80px; height: 60px">
