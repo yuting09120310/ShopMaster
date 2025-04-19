@@ -27,9 +27,10 @@
         </div>
     </div>
     <form  method="post">
+        @Html.AntiForgeryToken()
         <div class="row ">
             @* 收件資料 *@
-            @if(Model.cartList.Any())
+            @if (Model?.cartList != null && Model.cartList.Any())
             {
                 var member = Model.cartList.First().Member;
                 var code = Model.cartList.First().Code;

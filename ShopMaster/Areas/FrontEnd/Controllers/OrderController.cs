@@ -187,11 +187,13 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 await _db.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                return RedirectToAction("Index","Home", new {Area="FrontEnd"});
+                return RedirectToAction("Details", "Order", new {Area="FrontEnd"});
             }
-            catch
+            catch(Exception ex)
             {
-                return View();
+                ModelState.AddModelError(string.Empty, "發生錯誤：" + ex.Message);
+               
+                return View(model);
             }
         }
 

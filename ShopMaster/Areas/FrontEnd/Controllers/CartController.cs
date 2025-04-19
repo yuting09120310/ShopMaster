@@ -349,7 +349,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                         ViewBag.totalInputDictionary = countInputDy;
                         HttpContext.Session.Set("totalInput", countInputDy);
 
-                        var getCartTemp = tempCart.DistinctBy(p => p.ProductId).ToList();
+                        var getCartTemp = tempCart.DistinctBy(p => p.ProductId != null).ToList();
                        
                         // 商品金額
                         var price = getCartTemp.Select(c => c.CartItem.Select(p => new { c.ProductId, p.Price })).ToList();
