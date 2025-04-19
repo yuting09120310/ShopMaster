@@ -140,7 +140,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                                              Where(r => code.StartsWith(r.rule))
                                              .Select(r => r.discountAmount)
                                              .FirstOrDefault();     
-                   if(discountAmount == 0m)
+
+                   if(discountAmount == 0m && c.MemberId != 100000)
                    {
                         shipping = 0;
                    }
