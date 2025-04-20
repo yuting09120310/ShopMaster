@@ -187,7 +187,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 await _db.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                return RedirectToAction("Details", "Order", new {Area="FrontEnd"});
+                return RedirectToAction("OrderOk", "Order", new {Area="FrontEnd"});
             }
             catch(Exception ex)
             {
@@ -195,6 +195,11 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                
                 return View(model);
             }
+        }
+
+        public ActionResult OrderOk()
+        {
+            return View();
         }
 
         // GET: OrderController/Edit/5

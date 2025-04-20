@@ -35,13 +35,24 @@
                 var member = Model.cartList.First().Member;
                 var code = Model.cartList.First().Code;
 
-                @for (int i = 0; i < Model.cartList.Count; i++)
+                @if (Model?.cartList != null)
                 {
-                    <input type="hidden" asp-for="cartList[i].ProductId" />
-                    @for (int j = 0; j < Model.cartList[i].CartItem.Count; j++)
+
+                    @for (int i = 0; i < Model.cartList.Count; i++)
                     {
-                        <input type="hidden" asp-for="cartList[i].CartItem[j].Price"/>                        
-                    }                    
+                        <input type="hidden" asp-for="cartList[i].ProductId" />
+
+                        if (Model.cartList[i].CartItem != null)
+                        {
+                            @for (int j = 0; j < Model.cartList[i].CartItem.Count; j++)
+                            {
+                                <input type="hidden" asp-for="cartList[i].CartItem[j].Price"/>
+                            }
+
+                        }
+
+                    }
+
                 }
 
                 <input type="hidden" asp-for="cartList[0].MemberId" />
