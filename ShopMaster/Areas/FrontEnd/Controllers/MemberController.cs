@@ -144,8 +144,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 tempCart.Add(newCart);
             }
 
-            HttpContext.Session.Set("tempCart", tempCart);
-            var tt = HttpContext.Session.Get<List<Areas.FrontEnd.ViewModelsF.Cart>>("tempCart") ?? new List<Areas.FrontEnd.ViewModelsF.Cart>();
+            HttpContext.Session.Set("tempCart", tempCart);           
 
             // 設定登入 Session
             HttpContext.Session.SetString("MemberId", member.Id.ToString());                   

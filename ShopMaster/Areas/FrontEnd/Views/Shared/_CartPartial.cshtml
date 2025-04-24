@@ -3,7 +3,7 @@
 @{
     if (Model != null)
     {
-        if (Model.ProductCart.Count() != 0 )
+        if (Model.ProductCart.Count() != 0 && Model.ProductCart.Any(x=>x.ProductId != null))
         {
             <form method="post" asp-action="Create" asp-controller="Cart" asp-area="FrontEnd">      
 
