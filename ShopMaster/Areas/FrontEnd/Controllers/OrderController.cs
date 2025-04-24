@@ -31,10 +31,12 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         public ActionResult Details(int id, int extraId)
         {            
             var member = _db.Members.FirstOrDefault(x => x.Id == id);
+            MemberOrderViewModel result = new MemberOrderViewModel();
 
-            if(member != null)
+            if (member != null)
             {
                 var order = _db.Orders.FirstOrDefault(x => x.Id == extraId && x.MemberId == member.Id);
+                
 
                 if(order != null)
                 {
@@ -42,20 +44,22 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                               .Where(od => od.OrderId == order.Id)
                               .ToList();
 
-                   MemberOrderViewModel result = new MemberOrderViewModel
-                   {
-                       Name = member.Name,
-                       OrderDetail = orderDetail                      
-                      
+                    foreach (var p in orderDetail)
+                    {
+                        var product = _db.Products.FirstOrDefault(x => x.Id == p.ProductId);
 
-                    };
+                         result = new MemberOrderViewModel
+                        {
+                            Name = member.Name,
+                            OrderDetail = orderDetail,                            
+                            TotalAmount = order.TotalAmount,
+
+                        };
+                    }
 
                     return View(result);
                 } 
 
-
-
-                
             }
 
             return View();
@@ -246,7 +250,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         public ActionResult OrderOk()
         {
             // 找會員
-            string? memberId = HttpContext.Session.GetString("MemberId");           
+            string? memberId = HttpContext.Session.GetString("MemberId");     
+            
 
             BackEnd.Models.Order? order = new BackEnd.Models.Order();
 

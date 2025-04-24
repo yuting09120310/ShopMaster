@@ -10,7 +10,8 @@ namespace ShopMaster.Areas.FrontEnd.ViewModelsF
 
         public List<OrderDetail> OrderDetail { get; set; } = new List<OrderDetail>();
 
-        
+        public decimal TotalAmount { get; set; }
+
 
     }
 }
