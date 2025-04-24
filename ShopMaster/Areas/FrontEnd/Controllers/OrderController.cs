@@ -174,7 +174,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                         ("WELCOME100", 100),
                         ("ANNIV", 500),
                         ("DOUBLE11", 200),
-                        ("請選擇優惠券", 0),
+                        ("請選擇優惠券", 1),
                     };
 
                     decimal discountAmount = discountRole.
@@ -182,17 +182,22 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                                              .Select(r => r.discountAmount)
                                              .FirstOrDefault();     
 
-                   if(discountAmount == 0m && c.MemberId != 100000)
+                   if(discountAmount == 1m)
+                   {
+                        shipping = 60;
+                        discountAmount = 0;
+                   }
+                   else if (discountAmount == 0m && c.MemberId != 100000)
                    {
                         shipping = 0;
                    }
-                   else
+                    else
                    {
                         shipping = 60;
                    }
 
-                   
-                    model.price.TryGetValue(productId, out var amount);
+
+                        model.price.TryGetValue(productId, out var amount);
                     decimal originalPrice = 0;
 
                     // 單價
