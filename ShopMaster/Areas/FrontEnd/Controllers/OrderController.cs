@@ -141,7 +141,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             try
             {
                 var member = model.cartList.First().Member;
-                var product = model.cartList.ToList();
+                var product = model.cartList.Where(x=>x.ProductId != null).ToList();
+
                 var quanity = model.total.ToList();                
 
                 //訂單
