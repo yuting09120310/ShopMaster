@@ -35,8 +35,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
             if (member != null)
             {
-                var order = _db.Orders.FirstOrDefault(x => x.Id == extraId && x.MemberId == member.Id);
-                
+                var order = _db.Orders.FirstOrDefault(x => x.Id == extraId && x.MemberId == member.Id);                
 
                 if(order != null)
                 {
