@@ -28,10 +28,50 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         }
 
         // GET: OrderController/Details/5
-        public ActionResult Details(int id)
-        {
+        public ActionResult Details(int id, int extraId)
+        {            
+            var member = _db.Members.FirstOrDefault(x => x.Id == id);
+
+            if(member != null)
+            {
+                var order = _db.Orders.FirstOrDefault(x => x.Id == extraId && x.MemberId == member.Id);
+
+                if(order != null)
+                {
+                    var orderDetail = _db.OrderDetails
+                              .Where(od => od.OrderId == order.Id)
+                              .ToList();
+
+                   MemberOrderViewModel result = new MemberOrderViewModel
+                   {
+                       Name = member.Name,
+                       OrderDetail = orderDetail                      
+                      
+
+                    };
+
+                    return View(result);
+                } 
+
+
+
+                
+            }
+
             return View();
+
+
+            
         }
+
+        
+
+
+
+
+
+
+
 
         // GET: OrderController/Create
         public ActionResult Create()
@@ -199,12 +239,40 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
 
         public ActionResult OrderOk()
         {
+            // 找會員
+            string? memberId = HttpContext.Session.GetString("MemberId");
+            BackEnd.Models.Order? order = new BackEnd.Models.Order();
+
+            if (!string.IsNullOrEmpty(memberId))
+            {
+                //找訂單
+                order = _db.Orders.Where(x => x.MemberId == long.Parse(memberId))
+                    .OrderByDescending(x => x.CreatedAt)
+                    .FirstOrDefault();
+            }
+            else
+            {
+                //找訂單
+                 order = _db.Orders.Where(x => x.MemberId == 100000)
+                    .OrderByDescending(x => x.CreatedAt)
+                    .FirstOrDefault();
+            }
+                
+                
+                
+            ViewBag.memberId = memberId;
+            ViewBag.orderID = order.Id;
+
             return View();
         }
 
         // GET: OrderController/Edit/5
         public ActionResult Edit(int id)
         {
+            
+
+
+
             return View();
         }
 

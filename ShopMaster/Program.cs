@@ -34,7 +34,7 @@ app.MapControllerRoute(
 
 app.MapControllerRoute(
     name: "frontend",
-    pattern: "{controller=Home}/{action=Index}/{id?}",
+    pattern: "{controller=Home}/{action=Index}/{id?}/{extraid?}",
     defaults: new { area = "FrontEnd" });
 
 app.Run();
