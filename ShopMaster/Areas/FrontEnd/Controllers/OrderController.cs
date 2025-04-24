@@ -241,7 +241,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         public ActionResult OrderOk()
         {
             // 找會員
-            string? memberId = HttpContext.Session.GetString("MemberId");
+            string? memberId = HttpContext.Session.GetString("MemberId");           
+
             BackEnd.Models.Order? order = new BackEnd.Models.Order();
 
             if (!string.IsNullOrEmpty(memberId))
@@ -250,6 +251,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 order = _db.Orders.Where(x => x.MemberId == long.Parse(memberId))
                     .OrderByDescending(x => x.CreatedAt)
                     .FirstOrDefault();
+
+                ViewBag.memberId = memberId;
             }
             else
             {
@@ -257,11 +260,11 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                  order = _db.Orders.Where(x => x.MemberId == 100000)
                     .OrderByDescending(x => x.CreatedAt)
                     .FirstOrDefault();
+
+                ViewBag.memberId =order.MemberId;
             }
-                
-                
-                
-            ViewBag.memberId = memberId;
+                 
+            
             ViewBag.orderID = order.Id;
 
             return View();
