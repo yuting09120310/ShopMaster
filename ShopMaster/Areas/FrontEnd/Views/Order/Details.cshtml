@@ -23,21 +23,33 @@
                 <div class="card-header text-secondary fw-bold " style="background-color:transparent">
                     <i class="fas fa-user"></i> @Model.Name 的訂單
                 </div>
-                <div class="card-body">                  
-                    @foreach(var i in Model.OrderDetail)
-                    {
-                        <p>商品:@i.Product.Name </p>
-                        <p>數量:@i.Quantity</p>
-                        <p>金額:@i.OriginalPrice </p>
-                        <p>總金額:@i.FinalPrice </p>
-                        <p>折扣後金額:@i.SubTotal </p>
-                        
-
-                    }
-                    <p>合計:@Model.TotalAmount </p>
-
-                    </div>
+                <div class="card-body ">                  
+                    <table class="table  table-sm">
+                        <thead>
+                            <tr>
+                                <th>商品</th>
+                                <th>數量</th>
+                                <th>金額</th>
+                                <th>總金額</th>
+                                <th>小計</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var i in Model.OrderDetail)
+                            {
+                                <tr>
+                                    <td>@i.Product.Name</td>
+                                    <td>@i.Quantity</td>
+                                    <td>@i.OriginalPrice</td>
+                                    <td>@i.FinalPrice</td>
+                                    <td>@i.SubTotal</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                                                  
                 </div>
+                <p class="me-5 text-end  ">合計: @Model.TotalAmount </p>
             </div>
            
         </div>

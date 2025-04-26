@@ -4,6 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using ShopMaster.Areas.BackEnd.Models;
 using ShopMaster.Areas.FrontEnd.ViewModelsF;
 using ShopMaster.Areas.FrontEnd.Utility;
+using Dapper;
+using System.Data;
+using Microsoft.Data.SqlClient;
+using MySqlConnector;
+
+
 
 
 
@@ -13,10 +19,12 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
     public class MemberController : Controller
     {
         protected readonly shopmasterdbContext _db;
+        private readonly string _connectionString;
 
-        public MemberController(shopmasterdbContext db)
+        public MemberController(shopmasterdbContext db, IConfiguration configuration)
         {
             _db = db;
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
         
         public IActionResult Index()
@@ -165,6 +173,29 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 return builder.ToString();
             }
         }
+        
+
+        public IActionResult OrderList(string id)
+        {
+            //using (IDbConnection connection = new MySqlConnection(_connectionString))
+            //{
+            //    connection.Open();                
+
+            //    string sql = @"SELECT * FROM MEMBER";
+            //    try
+            //    {
+            //        var result = connection.Query<BackEnd.Models.Member>(sql).ToList();
+            //    }
+            //    catch(Exception ex)
+            //    {                    
+            //        Console.WriteLine(ex.Message);
+            //    }
+            //}
+
+
+                return View();
+        }
+
 
         public IActionResult Logout()
         {

@@ -168,7 +168,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 {
                     var productId = c.ProductId ?? 0;
                     var code = string.Join("",c.Code.ToList());
-                    decimal shipping = 60;              
+                    decimal shipping = 60;    
+                    
 
                     // 折扣金額
                     var discountRole = new List<(string rule, decimal discountAmount)>()
@@ -185,12 +186,12 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                                              .Select(r => r.discountAmount)
                                              .FirstOrDefault();     
 
-                   if(discountAmount == 1m)
+                   if(discountAmount == 1)
                    {
                         shipping = 60;
                         discountAmount = 0;
                    }
-                   else if (discountAmount == 0m && c.MemberId != 100000)
+                   else if (discountAmount == 0 && c.MemberId != 100000)
                    {
                         shipping = 0;
                    }
@@ -200,7 +201,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                    }
 
 
-                        model.price.TryGetValue(productId, out var amount);
+                    model.price.TryGetValue(productId, out var amount);
                     decimal originalPrice = 0;
 
                     // 單價

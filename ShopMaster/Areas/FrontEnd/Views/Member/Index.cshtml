@@ -51,9 +51,12 @@
                 </div>
                 <div class="card-body">
                     <p>查看您的訂單歷史記錄和狀態。</p>
+                    <form action="OrderList" method="get">
                     <div id="orderHistory" style="text-align: center">
-                        <a href="@Url.Action("Index", "Order", new { area = "FrontEnd" })" class="btn btn-warning text-white border  rounded-xl fw-bold" id="orderHistory">查看訂單</a>
+                        <input type="hidden" asd-for="id" value="@Model.Id" name="id" />
+                        <button  class="btn btn-warning text-white border  rounded-xl fw-bold" id="orderHistory" type="submit">查看訂單</button>
                     </div>
+                    </form>
                 </div>
             </div>
         </div>
