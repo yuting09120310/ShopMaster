@@ -138,12 +138,14 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         // POST: OrderController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(OrderViewModel model)
+        public async Task<IActionResult> Create(OrderViewModel model, decimal shippingFee)
         {            
             using var transaction = await _db.Database.BeginTransactionAsync();
+            List<string>? code = new List<string>();
             try
             {
                 var member = model.cartList.First().Member;
+                code = model.cartList[0].Code.ToList();
                 var product = model.cartList.Where(x=>x.ProductId != null).ToList();
 
                 var quanity = model.total.ToList();                
@@ -162,17 +164,12 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 await _db.SaveChangesAsync();               
                 
                 // 訂單明細
-                List<OrderDetail> orderDetails = new List<OrderDetail>();                
+                List<OrderDetail> orderDetails = new List<OrderDetail>();
+                var codeChoose = string.Join("", code.ToList());
+                decimal shipping = 60;
 
-                foreach (var c in product)
-                {
-                    var productId = c.ProductId ?? 0;
-                    var code = string.Join("",c.Code.ToList());
-                    decimal shipping = 60;    
-                    
-
-                    // 折扣金額
-                    var discountRole = new List<(string rule, decimal discountAmount)>()
+                // 折扣金額
+                var discountRole = new List<(string rule, decimal discountAmount)>()
                     {
                         ("FREESHIP", 0),
                         ("WELCOME100", 100),
@@ -181,26 +178,30 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                         ("請選擇優惠券", 1),
                     };
 
-                    decimal discountAmount = discountRole.
-                                             Where(r => code.StartsWith(r.rule))
-                                             .Select(r => r.discountAmount)
-                                             .FirstOrDefault();     
+                decimal discountAmount = discountRole.
+                                         Where(r => codeChoose.StartsWith(r.rule))
+                                         .Select(r => r.discountAmount)
+                                         .FirstOrDefault();
 
-                   if(discountAmount == 1)
-                   {
-                        shipping = 60;
-                        discountAmount = 0;
-                   }
-                   else if (discountAmount == 0 && c.MemberId != 100000)
-                   {
-                        shipping = 0;
-                   }
-                    else
-                   {
-                        shipping = 60;
-                   }
+                if (discountAmount == 1)
+                {
+                    shipping = 60;
+                    discountAmount = 0;
+                }
+                else if (discountAmount == 0 && member.Id != 100000)
+                {
+                    shipping = 0;
+                }
+                else
+                {
+                    shipping = 60;
+                }
 
+                bool isFirst = true;
 
+                foreach (var c in product)
+                {
+                    var productId = c.ProductId ?? 0;             
                     model.price.TryGetValue(productId, out var amount);
                     decimal originalPrice = 0;
 
@@ -214,6 +215,16 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                         originalPrice = 0;
                     }
 
+                    // 折扣優惠只套用第一筆
+                    var subTotal = amount;
+
+                    if (isFirst)
+                    {
+                        subTotal = amount - discountAmount + shipping;
+                        isFirst = false;
+                    }
+
+
                     orderDetails.Add(new Areas.BackEnd.Models.OrderDetail
                     {
                         OrderId = order.Id,
@@ -221,12 +232,14 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                         Quantity = Convert.ToInt32(quantity),                        
                         OriginalPrice = originalPrice,
                         FinalPrice = amount,
-                        SubTotal = amount - discountAmount + shipping
-
+                        SubTotal = subTotal
                     });                    
                 }
 
+               
                 decimal totalAmount = orderDetails.Sum(x => x.SubTotal);
+                
+                
 
                 // 更新訂單金額
                 order.TotalAmount = totalAmount;
