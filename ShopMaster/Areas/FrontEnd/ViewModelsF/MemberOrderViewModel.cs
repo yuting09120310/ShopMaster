@@ -8,7 +8,7 @@ namespace ShopMaster.Areas.FrontEnd.ViewModelsF
 
         public string Name { get; set; } = null!;
 
-        public List<OrderDetail> OrderDetail { get; set; } = new List<OrderDetail>();
+        public List<OrderDetail> OrderDetail { get; set; } = new List<OrderDetail>();        
 
         public decimal TotalAmount { get; set; }
 

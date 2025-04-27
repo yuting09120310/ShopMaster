@@ -8,6 +8,7 @@ using Dapper;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using MySqlConnector;
+using Microsoft.EntityFrameworkCore;
 
 
 
@@ -173,9 +174,9 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 return builder.ToString();
             }
         }
-        
 
-        public IActionResult OrderList(string id)
+
+        public IActionResult OrderList(long id)
         {
             //using (IDbConnection connection = new MySqlConnection(_connectionString))
             //{
@@ -191,6 +192,34 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             //        Console.WriteLine(ex.Message);
             //    }
             //}
+
+            var member = _db.Members.FirstOrDefault(x => x.Id == id);
+            if(member != null)
+            {
+                var product = _db.Products.Where(x => x.Id == member.Id).ToList();
+
+                var order = _db.Orders
+                                    .Include(x => x.OrderDetails)
+                                    .ThenInclude(od => od.Product)
+                                    .Include(x => x.Member)
+                                    .Where(x => x.MemberId == member.Id)
+                                    .ToList();
+
+
+                var result = order.Select(x => new MemberOrderViewModel
+                {
+                    Id = id,
+                    Name = x.Member.Name,
+                    OrderDetail = x.OrderDetails.ToList(),
+                    TotalAmount = x.TotalAmount,
+
+
+                });
+                return View(result);
+            }
+
+            
+           
 
 
                 return View();
