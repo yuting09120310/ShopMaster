@@ -18,7 +18,7 @@
 <div class="container" style="padding-top: 160px">
 
     <div class="row justify-content-center">
-        <div class="col-md-9 col-12 mb-4">
+        <div class="col-md-10 col-12 mb-4">
             <div class="card">
                 <div class="card-header text-secondary fw-bold " style="background-color:transparent">
                     <i class="fas fa-user"></i> @Model.Name 的訂單
@@ -27,8 +27,9 @@
                     <table class="table  table-sm">
                         <thead>
                             <tr>
-                                <th>商品</th>
-                                <th style="width:50px;">數量</th>
+                                <th >照片</th>
+                                <th >名稱</th>
+                                <th style="width: 40px;">數量</th>
                                 <th>金額</th>
                                 <th>總金額</th>                                
                                 <th>小計</th>
@@ -38,6 +39,7 @@
                             @foreach (var i in Model.OrderDetail)
                             {
                                 <tr>
+                                    <td> <img src=@i.Product.MainImage class="img-fluid rounded-start d-block" alt="Responsive image" style="height:100px; width:120px"> </td>
                                     <td>@i.Product.Name</td>
                                     <td>@i.Quantity</td>
                                     <td>@i.OriginalPrice</td>
