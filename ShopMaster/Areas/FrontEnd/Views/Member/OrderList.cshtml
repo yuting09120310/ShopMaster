@@ -11,43 +11,68 @@
     align-items: center
     }
 
+
+    .btn {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center
+    }
+
+
 </style>
 
 <div class="container" style="padding-top: 140px">
-    <h4 class="text-start fw-bold text-secondary  mt-4">歷史訂單</h4>
+    <h4 class="text-start fw-bold text-secondary  ms-5 my-4">@Model.FirstOrDefault()?.Name 的歷史訂單</h4>
 
-    @foreach (var i in Model)
-    {
-
-        <div class="card my-3 " style="max-width: auto;" >
-            @foreach (var d in i.OrderDetail)
-            {
+        
+        <div class="my-3 " style="max-width: auto;" >
+           
                 <div class="row g-0 justify-content-center ">           
 
-                <div class="col-md-4 col-3" style="padding: 10px;">
-                    <img src=@d.Product.MainImage class="img-fluid rounded-start d-block" alt="Responsive image" style="height:100px; width:120px">
-                </div>
-                <div class="col-md-8 col-9">
-                    <div class="card-body d-flex justify-content-around  " style="padding-bottom: 0px;">
-                            <p class="card-title col-4">@d.Product.Name</p>
-                            <p class="col-4 text-center">@d.Quantity</p>
-                            <p class="card-text col-4 text-end mt-2">@i.TotalAmount</p>
+                <div class="col-md-10 col-12">
+                    <div class="" style="padding-bottom: 0px;">
+                            <table class="table  table-sm">
+                                <thead>
+                                    <tr class="my-2">
+                                        <th>訂單編號</th>                      
+                                                                            
+                                        <th>總金額</th>
+                                        <th>訂購日期</th>
+                                        <th class="text-end">訂單明細</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                            @foreach (var i in Model)
+                            {
+                                var firstDetail = i.OrderDetail.FirstOrDefault();
+                                    <tr class="">
+                                    <td class="align-middle">@firstDetail?.OrderId</td>
+                                    <td class="align-middle">@i.TotalAmount</td>
+                                    <td class="align-middle">@firstDetail?.CreatedAt?.ToString("yyyy-MM-dd")</td>
+
+                                    <td class="d-flex align-items-end justify-content-end me-2">
+
+                                        <a href="@Url.Action("Details", "Order", new { area = "FrontEnd",id =i.Id, extraId = @firstDetail?.OrderId })" class="btn btn-light text-secondary fw-bold my-1">GO</a>
+                                        </td>
+                                    </tr>
+                                }
+                       
+                            
+                                </tbody>
+                            </table>
+                        
                         </div>
                     </div>
                     
-                </div>}
+                </div>
 
-            @{
-                var orderId = i.OrderDetail.FirstOrDefault()?.OrderId;
-            }
-            <div class="row ">
-                    <div class="col d-flex justify-content-end mb-3 me-3" id="">
-                        <a href="@Url.Action("Details", "Order", new { area = "FrontEnd",id =i.Id, extraId = @orderId })" class="btn btn-light text-secondary  fw-bold" >訂單明細</a>
-            </div>
+           
 
-        </div>
-
-    </div>}
+    </div>
 
 
 
@@ -62,3 +87,7 @@
 
 
 </div>
+
+@* <div class="col-md-4 col-3" style="padding: 10px;">
+                    <img src=@d.Product.MainImage class="img-fluid rounded-start d-block" alt="Responsive image" style="height:100px; width:120px">
+                </div> *@
