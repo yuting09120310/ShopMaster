@@ -25,16 +25,24 @@
 
         <div class="row">
         
-            <div class="d-flex mt-5 justify-content-center" style="border: none;">
-
-               @*  <button type="submit" class="btn btn-warning fw-bold" id="checkOrder" style="color:white" onclick="window.location.href='@Url.Action("Details", "Order", new { area = "FrontEnd" })' ">查看訂單</button> *@
-                <button type="submit" class="btn btn-warning fw-bold" id="checkOrder" style="color:white">查看訂單</button>
-                <a href="@Url.Action("Index", "Home", new{area = "FrontEnd" })" class="btn btn-secondary fw-bold ms-3" id="back" style="color:white">回首頁</a>
+            <div class="d-flex mt-2 justify-content-center" style="border: none;">
+                          
+                <button type="submit" class="btn fw-bold fs-3 me-5 text-warning" id="checkOrder" style="width:200px; ">查看訂單</button>
+                
 
             </div>       
         
         
         </div>
+        <div class="row ">
+            <div class="col d-flex mt-2 justify-content-center">
+               
+                <a href="@Url.Action("Index", "Home", new{area = "FrontEnd" })" class="btn  fw-bold ms-5  fs-4" id="back" style="width:122px; color:gray">回首頁。</a>
+            </div>
+            
+           
+        </div>
+
     </form>
     </div>
 
