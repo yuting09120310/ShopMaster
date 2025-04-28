@@ -1,17 +1,18 @@
 ﻿@model ShopMaster.Areas.FrontEnd.ViewModelsF.ProductsAll
 
 @{
+
     if (Model != null)
     {
         if (Model.ProductCart.Count() != 0 && Model.ProductCart.Any(x=>x.ProductId != null))
         {
-            <form method="post" asp-action="Create" asp-controller="Cart" asp-area="FrontEnd">      
-
+            <form method="post" asp-action="Create" asp-controller="Cart" asp-area="FrontEnd">
+                
             @foreach (var i in Model.ProductCart)
             {                    
-                <input type="hidden" asp-for="ProductCart[0].ProductId" value="@i.ProductId"/>        
-
-                <div class="row d-flex mb-3  ">
+                <input type="hidden" asp-for="ProductCart[0].ProductId" value="@i.ProductId"/>
+                   
+                <div class="row  mb-3   ">
                     <div class="col-3 ">
 
                         @foreach (var img in i.CartItem.Select(c => c.MainImage).ToList())
@@ -35,12 +36,14 @@
                         }
 
                     </div>
-
-
+                 
                 </div>
             }
-                <div class="d-grid gap-2 justify-content-center mt-4">
-                    <button class="btn btn-warning fw-bold" type="submit" id="cart" style="color:white;" >前往購物車</button>
+          
+                <div class="offcanvas-footer  bg-white p-3 " style="flex-shrink: 0;">
+                <div class="d-grid gap-2 justify-content-center w-100 mt-4">
+                    <button class="btn btn-warning fw-bold" type="submit" id="cart" style="color:white" >前往購物車</button>
+                </div>
                 </div>
             </form>
         }
