@@ -28,7 +28,7 @@ namespace ShopMaster.Areas.FrontEnd.ViewModelsF
 
         public virtual ICollection<Ecoupon> Ecoupons { get; set; } = new List<Ecoupon>();
 
-        public virtual MemberType MemberType { get; set; } = null!;
+        public virtual List<MemberType> MemberType { get; set; } = new List<MemberType>();
 
         public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 

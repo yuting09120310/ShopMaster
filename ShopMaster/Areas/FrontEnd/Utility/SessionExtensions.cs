@@ -30,7 +30,12 @@ namespace ShopMaster.Areas.FrontEnd.Utility
     {
         public static void Set<T>(this ISession session, string key, T value)
         {
-            session.SetString(key, JsonConvert.SerializeObject(value));
+            var settings = new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            };
+
+            session.SetString(key, JsonConvert.SerializeObject(value, settings));
         }
 
         public static T Get<T>(this ISession session, string key)

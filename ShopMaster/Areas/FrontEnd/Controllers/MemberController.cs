@@ -9,6 +9,7 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using MySqlConnector;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 
 
@@ -37,8 +38,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                 return RedirectToAction("Login", "Member", new { Area = "FrontEnd" });
             }
 
-            var member = _db.Members.FirstOrDefault(x => x.Id.ToString() == memberId);        
-
+            var member = _db.Members.FirstOrDefault(x => x.Id.ToString() == memberId);
+           
 
             return View(member);
         }
@@ -55,40 +56,63 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
         {
             // 假設你有一個方法來獲取當前用戶的 ID
             string? memberId = HttpContext.Session.GetString("MemberId");
-            var member = _db.Members.Find(Convert.ToInt64(memberId));           
+            var member = _db.Members.Find(Convert.ToInt64(memberId));
+            
 
+            
 
             if (member == null)
             {
                 return NotFound();
-            }          
+            }
 
-
+          
             return View(member);
         }
 
         [HttpPost]
+        
         public IActionResult EditProfile(BackEnd.Models.Member member)
         {
-            if (ModelState.IsValid)
+            
+            var existingMember = _db.Members.Find(member.Id);
+            if (existingMember == null)
             {
-                var existingMember = _db.Members.Find(member.Id);
-                if (existingMember == null)
-                {
-                    return NotFound();
-                }
+                return NotFound();
+            }
 
-                existingMember.Name = member.Name;
-                existingMember.Email = member.Email;
-                existingMember.Phone = member.Phone;
-                existingMember.Address = member.Address;
+            existingMember.Name = member.Name;
+            existingMember.Email = member.Email;
+            existingMember.Phone = member.Phone;
+            existingMember.Address = member.Address;
 
-                _db.SaveChanges();
+           
+            var tempCart = HttpContext.Session.Get<List<Areas.FrontEnd.ViewModelsF.Cart>>("tempCart") ?? new List<Areas.FrontEnd.ViewModelsF.Cart>();
+            var ecoupon = _db.Ecoupons.Where(x => x.MemberId == member.Id).ToList();
 
-                return RedirectToAction("Profile");
-            }            
 
-            return View(member);
+            foreach (var i in tempCart)
+            {
+                if (i.Member == null)
+                    i.Member = new Areas.FrontEnd.ViewModelsF.Member();
+
+                i.Member.Name = member.Name;
+                i.Member.Address = member.Address;
+                i.Member.Phone = member.Phone;
+                i.Member.Email = member.Email;
+                i.MemberId = member.Id;                
+                i.Member.PasswordHash = member.PasswordHash;
+                i.Code = ecoupon.Select(x => x.Code).ToList();
+            }
+            
+            HttpContext.Session.Set("tempCart", tempCart);
+            HttpContext.Session.SetString("MemberId", member.Id.ToString());
+            string? memberId = HttpContext.Session.GetString("MemberId");
+            _db.SaveChanges();               
+
+            return RedirectToAction("Index", "Member", new { Area = "FrontEnd"});                    
+
+            
         }
 
 
@@ -116,6 +140,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             // 購物車
             var tempCart = HttpContext.Session.Get<List<Areas.FrontEnd.ViewModelsF.Cart>>("tempCart") ?? new List<Areas.FrontEnd.ViewModelsF.Cart>();
             var ecoupon = _db.Ecoupons.Where(x => x.MemberId == member.Id).ToList();
+            var memberType = _db.MemberTypes.Where(x => x.Id == member.MemberTypeId).ToList();
             
             if(tempCart.Count > 0)
             {
@@ -129,7 +154,8 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                     i.Member.Phone = member.Phone;
                     i.Member.Email = member.Email;
                     i.MemberId = member.Id;
-                    i.Member.MemberTypeId = member.MemberTypeId;
+                    i.Member.MemberType = memberType;
+                    i.Member.PasswordHash = member.PasswordHash;
                     i.Code = ecoupon.Select(x => x.Code).ToList();
                 }
             }
@@ -143,8 +169,9 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
                         Name = member.Name,
                         Address = member.Address,
                         Phone = member.Phone,
-                        Email = member.Email,
-                        MemberTypeId = member.MemberTypeId
+                        Email = member.Email,    
+                        MemberType = memberType,   
+                        PasswordHash = member.PasswordHash
                     },
                     MemberId = member.Id,
                     Code = ecoupon.Select(x => x.Code).ToList()
@@ -175,7 +202,7 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             }
         }
 
-
+        [HttpGet]
         public IActionResult OrderList(long id)
         {
             //using (IDbConnection connection = new MySqlConnection(_connectionString))
@@ -191,7 +218,11 @@ namespace ShopMaster.Areas.FrontEnd.Controllers
             //    {                    
             //        Console.WriteLine(ex.Message);
             //    }
-            //}
+
+            if (id == 0)
+            {
+                return RedirectToAction("Index", "Member", new { Area = "FrontEnd" });
+            }
 
             var member = _db.Members.FirstOrDefault(x => x.Id == id);
             if(member != null)

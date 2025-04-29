@@ -7,12 +7,12 @@
 
 
     #editFinish, #cancle {
-        width: 90px;
-        height: 90px;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center
     }
 
 </style>
@@ -27,25 +27,28 @@
                     <i class="fas fa-user-edit"></i> 編輯個人資料
                 </div>
                 <div class="card-body">
-                    <form asp-action="EditProfile" method="post">
-                        <div class="form-group mb-2">
-                            <label for="Name ">姓名</label>
-                            <input type="text" class="form-control my-2" id="Name" name="Name" value="@Model.Name" required />
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="Email">Email</label>
-                            <input type="email" class="form-control my-2" id="Email" name="Email" value="@Model.Email" required />
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="Phone">電話</label>
+                    <form asp-action="EditProfile" method="post" asp-area="FrontEnd">
+                        <input type="hidden" id="Id" name="Id" value="@Model.Id"/>
+                            
+
+                            <div class="form-group mb-2">
+                                <label for="Name ">姓名</label>
+                                <input type="text" class="form-control my-2" id="Name" name="Name" value="@Model.Name" required />
+                            </div>
+                            <div class="form-group mb-2">
+                                <label for="Email">Email</label>
+                                <input type="email" class="form-control my-2" id="Email" name="Email" value="@Model.Email" required />
+                            </div>
+                            <div class="form-group mb-2">
+                                <label for="Phone">電話</label>
                             <input type="text" class="form-control my-2" id="Phone" name="Phone" value="@Model.Phone" />
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="Address">地址</label>
+                            </div>
+                            <div class="form-group mb-2">
+                                <label for="Address">地址</label>
                             <input type="text" class="form-control my-2" id="Address" name="Address" value="@Model.Address" />
-                        </div>
-                        <div class="d-flex mt-3 justify-content-between">
-                        <button type="submit" class="btn btn-warning fw-bold" id="editFinish" style="color:white">保存變更</button>
+                            </div>
+                            <div class="d-flex mt-3 justify-content-between">
+                                <button type="submit" class="btn btn-warning fw-bold" id="editFinish" style="color:white">保存變更</button>
                             <a href="@Url.Action("Index", "Member",new {Area="FrontEnd"})" class="btn btn-secondary fw-bold ms-3" id="cancle" style="color:white">取消</a>
                         </div>
                     </form>

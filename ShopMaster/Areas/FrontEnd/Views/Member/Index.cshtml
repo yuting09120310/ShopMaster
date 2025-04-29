@@ -40,6 +40,7 @@
                     <p>姓名: @Model.Name</p>
                     <p>Email: @Model.Email</p>
                     <p>電話: @Model.Phone</p>
+                    <p>地址: @Model.Address</p>
                     <a href="@Url.Action("EditProfile", "Member", new { area = "FrontEnd" })" class="btn btn-warning text-white fw-bold" id="edit">編輯個人資料</a>
                 </div>
             </div>
@@ -51,9 +52,9 @@
                 </div>
                 <div class="card-body">
                     <p>查看您的訂單歷史記錄和狀態。</p>
-                    <form action="OrderList" method="get">
+                    <form asp-action="OrderList" asp-controller="Member" asp-area="FrontEnd" method="get">
                     <div id="orderHistory" style="text-align: center">
-                        <input type="hidden" asd-for="id" value="@Model.Id" name="id" />
+                        <input type="hidden"  value="@Model.Id" name="id" />
                         <button  class="btn btn-warning text-white border  rounded-xl fw-bold" id="orderHistory" type="submit">查看訂單</button>
                     </div>
                     </form>
